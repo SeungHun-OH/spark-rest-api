@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class Test {
 
-	private int tno;
-	private String tname;
+	private int t_no;
+	private String t_name;
 }
