@@ -5,10 +5,25 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spark.dating.dao.mybatis.TestDao">
-<select id="testselect"
-          resultType="Test">
+
+<insert id = "insertMember" parameterType="Member">
+    insert into member (
+      M_ID, M_PASSWORD, M_NAME, M_SSN, M_AGE,
+      M_EMAIL, M_GENDER, M_PHONE, M_NICKNAME, M_REGION,
+      M_BIO, M_MBTI, M_ACTIVE
+
+    ) VALUES (
+      #{m_id}, #{m_password}, #{m_name}, #{m_ssn}, #{m_age},
+      #{m_email}, #{m_gender}, #{m_phone}, #{m_nickname}, #{m_region},
+      #{m_bio}, #{m_mbti}, #{m_active}
+    )
+
+  </insert>
+
+  <select id="SelectMemberByM_id" resultType="Member" parameterType="String">
     SELECT *
-	FROM TEST
-</select>
+	  from member
+    where mid = #{value}
+  </select>
 
 </mapper>
