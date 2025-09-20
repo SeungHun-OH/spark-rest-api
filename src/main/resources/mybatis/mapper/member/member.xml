@@ -4,9 +4,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spark.dating.dao.mybatis.TestDao">
+<mapper namespace="com.spark.dating.member.MemberDao">
 
-<insert id = "insertMember" parameterType="Member">
+  <insert id = "insertMember" parameterType="com.spark.dating.dto.member.Member">
     insert into member (
       M_ID, M_PASSWORD, M_NAME, M_SSN, M_AGE,
       M_EMAIL, M_GENDER, M_PHONE, M_NICKNAME, M_REGION,
@@ -20,7 +20,7 @@
 
   </insert>
 
-  <select id="SelectMemberByM_id" resultType="Member" parameterType="String">
+  <select id="SelectMemberByM_id" resultType="com.spark.dating.dto.member.Member" parameterType="String">
     SELECT *
 	  from member
     where mid = #{value}

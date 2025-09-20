@@ -17,7 +17,7 @@ public class Member {
 	private String m_nickname;
 	private String m_region;
 	private String m_bio;
-	private char m_mbti;
+	private String m_mbti;
 	private char m_active = 'T';
 
 }

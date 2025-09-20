@@ -12,8 +12,8 @@
 
   <typeAliases>
     <typeAlias type="com.spark.dating.dto.Test" alias="Test"/>
-    <typeAlias type="com.spark.dating.dto.Member" alias="Member"/>
-    <typeAlias type="com.spark.dating.dto.MemberPicture" alias="MemberPicture"/>
+    <typeAlias type="com.spark.dating.dto.member.Member" alias="Member"/>
+    <typeAlias type="com.spark.dating.dto.member.MemberPicture" alias="MemberPicture"/>
 
   </typeAliases>
 
