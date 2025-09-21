@@ -6,7 +6,7 @@
 
 <mapper namespace="com.spark.dating.member.MemberDao">
 
-  <resultMap id="MemberMap" type="com.spark.dating.dto.member.Member">
+  <resultMap id="Member" type="Member">
     <id property="m_no" column="M_NO"/>
     <result property="m_id" column="M_ID"/>
     <result property="m_password" column="M_PASSWORD"/>
@@ -25,7 +25,7 @@
 
   <insert id = "insertMember" parameterType="Member">
     insert into member (
-      M_ID, M_PASSWORD, M_NAME, M_SSN, M_AGE,
+      M_ID, M_PASSWORD, M_NAME, M_SSN, M_AGE,111
       M_EMAIL, M_GENDER, M_PHONE, M_NICKNAME, M_REGION,
       M_BIO, M_MBTI, M_ACTIVE
 
@@ -36,7 +36,7 @@
     )
   </insert>
 
-  <select id="SelectMemberByM_id" resultMap="MemberMap" resultType="Member" parameterType="String">
+  <select id="SelectMemberByM_id" resultMap="Member" resultType="Member" parameterType="String">
     SELECT *
 	  from member
     where M_ID = #{value}

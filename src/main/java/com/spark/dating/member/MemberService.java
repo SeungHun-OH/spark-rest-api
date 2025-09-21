@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.dto.member.MemberPicture;
 
 @Service
 public class MemberService {
@@ -18,6 +20,9 @@ public class MemberService {
 
   @Autowired
   MemberDao memberDao;
+
+  @Autowired
+  MemberPictureDao memberPictureDao;
 
   public Map<String, Object> insertMember(Member member) {
 
@@ -38,6 +43,23 @@ public class MemberService {
       map.put("Message", e.getMessage());
       return map;
     }
+  }
+
+  public Map<String, Object> insertMemberPicture(int m_no, MultipartFile file){
+    Map<String, Object>map = new HashMap<>();
+    try{
+      MemberPicture memberPicture = new MemberPicture();
+
+      memberPicture.setMp_memberno(m_no);
+      memberPicture.setMp_attachoname(file.getOriginalFilename());
+      memberPicture.setMp_attachtype(file.getContentType());
+      memberPicture.setMp_attachdata(file.getBytes());
+
+    }catch(Exception e){
+      
+    }
+
+    return map;
   }
 
 
