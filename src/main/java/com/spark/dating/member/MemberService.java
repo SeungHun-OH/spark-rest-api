@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberPicture;
 
@@ -24,24 +25,17 @@ public class MemberService {
   @Autowired
   MemberPictureDao memberPictureDao;
 
-  public Map<String, Object> insertMember(Member member) {
-
-    Map<String, Object> map = new HashMap<>();
+  public ApiResponse<Member> insertMember(Member member) {
 
     PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
     String encodedPassword = passwordEncode.encode(member.getM_password());
     member.setM_password(encodedPassword);
-
     try {
       memberDao.insertMember(member);
-      map.put("result", "success");
-      map.put("Message", "회원님 가입을 환영합니다");
-      return map;
-    } catch (Exception e) {
-
-      map.put("result", "fail");
-      map.put("Message", e.getMessage());
-      return map;
+      return new ApiResponse<>("success", "회원 가입을 환영합니다", member);
+    } 
+    catch (Exception e) {
+      return new ApiResponse<>("fail",e.getMessage(),null);
     }
   }
 
