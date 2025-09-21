@@ -32,7 +32,7 @@ public class MemberService {
     member.setM_password(encodedPassword);
     try {
       memberDao.insertMember(member);
-      return new ApiResponse<>("success", "회원 가입을 환영합니다", member);
+      return new ApiResponse<>("success", "회원s 가입을 환영합니다", member);
     } 
     catch (Exception e) {
       return new ApiResponse<>("fail",e.getMessage(),null);
@@ -57,24 +57,18 @@ public class MemberService {
   }
 
 
-  public  Map<String, Object> SelectMemberByM_id(String m_id) {
+  public  ApiResponse<Member> SelectMemberByM_id(String m_id) {
     Map<String, Object> map = new HashMap<>();
     try {
       Member member = memberDao.SelectMemberByM_id(m_id);
       if (member == null) {
-        map.put("result", "fail");
-        map.put("member", member);
-        map.put("Message", "해당 아이디의 회원을 찾을 수 없습니다.");
+        return new ApiResponse<>("fail", "해당 아이디의 회원을 찾을 수 없습니다.", member);
+     
       } else {
-        map.put("result", "success");
-        map.put("member", member);
-        map.put("Message", member.getM_name() + "회원님 로그인 환영합니다");
+        return new ApiResponse<>("success", member.getM_name() + "회원님 로그인 환영합니다", member);
       }
-      return map;
     } catch (Exception e) {
-      map.put("result", "fail");
-      map.put("Message", e.getMessage());
-      return map;
+       return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
 }

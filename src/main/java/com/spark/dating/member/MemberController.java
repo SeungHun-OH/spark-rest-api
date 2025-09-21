@@ -37,7 +37,7 @@ public class MemberController {
   }
 
   @GetMapping("/Member")
-  public Map<String, Object> SelectMemberByM_id(@RequestParam("m_id") String m_id) {
+  public ApiResponse<Member> SelectMemberByM_id(@RequestParam("m_id") String m_id) {
     return memberService.SelectMemberByM_id(m_id);
   }
 }
