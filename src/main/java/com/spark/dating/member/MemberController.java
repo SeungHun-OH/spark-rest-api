@@ -49,24 +49,6 @@ public class MemberController {
 
   @GetMapping("/Member/SelectMemberByM_id")
   public Map<String, Object> SelectMemberByM_id(@RequestParam("m_id") String m_id) {
-    Map<String, Object> map = new HashMap<>();
-
-    try {
-      Member member = memberService.SelectMemberByM_id(m_id);
-      if (member == null) {
-        map.put("result", "fail");
-        map.put("member", member);
-        map.put("Message", "해당 아이디의 회원을 찾을 수 없습니다.");
-      } else {
-        map.put("result", "success");
-        map.put("member", member);
-        map.put("Message", member.getM_name() + "회원님 로그인 환영합니다");
-      }
-      return map;
-    } catch (Exception e) {
-      map.put("result", "fail");
-      map.put("Message", e.getMessage());
-      return map;
-    }
+     return memberService.SelectMemberByM_id(m_id);
   }
 }
