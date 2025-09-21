@@ -1,5 +1,7 @@
 package com.spark.dating.member;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +27,13 @@ public class MemberController {
 
   @PostMapping("/Member")
   public ApiResponse<Member> insertMember(@RequestBody Member member) {
-
     return memberService.insertMember(member);
+  }
+
+  @PostMapping("Member/login")
+  public Map<String, Object> login(@RequestBody Member memberlogin){
+    
+    return memberService.login(memberlogin);
   }
 
   @PostMapping("/Member/picture")

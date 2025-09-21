@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.dating.dto.member.ApiResponse;
@@ -32,7 +33,7 @@ public class MemberService {
     member.setM_password(encodedPassword);
     try {
       memberDao.insertMember(member);
-      return new ApiResponse<>("success", "회원s 가입을 환영합니다", member);
+      return new ApiResponse<>("success", "회원 가입을 환영합니다", member);
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
@@ -52,6 +53,36 @@ public class MemberService {
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
+  }
+
+  public Map<String, Object> login(@RequestBody Member memberlogin) {
+    Map<String, Object> map = new HashMap<>();
+
+    Member member = memberDao.SelectMemberByM_id(memberlogin.getM_id());
+    if (member == null) {
+      map.put("result", "fail");
+      map.put("message", "아이디가 유효하지 않습니다");
+    } else {
+      PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+      map.put("member_pw", member.getM_password());
+      map.put("memberlogin_pw", memberlogin.getM_password());
+      boolean result = passwordEncoder.matches(memberlogin.getM_password(), member.getM_password());
+
+      if (result) {
+        String jwt = jwtService.createJWT(member.getM_id(), member.getM_email());
+
+        map.put("result", "success");
+        map.put("m_id", member.getM_id());
+        map.put("m_name", member.getM_name());
+        map.put("jwt", jwt);
+        map.put("message", member.getM_name() + "님 환영합니다");
+      } else {
+        map.put("result", "fail");
+        map.put("message", "비밀번호가 틀립니다");
+      }
+      map.put("data", member);
+    }
+    return map;
   }
 
   public ApiResponse<Member> SelectMemberByM_id(String m_id) {
