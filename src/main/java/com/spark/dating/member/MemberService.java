@@ -33,15 +33,13 @@ public class MemberService {
     try {
       memberDao.insertMember(member);
       return new ApiResponse<>("success", "회원s 가입을 환영합니다", member);
-    } 
-    catch (Exception e) {
-      return new ApiResponse<>("fail",e.getMessage(),null);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
 
-  public Map<String, Object> insertMemberPicture(int m_no, MultipartFile file){
-    Map<String, Object>map = new HashMap<>();
-    try{
+  public ApiResponse<MemberPicture> insertMemberPicture(int m_no, MultipartFile file) {
+    try {
       MemberPicture memberPicture = new MemberPicture();
 
       memberPicture.setMp_memberno(m_no);
@@ -49,26 +47,38 @@ public class MemberService {
       memberPicture.setMp_attachtype(file.getContentType());
       memberPicture.setMp_attachdata(file.getBytes());
 
-    }catch(Exception e){
-      
+      memberPictureDao.insertMemberPicture(memberPicture);
+      return new ApiResponse<>("success", "사진등록성공", null);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", e.getMessage(), null);
     }
-
-    return map;
   }
 
-
-  public  ApiResponse<Member> SelectMemberByM_id(String m_id) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiResponse<Member> SelectMemberByM_id(String m_id) {
     try {
       Member member = memberDao.SelectMemberByM_id(m_id);
       if (member == null) {
         return new ApiResponse<>("fail", "해당 아이디의 회원을 찾을 수 없습니다.", member);
-     
+
       } else {
         return new ApiResponse<>("success", member.getM_name() + "회원님 로그인 환영합니다", member);
       }
     } catch (Exception e) {
-       return new ApiResponse<>("fail", e.getMessage(), null);
+      return new ApiResponse<>("fail", e.getMessage(), null);
+    }
+  }
+
+  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(int m_no) {
+    try {
+      MemberPicture memberPicture = memberPictureDao.SelectMemberPictureByM_no(m_no);
+      if (memberPicture == null) {
+        return new ApiResponse<>("fail", "해당 넘버의 사진을 찾을 수 없습니다.", memberPicture);
+
+      } else {
+        return new ApiResponse<>("success", "사진 조회 성공", memberPicture);
+      }
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
 }

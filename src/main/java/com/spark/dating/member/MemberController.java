@@ -1,7 +1,5 @@
 package com.spark.dating.member;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.dto.member.MemberPicture;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,8 +29,8 @@ public class MemberController {
     return memberService.insertMember(member);
   }
 
-  @PostMapping("Member/picture")
-  public Map<String, Object> insertMemberPicture(@RequestParam("m_no") int m_no,
+  @PostMapping("/Member/picture")
+  public ApiResponse<MemberPicture>insertMemberPicture(@RequestParam("m_no") int m_no,
                                                  @RequestParam("file") MultipartFile file) {
     return memberService.insertMemberPicture(m_no, file);
   }
@@ -39,5 +38,16 @@ public class MemberController {
   @GetMapping("/Member")
   public ApiResponse<Member> SelectMemberByM_id(@RequestParam("m_id") String m_id) {
     return memberService.SelectMemberByM_id(m_id);
+  }
+
+  @GetMapping("/Member/picture")
+  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("m_no") int m_no){
+
+    ApiResponse<MemberPicture> response =  memberService.SelectMemberPictureByM_no(m_no);
+
+    log.info(response.getMessage());
+    log.info(response.getData().getMp_attachtype());
+
+    return memberService.SelectMemberPictureByM_no(m_no);
   }
 }

@@ -6,22 +6,34 @@
 
 <mapper namespace="com.spark.dating.member.MemberPictureDao">
 
-  <resultMap id = "MemberPicture" type = "memberPicture">
+  <resultMap id = "MemberPicture" type = "MemberPicture">
     <id property="mp_no" column="MP_NO"/>
-
     <result property="mp_memberno" column="MP_MEMBERNO"/>
-    <result property="mp_memberno" column="MP_MEMBERBNO"/>
+    <result property="mp_attachtype" column="MP_ATTACHTYPE"/>
     <result property="mp_attachoname" column="MP_ATTACHONAME"/>
-    <result property="mp_attachsname" column="MP_ATTACHSNAME"/>
+    <result property="mp_attachdata" column="MP_ATTACHDATA"/>
 
-    <result property="mp_mattachdata" column="MP_MATTACHDATA"/>
   </resultMap>
 
   <insert id = "insertMemberPicture" parameterType="memberPicture">
     insert into memberpicture (
-      MP_NO, MP_MEMBERNO, MP_ATTACHONAME, MP_ATTACHSNAME, MP_MATTACHDATA
+     MP_MEMBERNO, MP_ATTACHTYPE, MP_ATTACHONAME, MP_ATTACHDATA
     ) values (
-      #{mp_no}, #{mp_memberno}, #{mp_attachoname}, #{mp_attachsname}, #{mp_mattachdata,jdbcType=BLOB}
+     #{mp_memberno}, #{mp_attachtype}, #{mp_attachoname}, #{mp_attachdata,jdbcType=BLOB}
     )
   </insert>
+
+  <!-- <select id= "SelectMemberPictureByM_no" parameterType="int" resultType="MemberPicture">
+    select *
+    from memberpicture
+    where MP_MEMBERNO = #{value}
+
+  </select> -->
+
+  <select id="SelectMemberPictureByM_no" parameterType="int" resultMap="MemberPicture">
+  SELECT *
+  FROM memberpicture
+  WHERE MP_MEMBERNO = #{m_no}
+  </select>
+
 </mapper>
