@@ -28,23 +28,7 @@ public class MemberController {
   @PostMapping("/Member/insert")
   public Map<String, Object> insertMember(@RequestBody Member member) {
 
-    Map<String, Object> map = new HashMap<>();
-
-    PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-    String encodedPassword = passwordEncode.encode(member.getM_password());
-    member.setM_password(encodedPassword);
-
-    int memberCount = memberService.insertMember(member);
-    try {
-      map.put("result", "success");
-      map.put("Message", "회원님 가입을 환영합니다");
-      return map;
-    } catch (Exception e) {
-
-      map.put("result", "fail");
-      map.put("Message", e.getMessage());
-      return map;
-    }
+    return memberService.insertMember(member);
   }
 
   @GetMapping("/Member/SelectMemberByM_id")

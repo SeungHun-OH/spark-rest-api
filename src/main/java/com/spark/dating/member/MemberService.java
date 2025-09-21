@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.spark.dating.dto.member.Member;
@@ -17,8 +19,25 @@ public class MemberService {
   @Autowired
   MemberDao memberDao;
 
-  public int insertMember(Member member) {
-    return memberDao.insertMember(member);
+  public Map<String, Object> insertMember(Member member) {
+
+    Map<String, Object> map = new HashMap<>();
+
+    PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
+    String encodedPassword = passwordEncode.encode(member.getM_password());
+    member.setM_password(encodedPassword);
+
+    try {
+      memberDao.insertMember(member);
+      map.put("result", "success");
+      map.put("Message", "회원님 가입을 환영합니다");
+      return map;
+    } catch (Exception e) {
+
+      map.put("result", "fail");
+      map.put("Message", e.getMessage());
+      return map;
+    }
   }
 
 
