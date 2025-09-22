@@ -26,13 +26,18 @@ public class MemberService {
   @Autowired
   MemberPictureDao memberPictureDao;
 
+  // public ApiResponse<Member> CreateMember(Member member, MultipartFile file){
+    
+  // }
+
+
   public ApiResponse<Member> insertMember(Member member) {
 
     PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
     String encodedPassword = passwordEncode.encode(member.getM_password());
     member.setM_password(encodedPassword);
     try {
-      memberDao.insertMember(member);
+      int m_no = memberDao.insertMember(member);
       return new ApiResponse<>("success", "회원 가입을 환영합니다", member);
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
