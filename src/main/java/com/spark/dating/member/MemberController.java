@@ -25,21 +25,10 @@ public class MemberController {
   @Autowired
   JwtService jwtService;
 
+  //url
   @PostMapping("/Member")
   public ApiResponse<Member> insertMember(@RequestBody Member member) {
     return memberService.insertMember(member);
-  }
-
-  @PostMapping("Member/login")
-  public Map<String, Object> login(@RequestBody Member memberlogin){
-    
-    return memberService.login(memberlogin);
-  }
-
-  @PostMapping("/Member/picture")
-  public ApiResponse<MemberPicture>insertMemberPicture(@RequestParam("m_no") int m_no,
-                                                 @RequestParam("file") MultipartFile file) {
-    return memberService.insertMemberPicture(m_no, file);
   }
 
   @GetMapping("/Member")
@@ -47,10 +36,24 @@ public class MemberController {
     return memberService.SelectMemberByM_id(m_id);
   }
 
-  @GetMapping("/Member/picture")
-  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("m_no") int m_no){
 
-    ApiResponse<MemberPicture> response =  memberService.SelectMemberPictureByM_no(m_no);
+
+  @PostMapping("Member/login")
+  public Map<String, Object> login(@RequestBody Member memberlogin) {
+
+    return memberService.login(memberlogin);
+  }
+
+  @PostMapping("/Member/picture")
+  public ApiResponse<MemberPicture> insertMemberPicture(@RequestParam("m_no") int m_no,
+      @RequestParam("file") MultipartFile file) {
+    return memberService.insertMemberPicture(m_no, file);
+  }
+
+  @GetMapping("/Member/picture")
+  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("m_no") int m_no) {
+
+    ApiResponse<MemberPicture> response = memberService.SelectMemberPictureByM_no(m_no);
 
     log.info(response.getMessage());
     log.info(response.getData().getMp_attachtype());
