@@ -11,7 +11,6 @@ public class ChatMessageService {
 
 	private final SimpMessagingTemplate  template;
 
-
 	public void sendMessage(String message) {
 		template.convertAndSend("/sub/chat/",message);
 	}

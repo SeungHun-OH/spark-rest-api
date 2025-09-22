@@ -26,25 +26,25 @@ public class MemberController {
   @Autowired
   JwtService jwtService;
 
-  // @PostMapping("member/create")
-  // public ApiResponse<Member> Create(@RequestPart("member") Member member,
-  //     @RequestPart("file") MultipartFile file) {
-  //   return.memberService
-  // }
+  @PostMapping("member/create")
+  public ApiResponse<Integer> Create(@RequestPart("member") Member member,
+      @RequestPart("file") MultipartFile file) {
+    return memberService.CreateMember(member, file);
+  }
 
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody Member memberlogin) {
-
     return memberService.login(memberlogin);
   }
 
+
   @PostMapping("/member")
-  public ApiResponse<Member> insertMember(@RequestBody Member member) {
+  public ApiResponse<Integer> insertMember(@RequestBody Member member) {
     return memberService.insertMember(member);
   }
 
   @PostMapping("/member/picture")
-  public ApiResponse<MemberPicture> insertMemberPicture(@RequestParam("m_no") int m_no,
+  public ApiResponse<Integer> insertMemberPicture(@RequestParam("m_no") int m_no,
       @RequestParam("file") MultipartFile file) {
     return memberService.insertMemberPicture(m_no, file);
   }

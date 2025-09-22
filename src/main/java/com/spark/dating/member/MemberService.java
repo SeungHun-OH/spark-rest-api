@@ -14,6 +14,9 @@ import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberPicture;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class MemberService {
 
@@ -26,37 +29,45 @@ public class MemberService {
   @Autowired
   MemberPictureDao memberPictureDao;
 
-  // public ApiResponse<Member> CreateMember(Member member, MultipartFile file){
-    
-  // }
+  public ApiResponse<Integer> CreateMember(Member member, MultipartFile file) {
 
+    ApiResponse<Integer> response = insertMember(member);
+    if (response.getData() == null) {
+      return response;
+    } 
+    else {
+      ApiResponse<Integer> responsePicture = insertMemberPicture(member.getM_no(), file);
+      return responsePicture;
+    }
+  }
 
-  public ApiResponse<Member> insertMember(Member member) {
+  public ApiResponse<Integer> insertMember(Member member) {
 
     PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
     String encodedPassword = passwordEncode.encode(member.getM_password());
     member.setM_password(encodedPassword);
     try {
-      int m_no = memberDao.insertMember(member);
-      return new ApiResponse<>("success", "회원 가입을 환영합니다", member);
+      memberDao.insertMember(member);
+      return new ApiResponse<>("success", "회원 가입을 환영합니다" + member.getM_no() + "님", member.getM_no());
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
 
-  public ApiResponse<MemberPicture> insertMemberPicture(int m_no, MultipartFile file) {
+  public ApiResponse<Integer> insertMemberPicture(int m_no, MultipartFile file) {
     try {
       MemberPicture memberPicture = new MemberPicture();
 
+      log.info("setMp_memberno(m_no)값은?" + m_no);
       memberPicture.setMp_memberno(m_no);
       memberPicture.setMp_attachoname(file.getOriginalFilename());
       memberPicture.setMp_attachtype(file.getContentType());
       memberPicture.setMp_attachdata(file.getBytes());
 
       memberPictureDao.insertMemberPicture(memberPicture);
-      return new ApiResponse<>("success", "사진등록성공", null);
+      return new ApiResponse<>("success", "사진등록성공",  m_no);
     } catch (Exception e) {
-      return new ApiResponse<>("fail", e.getMessage(), null);
+      return new ApiResponse<>("fail", e.getMessage(),  m_no);
     }
   }
 
@@ -81,10 +92,11 @@ public class MemberService {
         map.put("m_name", member.getM_name());
         map.put("jwt", jwt);
         map.put("message", member.getM_name() + "님 환영합니다");
+        map.put("m_no", member.getM_no());
       } else {
         map.put("result", "fail");
         map.put("message", "비밀번호가 틀립니다");
-      }
+      } 
       map.put("data", member);
     }
     return map;
