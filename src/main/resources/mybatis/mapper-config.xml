@@ -9,6 +9,7 @@
 
     <setting name="mapUnderscoreToCamelCase" value="true"/>
     <setting name="jdbcTypeForNull" value="NULL" />
+
     <!-- dto 소문자 언더바 -> 테이블 칼럼 대문자 언더바 매핑 -->
     <setting name="useColumnLabel" value="true" />
     
@@ -16,9 +17,9 @@
 
   <typeAliases>
     <typeAlias type="com.spark.dating.dto.Test" alias="Test"/>
+    <typeAlias type="com.spark.dating.dto.chat.ChatRoom" alias="ChatRoom"/>
     <typeAlias type="com.spark.dating.dto.member.Member" alias="Member"/>
     <typeAlias type="com.spark.dating.dto.member.MemberPicture" alias="MemberPicture"/>
-
   </typeAliases>
 
 </configuration>
