@@ -1,6 +1,5 @@
 package com.spark.dating.matching;
 
-
-public class FeedController {
+public class MatchingService {
     
 }
