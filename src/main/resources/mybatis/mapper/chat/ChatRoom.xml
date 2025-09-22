@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.chat.dao.ChatRoomDao">
+<insert id="createChatRoom" parameterType="ChatRoom">
+	INSERT INTO CHATROOM 
+	VALUES (1, #{cr_matchingNo}, #{cr_name})
+</insert>
+
+
+<select id="selectAllChatRoom" parameterType="int" resultType="ChatRoom">
+	SELECT CR_NO, CR_MATCHINGNO, CR_NAME
+	FROM CHATROOM
+	WHERE CR_MATCHINGNO = #{value}
+</select>
+
+<select id="select" parameterType="int" resultType="ChatRoom">
+	SELECT CR_NO, CR_MATCHINGNO, CR_NAME
+	FROM CHATROOM
+	WHERE CR_MATCHINGNO = #{m_id}
+</select>
+</mapper>
