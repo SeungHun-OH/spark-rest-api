@@ -4,11 +4,42 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spark.dating.dao.mybatis.TestDao">
-<select id="testselect"
-          resultType="Test">
+<mapper namespace="com.spark.dating.member.MemberDao">
+
+  <resultMap id="Member" type="Member">
+    <id property="m_no" column="M_NO"/>
+    <result property="m_id" column="M_ID"/>
+    <result property="m_password" column="M_PASSWORD"/>
+    <result property="m_name" column="M_NAME"/>
+    <result property="m_ssn" column="M_SSN"/>
+    <result property="m_age" column="M_AGE"/>
+    <result property="m_email" column="M_EMAIL"/>
+    <result property="m_gender" column="M_GENDER"/>
+    <result property="m_phone" column="M_PHONE"/>
+    <result property="m_nickname" column="M_NICKNAME"/>
+    <result property="m_region" column="M_REGION"/>
+    <result property="m_bio" column="M_BIO"/>
+    <result property="m_mbti" column="M_MBTI"/>
+    <result property="m_active" column="M_ACTIVE"/>
+  </resultMap>
+
+  <insert id = "insertMember" parameterType="Member">
+    insert into member (
+      M_ID, M_PASSWORD, M_NAME, M_SSN, M_AGE,
+      M_EMAIL, M_GENDER, M_PHONE, M_NICKNAME, M_REGION,
+      M_BIO, M_MBTI, M_ACTIVE
+    ) 
+    VALUES (
+      #{m_id}, #{m_password}, #{m_name}, #{m_ssn}, #{m_age},
+      #{m_email}, #{m_gender}, #{m_phone}, #{m_nickname}, #{m_region},
+      #{m_bio}, #{m_mbti}, #{m_active}
+    )
+  </insert>
+
+  <select id="SelectMemberByM_id" resultMap="Member" parameterType="String">
     SELECT *
-	FROM TEST
-</select>
+	  from member
+    where M_ID = #{value}
+  </select>
 
 </mapper>

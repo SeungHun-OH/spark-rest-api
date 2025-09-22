@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.member.MemberPictureDao">
+
+  <resultMap id = "MemberPicture" type = "MemberPicture">
+    <id property="mp_no" column="MP_NO"/>
+    <result property="mp_memberno" column="MP_MEMBERNO"/>
+    <result property="mp_attachtype" column="MP_ATTACHTYPE"/>
+    <result property="mp_attachoname" column="MP_ATTACHONAME"/>
+    <result property="mp_attachdata" column="MP_ATTACHDATA"/>
+
+  </resultMap>
+
+  <insert id = "insertMemberPicture" parameterType="memberPicture">
+    insert into memberpicture (
+     MP_MEMBERNO, MP_ATTACHTYPE, MP_ATTACHONAME, MP_ATTACHDATA
+    ) values (
+     #{mp_memberno}, #{mp_attachtype}, #{mp_attachoname}, #{mp_attachdata,jdbcType=BLOB}
+    )
+  </insert>
+
+  <!-- <select id= "SelectMemberPictureByM_no" parameterType="int" resultType="MemberPicture">
+    select *
+    from memberpicture
+    where MP_MEMBERNO = #{value}
+
+  </select> -->
+
+  <select id="SelectMemberPictureByM_no" parameterType="int" resultMap="MemberPicture">
+  SELECT *
+  FROM memberpicture
+  WHERE MP_MEMBERNO = #{m_no}
+  </select>
+
+</mapper>
