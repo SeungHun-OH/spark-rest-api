@@ -18,6 +18,7 @@
   <typeAliases>
     <typeAlias type="com.spark.dating.dto.Test" alias="Test"/>
     <typeAlias type="com.spark.dating.dto.chat.ChatRoom" alias="ChatRoom"/>
+    <typeAlias type="com.spark.dating.dto.chat.ChatMessage" alias="ChatMessage"/>
     <typeAlias type="com.spark.dating.dto.member.Member" alias="Member"/>
     <typeAlias type="com.spark.dating.dto.member.MemberPicture" alias="MemberPicture"/>
   </typeAliases>
