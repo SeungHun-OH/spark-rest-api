@@ -9,5 +9,7 @@ import com.spark.dating.dto.member.MemberPicture;
 public interface MemberDao {
   int insertMember(Member member);
 
-  Member SelectMemberByM_id(String m_id);  
+  Member SelectMemberByM_id(String m_id); 
+  
+  int updateMember(int m_no);
 }
