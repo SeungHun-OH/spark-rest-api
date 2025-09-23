@@ -36,8 +36,6 @@ public class MemberController {
     return memberService.SelectMemberByM_id(m_id);
   }
 
-
-
   @PostMapping("Member/login")
   public Map<String, Object> login(@RequestBody Member memberlogin) {
 

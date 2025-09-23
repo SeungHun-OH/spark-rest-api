@@ -15,5 +15,4 @@ public class FeedPicture {
 	private String fp_attachtype;
 	private String fp_attachoname;
 	private byte[] fp_attachdata;
-	
 }
