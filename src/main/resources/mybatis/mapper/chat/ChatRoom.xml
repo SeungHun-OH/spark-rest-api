@@ -5,21 +5,54 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spark.dating.chat.dao.ChatRoomDao">
-<insert id="createChatRoom" parameterType="ChatRoom">
+<insert id="createChatRoom" parameterType="int">
 	INSERT INTO CHATROOM 
-	VALUES (1, #{cr_matchingNo}, #{cr_name})
+	VALUES (SEQ_CHATROOM_NO.NEXTVAL, #{matchingNo})
 </insert>
 
 
+
 <select id="selectAllChatRoom" parameterType="int" resultType="ChatRoom">
-	SELECT CR_NO, CR_MATCHINGNO, CR_NAME
-	FROM CHATROOM
-	WHERE CR_MATCHINGNO = #{value}
+	SELECT 
+    CR.CR_NO as cr_no,             
+    
+    CASE 
+        WHEN h.H_SENDUSER = #{value} THEN receiver.M_NAME
+        ELSE sender.M_NAME
+    END AS cr_name,
+
+    CASE 
+        WHEN h.H_SENDUSER = #{value} THEN receiver.M_AGE
+        ELSE sender.M_AGE
+    END AS cr_age,
+
+    msg.CM_MSG AS cr_lastMessage,
+    msg.CM_DATE AS cr_lastMessageDate
+
+FROM HEARTS h
+JOIN MEMBER sender   ON h.H_SENDUSER = sender.M_NO
+JOIN MEMBER receiver ON h.H_RECEIVEUSER = receiver.M_NO
+JOIN MATCHING m      ON h.H_NO = m.MT_HEARTSNO
+JOIN CHATROOM cr     ON cr.CR_MATCHINGNO = m.MT_HEARTSNO
+
+-- 🔽 채팅방별 가장 마지막 메시지를 가져오는 서브쿼리
+LEFT JOIN (
+    SELECT cm1.*
+    FROM CHATMESSAGE cm1
+    JOIN (
+        SELECT CM_CHATROOMNO, MAX(CM_DATE) AS MAX_DATE
+        FROM CHATMESSAGE
+        GROUP BY CM_CHATROOMNO
+    ) cm2
+    ON cm1.CM_CHATROOMNO = cm2.CM_CHATROOMNO AND cm1.CM_DATE = cm2.MAX_DATE
+) msg ON msg.CM_CHATROOMNO = cr.CR_NO
+
+-- 🔐 로그인 유저 기준 필터링
+WHERE h.H_SENDUSER = #{value}
+   OR h.H_RECEIVEUSER = #{value}
+
+-- 📅 마지막 메시지 날짜 기준으로 정렬
+ORDER BY msg.CM_DATE ASC
 </select>
 
-<select id="select" parameterType="int" resultType="ChatRoom">
-	SELECT CR_NO, CR_MATCHINGNO, CR_NAME
-	FROM CHATROOM
-	WHERE CR_MATCHINGNO = #{m_id}
-</select>
 </mapper>
