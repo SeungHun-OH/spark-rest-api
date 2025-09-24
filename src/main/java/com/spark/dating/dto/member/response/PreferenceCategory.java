@@ -1,4 +1,4 @@
-package com.spark.dating.dto.member;
+package com.spark.dating.dto.member.response;
 
 import lombok.Data;
 

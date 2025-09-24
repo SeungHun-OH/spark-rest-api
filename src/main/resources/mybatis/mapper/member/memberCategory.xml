@@ -4,37 +4,42 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spark.dating.member.PreferenceCategory">
+<mapper namespace="com.spark.dating.member.MemberCategoryDao">
 
-  <resultMap id="PreferenceCategory" type="PreferenceCategory">
-
+  <resultMap id="PreferenceCategoryMap" type="PreferenceCategory">
+    <id property="pc_no" column="PC_NO"/>
+    <result property="pc_type" column="PC_TYPE"/>
+    <result property="pc_typenum" column="PC_TYPENUM"/>
+    <result property="pc_group" column="PC_GROUP"/>
+    <result property="pc_name" column="PC_NAME"/>
   </resultMap>
 
-  <insert id = "insertPreferenceCategory" parameterType="PreferenceCategory">
-    <selectKey keyProperty="m_no" resultType="int" order="BEFORE">
-    SELECT MEMBER_SEQ.NEXTVAL FROM dual
-    </selectKey>
-    
-    insert into Survey (
-      M_NO
-    ) 
-    VALUES (
-      #{m_no}    
-    )
+  <resultMap id="PreferenceResponseMap" type="PreferenceResponse">
+    <result property="member_No" column="MEMBER_NO"/>
+
+    <collection property="selfPrefers" 
+                ofType = "PreferenceCategory"
+                resultMap ="PreferenceCategoryMap"/>
+
+    <collection property="partnerPrefers"
+                ofType="PreferenceCategory"
+                resultMap="PreferenceCategoryMap"/>
+  </resultMap>
+
+  <insert id="insertMemberCategories" parameterType="map">
+    insert all
+    <foreach collection="preferNos" item="preferNo">
+     into MemberCategory(
+       MP_MEMBERNO, MP_PREFERNO, MP_CREATEDAT
+     ) 
+     values(
+      #{mp_memberNo}, #{mp_preferNo}, SYSDATE
+     )
+    </foreach>
+    select 1 from dual
   </insert>
 
-  <update id = "updateSurvey" parameterType="Survey">
-    update survey
-    set
-       M_PASSWORD = #{m_password},
-       
-      where m_no = #{m_no}
-  </update>
 
-  <select id="SelectSurveyByM_no" resultMap="Survey" parameterType="int">
-    SELECT *
-	  from survey
-    where M_NO = #{value}
-  </select>
+  
 
 </mapper>
