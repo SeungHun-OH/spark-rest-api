@@ -55,6 +55,7 @@
        M_BIO = #{m_bio},
        M_MBTI = #{m_mbti},
        M_ACTIVE = #{m_active}
+       
       where m_no = #{m_no}
   </update>
 
