@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.member.SurveyDao">
+
+  <resultMap id="Survey" type="Survey">
+
+  </resultMap>
+
+  <insert id = "insertSurvey" parameterType="Survey">
+    <selectKey keyProperty="m_no" resultType="int" order="BEFORE">
+    SELECT MEMBER_SEQ.NEXTVAL FROM dual
+    </selectKey>
+    
+    insert into Survey (
+      M_NO
+    ) 
+    VALUES (
+      #{m_no}    
+    )
+  </insert>
+
+  <update id = "updateSurvey" parameterType="Survey">
+    update survey
+    set
+       M_PASSWORD = #{m_password},
+       
+      where m_no = #{m_no}
+  </update>
+
+  <select id="SelectSurveyByM_no" resultMap="Survey" parameterType="int">
+    SELECT *
+	  from survey
+    where M_NO = #{value}
+  </select>
+
+</mapper>
