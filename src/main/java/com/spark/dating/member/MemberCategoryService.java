@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SurveyService {
-  
+public class MemberCategoryService {
+
   @Autowired
-  SurveyDao surveyDao;
+  MemberCategoryDao memberCategoryDao;
 
 }

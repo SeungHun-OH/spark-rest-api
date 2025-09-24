@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class MemberPreference {
+public class MemberCategory {
   //MemberPreference 테이블명 참조 부모키만 가짐
   private int mp_no;
   private int mp_memberno;

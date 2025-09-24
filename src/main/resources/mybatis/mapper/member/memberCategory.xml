@@ -4,13 +4,13 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spark.dating.member.SurveyDao">
+<mapper namespace="com.spark.dating.member.PreferenceCategory">
 
-  <resultMap id="Survey" type="Survey">
+  <resultMap id="PreferenceCategory" type="PreferenceCategory">
 
   </resultMap>
 
-  <insert id = "insertSurvey" parameterType="Survey">
+  <insert id = "insertPreferenceCategory" parameterType="PreferenceCategory">
     <selectKey keyProperty="m_no" resultType="int" order="BEFORE">
     SELECT MEMBER_SEQ.NEXTVAL FROM dual
     </selectKey>

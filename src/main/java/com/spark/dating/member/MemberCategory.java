@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-public class SurveyController {
+public class MemberCategory {
 
   @Autowired
-  SurveyService surveyService;
+  MemberCategoryService preferenceService;
     
 }
