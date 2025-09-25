@@ -1,15 +1,15 @@
 package com.spark.dating.feed;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import com.spark.dating.dto.feed.FeedPicture;
 
 @Mapper
 public interface FeedPictureDao {
     public int create(FeedPicture feedPicture);
-    public MultipartFile[] getFeedPicture(int f_no);
-    public int update(FeedPicture feedPicture);
-    public int delete(int fp_no);
+    public List<FeedPicture> selectByFno(int f_no);
+    // public int update(FeedPicture feedPicture);
+    public int delete(int fp_feedno);
     public int countAll(int m_no);
 }
