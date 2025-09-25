@@ -26,9 +26,9 @@
                 resultMap="PreferenceCategoryMap"/>
   </resultMap>
 
-  <insert id="insertMemberCategories" parameterType="map">
+  <!-- <insert id="insertMemberCategories" parameterType="map">
     insert all
-    <foreach collection="preferNos" item="preferNo">
+    <foreach collection="preferNos" item="mp_preferNo">
      into MemberCategory(
        MP_MEMBERNO, MP_PREFERNO, MP_CREATEDAT
      ) 
@@ -37,9 +37,11 @@
      )
     </foreach>
     select 1 from dual
-  </insert>
+  </insert> -->
 
-
-  
+  <insert id="insertMemberCategories">
+    INSERT INTO MEMBERCATEGORY(MC_MEMBERNO, MC_PREFERNO, MC_CREATEDAT)
+    VALUES(#{mp_memberNo}, #{preferNo}, SYSDATE)
+</insert>
 
 </mapper>

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spark.dating.dto.member.response.PreferenceCategory;
+
 @Service
 public class MemberCategoryService {
 
@@ -16,5 +18,9 @@ public class MemberCategoryService {
         memberCategoryDao.insertMemberCategories(mp_memberNo, preferNo);
     }
     return "success";
+  }
+
+  public List<PreferenceCategory> getAllCategoryStatic(){
+    return memberCategoryDao.getAllCategoryStatic();
   }
 }
