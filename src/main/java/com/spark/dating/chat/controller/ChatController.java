@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.RuntimeErrorException;
-
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -13,17 +11,18 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.chat.service.ChatMessageService;
 import com.spark.dating.chat.service.ChatRoomService;
-import com.spark.dating.common.RestApiException;
-import com.spark.dating.common.error.ChatErrorCode;
 import com.spark.dating.dto.chat.ChatMessage;
 import com.spark.dating.dto.chat.ChatRoom;
+import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,9 +37,8 @@ public class ChatController implements ChatControllerDocs{
 	private ChatMessageService chatMessageService;
 
 	@PostMapping("/rooms")
-	public String createChatRoom(@RequestParam("matchingNo") final int matchingNo) {
-		chatRoomService.createChatRoom(matchingNo);
-		return "SUCCESS";
+	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest chatRoomCreateRequest) {
+		chatRoomService.createChatRoom(chatRoomCreateRequest);
 	}
 
 	@GetMapping("/rooms")

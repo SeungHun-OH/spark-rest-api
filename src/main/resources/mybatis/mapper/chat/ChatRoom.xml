@@ -11,6 +11,7 @@
 </insert>
 
 
+<select id="checkMatcing"></select>
 
 <select id="selectAllChatRoom" parameterType="int" resultType="ChatRoom">
 	SELECT 

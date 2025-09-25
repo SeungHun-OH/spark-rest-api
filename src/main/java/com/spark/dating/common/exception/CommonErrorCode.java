@@ -1,4 +1,4 @@
-package com.spark.dating.common.error;
+package com.spark.dating.common.exception;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,6 +1,6 @@
 package com.spark.dating.common;
 
-import com.spark.dating.common.error.BaseErrorCode;
+import com.spark.dating.common.exception.BaseErrorCode;
 
 import lombok.Getter;
 

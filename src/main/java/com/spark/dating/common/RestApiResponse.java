@@ -2,7 +2,7 @@ package com.spark.dating.common;
 
 import java.time.LocalDateTime;
 
-import com.spark.dating.common.error.BaseErrorCode;
+import com.spark.dating.common.exception.BaseErrorCode;
 
 import lombok.AccessLevel;
 import lombok.Builder;
