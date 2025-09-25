@@ -2,9 +2,9 @@ package com.spark.dating.common.error;
 
 import org.springframework.http.HttpStatus;
 
-public interface ErrorCode {
+public interface BaseErrorCode {
 
-	String name();
+	String getCode();
 	HttpStatus getHttpStatus();
 	String getMessage();
 }
