@@ -50,7 +50,7 @@
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
-    WHERE MC.MC_MEMBERNO = #{member_no}
+    WHERE MC.MC_MEMBERNO = #{member_No}
   </select>
 
   <select id="selectPartnerPrefers" parameterType="int" resultMap="PreferenceResponseMap">
@@ -58,12 +58,10 @@
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
-    WHERE MC.MC_MEMBERNO = #{member_no}  <!-- partner용 조건 필요시 수정 -->
+    WHERE MC.MC_MEMBERNO = #{member_No}  <!-- partner용 조건 필요시 수정 -->
   </select>
 
 </mapper>
-
-
 
 <!-- <insert id="insertMemberCategories" parameterType="map">
     insert all

@@ -39,9 +39,9 @@ public class MemberCategoryController {
   // public ApiResponse<Member> SelectMemberByM_id
   // (@RequestParam("m_id") String m_id) {
   @GetMapping("/member/membercategories")
-  public ApiResponse<PreferenceResponse> getPreferenceByMember_No(@RequestParam("member_no") int member_no) {
+  public ApiResponse<PreferenceResponse> getPreferenceByMember_No(@RequestParam("member_No") int member_No) {
     try {
-      PreferenceResponse response = memberCategoryService.getPreferenceByMember_No(member_no);
+      PreferenceResponse response = memberCategoryService.getPreferenceByMember_No(member_No);
       return new ApiResponse<>("success", "조회 성공", response);
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
