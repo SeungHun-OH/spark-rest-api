@@ -12,6 +12,7 @@
     <result property="pc_typenum" column="PC_TYPENUM"/>
     <result property="pc_group" column="PC_GROUP"/>
     <result property="pc_name" column="PC_NAME"/>
+    <result property="pc_desc" column="PC_DESC"/>
   </resultMap>
 
   <resultMap id="PreferenceResponseMap" type="PreferenceResponse">
@@ -21,12 +22,50 @@
                 ofType = "PreferenceCategory"
                 resultMap ="PreferenceCategoryMap"/>
 
-    <collection property="partnerPrefers"
-                ofType="PreferenceCategory"
-                resultMap="PreferenceCategoryMap"/>
+    <collection property="partnerPrefers" ofType="PreferenceCategory" resultMap="PreferenceCategoryMap"/>
   </resultMap>
 
-  <!-- <insert id="insertMemberCategories" parameterType="map">
+  <insert id="insertMemberCategories">
+    INSERT INTO MEMBERCATEGORY(
+      MC_NO, 
+      MC_MEMBERNO, 
+      MC_PREFERNO, 
+      MC_CREATEDAT
+    )
+    VALUES(
+      MEMBERCATEGORY_SEQ.nextval,  
+      #{mp_memberNo},            
+      #{preferNo},                
+      SYSDATE                      
+    )
+  </insert>
+
+  <select id="getAllCategoryStatic" resultMap="PreferenceCategoryMap">
+    SELECT * 
+    FROM PREFERENCECATEGORY
+  </select>
+
+  <select id = "selectSelfPrefers" parameterType="int" resultMap="PreferenceResponseMap">
+    SELECT PC.PC_NO, PC.PC_TYPE, PC.PC_TYPENUM, PC.PC_GROUP, PC.PC_NAME, PC.PC_DESC
+    FROM MEMBERCATEGORY MC
+
+    JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
+    WHERE MC.MC_MEMBERNO = #{member_no}
+  </select>
+
+  <select id="selectPartnerPrefers" parameterType="int" resultMap="PreferenceResponseMap">
+    SELECT PC.PC_NO, PC.PC_TYPE, PC.PC_TYPENUM, PC.PC_GROUP, PC.PC_NAME, PC.PC_DESC
+    FROM MEMBERCATEGORY MC
+
+    JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
+    WHERE MC.MC_MEMBERNO = #{member_no}  <!-- partner용 조건 필요시 수정 -->
+  </select>
+
+</mapper>
+
+
+
+<!-- <insert id="insertMemberCategories" parameterType="map">
     insert all
     <foreach collection="preferNos" item="mp_preferNo">
      into MemberCategory(
@@ -39,9 +78,9 @@
     select 1 from dual
   </insert> -->
 
-  <insert id="insertMemberCategories">
+
+
+<!-- <insert id="insertMemberCategories">
     INSERT INTO MEMBERCATEGORY(MC_MEMBERNO, MC_PREFERNO, MC_CREATEDAT)
     VALUES(#{mp_memberNo}, #{preferNo}, SYSDATE)
-</insert>
-
-</mapper>
+</insert> -->

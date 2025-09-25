@@ -12,7 +12,7 @@ public class ApiResponse<T> {
 	private String message;
 
 	@Builder
-	private ApiResponse(String path, T data, String message) {
+	private ApiResponse(String path, String message, T data) {
 		this.path = path;
 		this.data = data;
 		this.message = message;
