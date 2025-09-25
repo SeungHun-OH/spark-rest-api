@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spark.dating.chat.dao.ChatRoomDao;
 import com.spark.dating.dto.chat.ChatRoom;
+import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 
 @Service
 public class ChatRoomService {
@@ -14,8 +15,8 @@ public class ChatRoomService {
 	@Autowired
 	private ChatRoomDao chatRoomDao;
 
-	public void createChatRoom(int matchingNO) {
-		chatRoomDao.createChatRoom(matchingNO);
+	public void createChatRoom(ChatRoomCreateRequest chatRoomCreateRequest) {		
+		chatRoomDao.createChatRoom(chatRoomCreateRequest.getMatchingNo());
 	}
 
 	public List<ChatRoom> selectAllChatRoom(int userNo) {
