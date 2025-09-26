@@ -11,22 +11,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FeedPicture {
 
-	private int fp_no;
-	private int fp_feedno;
+	private int fpNo;
+	private int fpFeedNo;
 
-	private MultipartFile fp_attach;
+	private MultipartFile fpAttach;
 
-	private String fp_attachtype;
-	private String fp_attachoname;
-	private byte[] fp_attachdata;
+	private String fpAttachtype;
+	private String fpAttachoname;
+	private byte[] fpAttachdata;
 
 	static public FeedPicture insertFeedPictures(int f_no, MultipartFile file) {
 		FeedPicture feedPicture = new FeedPicture();
 		try {
-			feedPicture.setFp_feedno(f_no);
-			feedPicture.setFp_attachoname(file.getOriginalFilename());
-			feedPicture.setFp_attachdata(file.getBytes());
-			feedPicture.setFp_attachtype(file.getContentType());
+			feedPicture.setFpFeedNo(f_no);
+			feedPicture.setFpAttachoname(file.getOriginalFilename());
+			feedPicture.setFpAttachdata(file.getBytes());
+			feedPicture.setFpAttachtype(file.getContentType());
 		} catch (IOException e) {
 			log.info("error");
 		}

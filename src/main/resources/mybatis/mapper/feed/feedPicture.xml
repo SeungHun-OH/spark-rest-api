@@ -4,6 +4,7 @@
 <mapper namespace="com.spark.dating.feed.FeedPictureDao">
 
   <!--ResultMap-->
+  <!-- 
   <resultMap id="feedPictureBase" type="FeedPicture">
     <id property="fp_no" column="fp_no"/>
     <result property="fp_feedno" column="fp_feedno"/>
@@ -11,34 +12,35 @@
     <result property="fp_attachoname" column="fp_attachoname"/>
     <result property="fp_attachdata" column="fp_attachdata"/>
   </resultMap>
+  -->
 
   <!--구현-->
   <insert id="create"
     parameterType="FeedPicture">
-    <selectKey keyProperty="fp_no" resultType="int" order="BEFORE"> 
+    <selectKey keyProperty="fpNo" resultType="int" order="BEFORE"> 
       SELECT fp_no_seq.NEXTVAL FROM dual 
     </selectKey> 
     INSERT INTO feedPicture (fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata) 
-    VALUES (#{fp_no}, #{fp_feedno}, #{fp_attachtype}, #{fp_attachoname}, #{fp_attachdata})
+    VALUES (#{fpNo}, #{fpFeedNo}, #{fpAttachtype}, #{fpAttachoname}, #{fpAttachdata})
   </insert>
 
   <select id="selectByFno"
     parameterType="int"
-    resultMap="feedPictureBase"> 
+    resultType="FeedPicture"> 
     SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
-    FROM feedPicture WHERE fp_feedno = #{fp_feedno} 
+    FROM feedPicture WHERE fp_feedno = #{fpFeedNo} 
   </select>
 
   <select id="selectByFpno"
     parameterType="int"
-    resultMap="feedPictureBase"> 
+    resultType="FeedPicture"> 
     SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
-    FROM feedPicture WHERE fp_no = #{fp_no} 
+    FROM feedPicture WHERE fp_no = #{fpNo} 
   </select>
 
   <delete id="delete"
           parameterType="int">
     DELETE FROM feedPicture
-    WHERE fp_feedno = #{fp_feedno}
+    WHERE fp_feedno = #{fpFeedNo}
   </delete>
 </mapper>

@@ -31,7 +31,7 @@ public class FeedPictureController {
         FeedPicture feedPicture = feedPictureService.getPicture(fp_no);
         return ResponseEntity
         .ok()
-        .contentType(MediaType.parseMediaType(feedPicture.getFp_attachtype()))
-        .body(feedPicture.getFp_attachdata());
+        .contentType(MediaType.parseMediaType(feedPicture.getFpAttachtype()))
+        .body(feedPicture.getFpAttachdata());
     } 
 }

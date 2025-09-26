@@ -7,30 +7,32 @@
 <mapper namespace="com.spark.dating.feed.FeedDao">
 
   <!--ResultMap-->
+  <!-- 
   <resultMap id="feedBase" type="Feed">
     <id property="f_no" column="f_no"/>
     <result property="f_memberno" column="f_memberno"/>
     <result property="f_content" column="f_content"/>
     <result property="f_date" column="f_date"/>
   </resultMap>
+  -->
 
   <!--구현-->
   <insert id="create"
           parameterType="Feed">
-    <selectKey keyProperty="f_no" resultType="int" order="BEFORE">
+    <selectKey keyProperty="fNo" resultType="int" order="BEFORE">
       SELECT f_no_seq.NEXTVAL FROM dual
     </selectKey>
     INSERT INTO feed (f_no, f_memberno, f_content, f_date)
-    VALUES (#{f_no}, #{f_memberno}, #{f_content}, SYSDATE)
+    VALUES (#{fNo}, #{fMemberNo}, #{fContent}, SYSDATE)
   </insert>
 
-  <select id="selectByFno" parameterType="int" resultMap="feedBase">
+  <select id="selectByFno" parameterType="int" resultType="Feed">
     SELECT f_no, f_memberno, f_content, f_date
     FROM feed
-    WHERE f_no = #{f_no}
+    WHERE f_no = #{fNo}
   </select>
 
-  <select id="selectByPage" resultMap="feedBase">
+  <select id="selectByPage" resultType="Feed">
   <![CDATA[
     SELECT rnum, f_no, f_memberno, f_content, f_date
     FROM (
@@ -38,7 +40,7 @@
       FROM (
         SELECT f_no, f_memberno, f_content, f_date
         FROM feed
-        WHERE f_memberno = #{m_no}
+        WHERE f_memberno = #{fMemberNo}
         ORDER BY f_date DESC
       )
       WHERE rownum <= #{pager.endRowNo}
@@ -47,29 +49,29 @@
   ]]>
   </select>
 
-  <select id="selectAllByMno" parameterType="int" resultMap="feedBase">
+  <select id="selectAllByMno" parameterType="int" resultType="Feed">
     SELECT f_no, f_memberno, f_content, f_date
     FROM feed
-    WHERE f_memberno = #{f_memberno}
+    WHERE f_memberno = #{fMemberno}
   </select>
 
   <update id="update" parameterType="Feed">
     UPDATE feed
-    SET   f_content = #{f_content},
+    SET   f_content = #{fContent},
           f_date = SYSDATE
-    WHERE f_no = #{f_no}
+    WHERE f_no = #{fNo}
   </update>
 
   <delete id="delete"
           parameterType="int">
     DELETE FROM feed
-    WHERE f_no = #{f_no}
+    WHERE f_no = #{fNo}
   </delete>
 
   <select id="countAll" parameterType="int" resultType="int">
     SELECT count(*)
     FROM feed
-    WHERE f_memberno = #{f_memberno}
+    WHERE f_memberno = #{fMemberno}
   </select>
 
 </mapper>

@@ -24,11 +24,11 @@ public class FeedService {
     private FeedPictureDao feedPictureDao;
 
     public void createFeed(Feed feed, MultipartFile[] files) throws IOException {
-        feedDao.create(feed);
+        int rows = feedDao.create(feed);
 
         if (files != null) {
             for (int i=0; i<files.length; i++) {
-                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getF_no(), files[i]);
+                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getFNo(), files[i]);
                 feedPictureDao.create(feedPicture);
             }
         }
@@ -40,7 +40,7 @@ public class FeedService {
 
         if (files != null) {
             for (int i=0; i<files.length; i++) {
-                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getF_no(), files[i]);
+                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getFNo(), files[i]);
                 feedPicRows += feedPictureDao.create(feedPicture);
             }
         }
@@ -63,7 +63,7 @@ public class FeedService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("feed", feed);
-        map.put("feedPicture", list);
+//        map.put("feedPicture", list);
 
         return map;
     }
