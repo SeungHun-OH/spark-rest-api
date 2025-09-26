@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,16 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.chat.service.ChatMessageService;
 import com.spark.dating.chat.service.ChatRoomService;
-import com.spark.dating.dto.chat.ChatMessage;
-import com.spark.dating.dto.chat.ChatRoom;
+import com.spark.dating.dto.chat.ChatMessageSelectRequest;
+import com.spark.dating.dto.chat.ChatMessageSend;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
+import com.spark.dating.dto.chat.ChatRoomSelectRequest;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestMapping("/matching-chat")
-//@Tag(name = "채팅 컨트롤러", description = "채팅 관련해서 처리하는 컨트롤러입니다.")
 @RestController
 public class ChatController implements ChatControllerDocs{
 
@@ -37,21 +39,19 @@ public class ChatController implements ChatControllerDocs{
 	private ChatMessageService chatMessageService;
 
 	@PostMapping("/rooms")
-	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest chatRoomCreateRequest) {
-		chatRoomService.createChatRoom(chatRoomCreateRequest);
+	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest ChatRoomCreateRequest) {
+		
+		chatRoomService.createChatRoom(ChatRoomCreateRequest);
 	}
 
 	@GetMapping("/rooms")
-	public List<ChatRoom> chatRoomList(@RequestParam("m_id") final int userNo) {
+	public List<ChatRoomSelectRequest> chatRoomList(@RequestParam("m_id") final int userNo) {
+		System.out.println("여기");
 		return chatRoomService.selectAllChatRoom(userNo);
 	}
 
 	@GetMapping("/chatting/{roomId}")
-	public List<ChatMessage> chatMessage(@PathVariable("roomId") final int roomId) {
-		if(roomId>0) {
-//			throw new RestApiException(ChatErrorCode.INVALID_PARAMETER);
-			throw new NullPointerException();
-		}
+	public List<ChatMessageSelectRequest> chatMessage(@PathVariable("roomId") final int roomId) {
 		return chatMessageService.getChattingMessage(roomId);
 	}
 
@@ -60,18 +60,19 @@ public class ChatController implements ChatControllerDocs{
 		Map<String, Object> resultMap = new HashMap<>();
 		return resultMap;
 	}
-
+	@Validated
 	@MessageMapping("/room/{roomId}")
-//	@SendTo("sub/room/{roomId}")
-	public void sendMessage(@DestinationVariable("roomId") int roomId, ChatMessage sendChatData) {
+	@SendTo("sub/room/{roomId}")
+	public void sendMessage(@DestinationVariable("roomId") int roomId, @Valid ChatMessageSend chatMessageSend) {
+		
+		
+		//		ChatMessage2 chatMessage = ChatMessage2.createChatMessage(sendChatData.getCm_senduser(), roomId,
+		//				sendChatData.getCm_msg());
+		log.info(chatMessageSend+toString());
+		log.info(roomId+"");
 
-		ChatMessage chatMessage = ChatMessage.createChatMessage(sendChatData.getCm_senduser(), roomId,
-				sendChatData.getCm_msg());
-
-		System.out.println("연결");
-
-		log.info(chatMessage.toString() + "-----------");
-		chatMessageService.insertChatMessage(chatMessage);
-		chatMessageService.sendMessage(roomId, chatMessage.getCm_msg());
+		//		log.info(chatMessage.toString() + "-----------");
+		//		chatMessageService.insertChatMessage(chatMessage);
+		//		chatMessageService.sendMessage(roomId, chatMessage.getCm_msg());
 	}
 }

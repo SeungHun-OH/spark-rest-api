@@ -5,55 +5,80 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spark.dating.chat.dao.ChatRoomDao">
-<insert id="createChatRoom" parameterType="int">
+
+<resultMap id="ChatRoomRequest" type="com.spark.dating.dto.chat.ChatRoomSelectRequest">
+	<id column="CR_NO" property="crNo" />
+	<result column="CR_NAME"  property="crName"/>
+	<result column="CR_AGE"  property="crAge"/>
+	<result column="CR_LASTMESSAGE"  property="crLastMessage"/>
+	<result column="CR_LASTMESSAGEDATE"  property="crLastMessageDate"/>
+</resultMap>
+
+<insert id="createChatRoom" parameterType="String">
 	INSERT INTO CHATROOM 
-	VALUES (SEQ_CHATROOM_NO.NEXTVAL, #{matchingNo})
+		VALUES (SEQ_CHATROOM_NO.NEXTVAL, HEXTORAW(#{chatRoomUUID}))
+	<selectKey order="AFTER" resultType="Long">
+		SELECT SEQ_CHATROOM_NO.CURRVAL FROM DUAL
+	</selectKey>
 </insert>
 
+<insert id="insertMatchingRoomMapping" parameterType="com.spark.dating.dto.chat.MatchingRoomMapping">
+	INSERT INTO MATCHINGCHATROOMMAPPING 
+		VALUES (SEQ_MATCHINGROOMMAPPING_NO.NEXTVAL, #{mcMatchingNo}, #{mcChatRoomNo})
+</insert>
 
-<select id="checkMatcing"></select>
+<select id="isUserInMatching" parameterType="Long" resultType="int">
+	SELECT CASE WHEN EXISTS (
+	    SELECT 1
+	    FROM MATCHING M
+	    JOIN HEARTS H ON M.MT_HEARTSNO = H.H_NO
+	    WHERE MT_NO = #{matchingNo}
+	      AND (#{memberNo} = H.H_SENDUSER OR #{memberNo} = H.H_RECEIVEUSER)
+	  ) THEN 1 ELSE 0 END AS IS_VALID
+	  FROM DUAL
+</select>
 
-<select id="selectAllChatRoom" parameterType="int" resultType="ChatRoom">
+<select id="selectAllChatRoom" parameterType="int" resultMap="ChatRoomRequest">
 	SELECT 
-    CR.CR_NO as cr_no,             
-    
-    CASE 
-        WHEN h.H_SENDUSER = #{value} THEN receiver.M_NAME
-        ELSE sender.M_NAME
-    END AS cr_name,
-
-    CASE 
-        WHEN h.H_SENDUSER = #{value} THEN receiver.M_AGE
-        ELSE sender.M_AGE
-    END AS cr_age,
-
-    msg.CM_MSG AS cr_lastMessage,
-    msg.CM_DATE AS cr_lastMessageDate
-
-FROM HEARTS h
-JOIN MEMBER sender   ON h.H_SENDUSER = sender.M_NO
-JOIN MEMBER receiver ON h.H_RECEIVEUSER = receiver.M_NO
-JOIN MATCHING m      ON h.H_NO = m.MT_HEARTSNO
-JOIN CHATROOM cr     ON cr.CR_MATCHINGNO = m.MT_HEARTSNO
-
--- 🔽 채팅방별 가장 마지막 메시지를 가져오는 서브쿼리
-LEFT JOIN (
-    SELECT cm1.*
-    FROM CHATMESSAGE cm1
-    JOIN (
-        SELECT CM_CHATROOMNO, MAX(CM_DATE) AS MAX_DATE
-        FROM CHATMESSAGE
-        GROUP BY CM_CHATROOMNO
-    ) cm2
-    ON cm1.CM_CHATROOMNO = cm2.CM_CHATROOMNO AND cm1.CM_DATE = cm2.MAX_DATE
-) msg ON msg.CM_CHATROOMNO = cr.CR_NO
-
--- 🔐 로그인 유저 기준 필터링
-WHERE h.H_SENDUSER = #{value}
-   OR h.H_RECEIVEUSER = #{value}
-
--- 📅 마지막 메시지 날짜 기준으로 정렬
-ORDER BY msg.CM_DATE ASC
+	    CR.CR_NO as cr_no,             
+	    
+	    CASE 
+	        WHEN h.H_SENDUSER = #{value} THEN receiver.M_NAME
+	        ELSE sender.M_NAME
+	    END AS cr_name,
+	
+	    CASE 
+	        WHEN h.H_SENDUSER = #{value} THEN receiver.M_AGE
+	        ELSE sender.M_AGE
+	    END AS cr_age,
+	
+	    msg.CM_MSG AS cr_lastMessage,
+	    msg.CM_DATE AS cr_lastMessageDate
+	
+	FROM HEARTS h
+	JOIN MEMBER sender   ON h.H_SENDUSER = sender.M_NO
+	JOIN MEMBER receiver ON h.H_RECEIVEUSER = receiver.M_NO
+	JOIN MATCHING m      ON h.H_NO = m.MT_HEARTSNO
+	JOIN CHATROOM cr     ON cr.CR_MATCHINGNO = m.MT_HEARTSNO
+	
+	-- 🔽 채팅방별 가장 마지막 메시지를 가져오는 서브쿼리
+	LEFT JOIN (
+	    SELECT cm1.*
+	    FROM CHATMESSAGE cm1
+	    JOIN (
+	        SELECT CM_CHATROOMNO, MAX(CM_DATE) AS MAX_DATE
+	        FROM CHATMESSAGE
+	        GROUP BY CM_CHATROOMNO
+	    ) cm2
+	    ON cm1.CM_CHATROOMNO = cm2.CM_CHATROOMNO AND cm1.CM_DATE = cm2.MAX_DATE
+	) msg ON msg.CM_CHATROOMNO = cr.CR_NO
+	
+	-- 🔐 로그인 유저 기준 필터링
+	WHERE h.H_SENDUSER = #{value}
+	   OR h.H_RECEIVEUSER = #{value}
+	
+	-- 📅 마지막 메시지 날짜 기준으로 정렬
+	ORDER BY msg.CM_DATE ASC
 </select>
 
 </mapper>
