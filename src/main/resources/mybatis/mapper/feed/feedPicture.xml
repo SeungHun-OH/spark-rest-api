@@ -29,6 +29,13 @@
     FROM feedPicture WHERE fp_feedno = #{fp_feedno} 
   </select>
 
+  <select id="selectByFpno"
+    parameterType="int"
+    resultMap="feedPictureBase"> 
+    SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
+    FROM feedPicture WHERE fp_no = #{fp_no} 
+  </select>
+
   <delete id="delete"
           parameterType="int">
     DELETE FROM feedPicture

@@ -24,6 +24,12 @@
     VALUES (#{f_no}, #{f_memberno}, #{f_content}, SYSDATE)
   </insert>
 
+  <select id="selectByFno" parameterType="int" resultMap="feedBase">
+    SELECT f_no, f_memberno, f_content, f_date
+    FROM feed
+    WHERE f_no = #{f_no}
+  </select>
+
   <select id="selectByPage" resultMap="feedBase">
   <![CDATA[
     SELECT rnum, f_no, f_memberno, f_content, f_date

@@ -19,5 +19,4 @@ public class Member {
 	private String m_bio;
 	private String m_mbti;
 	private char m_active = 'T';
-
 }
