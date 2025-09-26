@@ -14,6 +14,8 @@ import com.spark.dating.dto.member.response.PreferenceCategory;
 import com.spark.dating.dto.member.response.PreferenceRequest;
 import com.spark.dating.dto.member.response.PreferenceResponse;
 
+// 명관님 ------------------------------------------------------------------------------------------
+
 @RestController
 public class MemberCategoryController {
 
@@ -23,7 +25,7 @@ public class MemberCategoryController {
   @PostMapping("/member/categories")
   public ApiResponse<Integer> insertMemberCategories(@RequestBody PreferenceRequest request) {
     try {
-      int insertedCount = memberCategoryService.insertMemberCategories(request.getMember_No(), request.getPreferNos());
+      int insertedCount = memberCategoryService.insertMemberCategories(request.getMember_no(), request.getPreferNos());
       return new ApiResponse<Integer>("success", insertedCount + "개의 카테고리 저장 완료", insertedCount);
     } catch (Exception e) {
       return new ApiResponse<Integer>("fail", e.getMessage(), null);
@@ -39,12 +41,14 @@ public class MemberCategoryController {
   // public ApiResponse<Member> SelectMemberByM_id
   // (@RequestParam("m_id") String m_id) {
   @GetMapping("/member/membercategories")
-  public ApiResponse<PreferenceResponse> getPreferenceByMember_No(@RequestParam("member_No") int member_No) {
+  public ApiResponse<PreferenceResponse> getPreferenceByMember_No(@RequestParam("member_no") int member_no) {
     try {
-      PreferenceResponse response = memberCategoryService.getPreferenceByMember_No(member_No);
+      PreferenceResponse response = memberCategoryService.getPreferenceByMember_No(member_no);
       return new ApiResponse<>("success", "조회 성공", response);
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
 }
+
+// 주희님 ------------------------------------------------------------------------------------------

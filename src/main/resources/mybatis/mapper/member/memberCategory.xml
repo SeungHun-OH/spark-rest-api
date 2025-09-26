@@ -16,7 +16,7 @@
   </resultMap>
 
   <resultMap id="PreferenceResponseMap" type="PreferenceResponse">
-    <result property="member_No" column="MEMBER_NO"/>
+    <result property="member_no" column="MEMBER_NO"/>
 
     <collection property="selfPrefers" 
                 ofType = "PreferenceCategory"
@@ -50,7 +50,7 @@
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
-    WHERE MC.MC_MEMBERNO = #{member_No}
+    WHERE MC.MC_MEMBERNO = #{member_no}
   </select>
 
   <select id="selectPartnerPrefers" parameterType="int" resultMap="PreferenceResponseMap">
@@ -58,7 +58,7 @@
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
-    WHERE MC.MC_MEMBERNO = #{member_No}  <!-- partner용 조건 필요시 수정 -->
+    WHERE MC.MC_MEMBERNO = #{member_no}  <!-- partner용 조건 필요시 수정 -->
   </select>
 
 </mapper>

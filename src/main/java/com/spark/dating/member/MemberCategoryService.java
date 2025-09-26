@@ -27,11 +27,11 @@ public class MemberCategoryService {
     return memberCategoryDao.getAllCategoryStatic();
   }
 
-  public PreferenceResponse getPreferenceByMember_No(int member_No){
+  public PreferenceResponse getPreferenceByMember_No(int member_no){
     PreferenceResponse response = new PreferenceResponse();
-    response.setMember_No(member_No);
+    response.setMember_No(member_no);
 
-    List<PreferenceCategory> selfPrefers = memberCategoryDao.selectSelfPrefers(member_No);
+    List<PreferenceCategory> selfPrefers = memberCategoryDao.selectSelfPrefers(member_no);
     response.setSelfPrefers(selfPrefers);
     
     // List<PreferenceCategory> partnerPrefers = memberCategoryDao.selectPartnerPrefers(member_no);
