@@ -22,7 +22,9 @@
                 ofType = "PreferenceCategory"
                 resultMap ="PreferenceCategoryMap"/>
 
-    <collection property="partnerPrefers" ofType="PreferenceCategory" resultMap="PreferenceCategoryMap"/>
+    <collection property="partnerPrefers" 
+                ofType="PreferenceCategory" 
+                resultMap="PreferenceCategoryMap"/>
   </resultMap>
 
   <insert id="insertMemberCategories">
@@ -34,7 +36,7 @@
     )
     VALUES(
       MEMBERCATEGORY_SEQ.nextval,  
-      #{mp_memberNo},            
+      #{memberNo},            
       #{preferNo},                
       SYSDATE                      
     )
@@ -50,7 +52,7 @@
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
-    WHERE MC.MC_MEMBERNO = #{member_no}
+    WHERE MC.MC_MEMBERNO = #{memberNo}
   </select>
 
   <select id="selectPartnerPrefers" parameterType="int" resultMap="PreferenceResponseMap">
@@ -58,7 +60,7 @@
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
-    WHERE MC.MC_MEMBERNO = #{member_no}  <!-- partner용 조건 필요시 수정 -->
+    WHERE MC.MC_MEMBERNO = #{memberNo}  <!-- partner용 조건 필요시 수정 -->
   </select>
 
 </mapper>
