@@ -18,7 +18,6 @@ import com.spark.dating.common.exception.CommonErrorCode;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 @RestControllerAdvice(basePackages = {"com.spark.dating.chat","com.spark.dating.feed", "com.spark.dating.common"})
 @Order(Ordered.LOWEST_PRECEDENCE)

@@ -78,5 +78,4 @@ public class FeedController {
         int rows = feedService.deleteFeed(f_no);
         return rows;
     }
-
 }
