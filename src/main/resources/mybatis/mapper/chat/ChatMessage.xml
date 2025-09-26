@@ -6,22 +6,29 @@
 
 <mapper namespace="com.spark.dating.chat.dao.ChatMessageDao">
 
-  <!-- <select id="testselect"
-          resultType="Test">
-    SELECT *
-	FROM TEST
-</select> -->
+<resultMap id="ChatMessageRequest" type="com.spark.dating.dto.chat.ChatMessageSelectRequest">
+	<result column="CM_SENDUSERNAME" property="cmSendUserName"/>
+	<result column="CM_MSG" property="cmMsg"/>
+	<result column="CM_DATE" property="cmDate"/>
+</resultMap>
 
+<resultMap id="ChatMessageSend" type="com.spark.dating.dto.chat.ChatMessageSend">
+<id column="CM_NO" property="cmNo" />
+<result column="CM_SENDUSER" property="cmSendUser" />
+<result column="CM_CHATROOMNO" property="cmMessage" />
+<result column="CM_MSG" property="cmChatRoomNo" />
+<result column="CM_DATE" property="cmDate" />
+</resultMap>
 
-<insert id="insertChatMessage" parameterType="ChatMessage">
+<insert id="insertChatMessage" parameterType="com.spark.dating.dto.chat.ChatMessageSend">
 	<selectKey keyProperty="cm_no" resultType="int" order="BEFORE">
 	      SELECT SEQ_CHATMESSAGE_NO.NEXTVAL FROM DUAL
 	</selectKey>
 	INSERT INTO CHATMESSAGE
-	VALUES(#{cm_no},#{cm_senduser},#{cm_chatRoomNo},#{cm_msg},#{cm_date})
+	VALUES(#{cmNo},#{cmSendUser},#{cmChatRoomNo},#{cmMessage},#{cmDate})
 </insert>
 
-<select id="getChattingMessage" parameterType="int" resultType="ChatMessage">
+<select id="getChattingMessage" parameterType="int" resultMap="ChatMessageRequest">
 	SELECT
 	    m.M_NAME AS CM_SENDUSERNAME,
 	    c.CM_MSG,
@@ -31,7 +38,5 @@
 	WHERE c.CM_CHATROOMNO = #{value}
 	ORDER BY c.CM_DATE ASC
 </select>
-
-
 
 </mapper>

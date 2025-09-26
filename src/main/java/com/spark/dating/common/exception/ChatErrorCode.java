@@ -16,7 +16,8 @@ import lombok.Getter;
 public enum ChatErrorCode implements BaseErrorCode {
 
 	USER_NOT_IN_CHAT("CH001", HttpStatus.FORBIDDEN, "채팅방에 참여하지 않은 사용자"),
-	INVALID_PARAMETER("CH002", HttpStatus.BAD_REQUEST, "파라미터(인자)가 잘못됨"),
+	USER_NOT_IN_MATCHING("CH002", HttpStatus.BAD_REQUEST, "해당 매칭에 참여한 사용자가 아님"
+			+ ""),
 	;
 	
 

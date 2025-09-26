@@ -15,7 +15,6 @@
   </settings>
 
   <typeAliases>
-    <typeAlias type="com.spark.dating.dto.Test" alias="Test"/>
     <typeAlias type="com.spark.dating.dto.feed.Feed" alias="Feed"/>
     <typeAlias type="com.spark.dating.dto.feed.FeedPicture" alias="FeedPicture"/>
     <typeAlias type="com.spark.dating.dto.chat.ChatRoom" alias="ChatRoom"/>
