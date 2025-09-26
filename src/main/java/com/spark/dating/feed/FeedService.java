@@ -1,13 +1,15 @@
 package com.spark.dating.feed;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spark.dating.dto.Pager;
 import com.spark.dating.dto.feed.Feed;
 import com.spark.dating.dto.feed.FeedPicture;
 
@@ -21,43 +23,63 @@ public class FeedService {
     @Autowired
     private FeedPictureDao feedPictureDao;
 
-    public void createFeed(Feed feed, MultipartFile[] files) throws IOException{
+    public void createFeed(Feed feed, MultipartFile[] files) throws IOException {
         feedDao.create(feed);
 
-        for (int i=0; i<files.length; i++) {
-
-            FeedPicture feedPicture = new FeedPicture();
-            feedPicture.setFp_feedno(feed.getF_no());
-            feedPicture.setFp_no(i);
-            feedPicture.setFp_attachoname(files[i].getOriginalFilename());
-            feedPicture.setFp_attachdata(files[i].getBytes());
-            feedPicture.setFp_attachtype(files[i].getContentType());
-
-            feedPictureDao.create(feedPicture);
+        if (files != null) {
+            for (int i=0; i<files.length; i++) {
+                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getF_no(), files[i]);
+                feedPictureDao.create(feedPicture);
+            }
         }
     }
 
-    public int updateFeed(Feed feed) {
-        int rows = feedDao.update(feed);
-        return rows;
+    public Map<String, Object> updateFeed(Feed feed, MultipartFile[] files) throws IOException {
+        Map<String, Object> map = new HashMap<>();
+        int feedPicRows = 0;
+
+        if (files != null) {
+            for (int i=0; i<files.length; i++) {
+                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getF_no(), files[i]);
+                feedPicRows += feedPictureDao.create(feedPicture);
+            }
+        }
+        int feedRows = feedDao.update(feed);
+        map.put("수정된 feedPictureRows", feedPicRows);
+        map.put("수정된 feedRows", feedRows);
+        return map;
     }
 
     public int deleteFeed(int f_no) {
+        feedPictureDao.delete(f_no);
         int rows = feedDao.delete(f_no);
         return rows;
     }
 
-    public Feed getFeed(int f_no) {
-        Feed feed = feedDao.selectFeedByFno(f_no);
+    public Map<String, Object> getFeed(int f_no) {
+        Feed feed = feedDao.selectByFno(f_no);
+        List<FeedPicture> list = feedPictureDao.selectByFno(f_no);
 
-        return feed;
+        Map<String, Object> map = new HashMap<>();
+        map.put("feed", feed);
+        map.put("feedPicture", list);
+
+        return map;
+    }
+
+    public List<Feed> getListByPage(int m_no, Pager pager) {
+        List<Feed> feedList = feedDao.selectByPage(m_no, pager);
+        return feedList;
     }
 
     public List<Feed> getFeedListByMno(int m_no) {
         List<Feed> feedList = feedDao.selectAllByMno(m_no);
-
-        int count = feedList.size();
         return feedList;
     }
 
+    public int totalRows(int m_no) {
+        int totalRows = feedDao.countAll(m_no);
+        return totalRows;
+    }
 }
+

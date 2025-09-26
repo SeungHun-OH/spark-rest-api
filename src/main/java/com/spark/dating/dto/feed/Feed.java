@@ -10,6 +10,4 @@ public class Feed {
 	private int f_memberno;
 	private String f_content;
 	private Date f_date;
-
-	private FeedPicture feedPicture; //Mybatis association 매핑용
 }

@@ -9,7 +9,7 @@ import com.spark.dating.dto.chat.ChatRoom;
 @Mapper
 public interface ChatRoomDao {
     
-	public void createChatRoom(int matchingNO);
+	public void createChatRoom(Long matchingNO);
 	public List<ChatRoom> selectAllChatRoom(int userNo);
 	public ChatRoom select(int m_id);
 }
