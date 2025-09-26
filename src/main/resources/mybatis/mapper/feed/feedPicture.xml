@@ -1,18 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spark.dating.feed.FeedPictureDao">
 
-  <!-- feed insert : 시퀀스로 f_no를 먼저 얻음-->
+  <!--ResultMap-->
+  <resultMap id="feedPictureBase" type="FeedPicture">
+    <id property="fp_no" column="fp_no"/>
+    <result property="fp_feedno" column="fp_feedno"/>
+    <result property="fp_attachtype" column="fp_attachtype"/>
+    <result property="fp_attachoname" column="fp_attachoname"/>
+    <result property="fp_attachdata" column="fp_attachdata"/>
+  </resultMap>
+
+  <!--구현-->
   <insert id="create"
-          parameterType="FeedPicture">
-    <selectKey keyProperty="fp_no" resultType="int" order="BEFORE">
-      SELECT fp_no_seq.NEXTVAL FROM dual
-    </selectKey>
-    INSERT INTO feedPicture (fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata)
+    parameterType="FeedPicture">
+    <selectKey keyProperty="fp_no" resultType="int" order="BEFORE"> 
+      SELECT fp_no_seq.NEXTVAL FROM dual 
+    </selectKey> 
+    INSERT INTO feedPicture (fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata) 
     VALUES (#{fp_no}, #{fp_feedno}, #{fp_attachtype}, #{fp_attachoname}, #{fp_attachdata})
   </insert>
+
+  <select id="selectByFno"
+    parameterType="int"
+    resultMap="feedPictureBase"> 
+    SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
+    FROM feedPicture WHERE fp_feedno = #{fp_feedno} 
+  </select>
+
+  <delete id="delete"
+          parameterType="int">
+    DELETE FROM feedPicture
+    WHERE fp_feedno = #{fp_feedno}
+  </delete>
 </mapper>

@@ -40,6 +40,25 @@
     )
   </insert>
 
+  <update id = "updateMember" parameterType="Member">
+    update member
+    set
+       M_PASSWORD = #{m_password},
+       M_NAME = #{m_name},
+       M_SSN = #{m_ssn},
+       M_AGE = #{m_age},
+       M_EMAIL = #{m_email},
+       M_GENDER = #{m_gender},
+       M_PHONE = #{m_phone},
+       M_NICKNAME = #{m_nickname},
+       M_REGION = #{m_region},
+       M_BIO = #{m_bio},
+       M_MBTI = #{m_mbti},
+       M_ACTIVE = #{m_active}
+       
+      where m_no = #{m_no}
+  </update>
+
   <select id="SelectMemberByM_id" resultMap="Member" parameterType="String">
     SELECT *
 	  from member

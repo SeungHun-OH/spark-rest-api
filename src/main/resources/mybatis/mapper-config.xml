@@ -21,6 +21,11 @@
     <typeAlias type="com.spark.dating.dto.chat.ChatMessage" alias="ChatMessage"/>
     <typeAlias type="com.spark.dating.dto.member.Member" alias="Member"/>
     <typeAlias type="com.spark.dating.dto.member.MemberPicture" alias="MemberPicture"/>
+    <typeAlias type="com.spark.dating.dto.member.MemberCategory" alias="MemberCategory"/>
+
+    <typeAlias type="com.spark.dating.dto.member.response.PreferenceCategory" alias="PreferenceCategory"/>
+    <typeAlias type="com.spark.dating.dto.member.response.PreferenceResponse" alias="PreferenceResponse"/>
+
   </typeAliases>
 
 </configuration>

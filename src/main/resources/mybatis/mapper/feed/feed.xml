@@ -7,17 +7,11 @@
 <mapper namespace="com.spark.dating.feed.FeedDao">
 
   <!--ResultMap-->
-  <resultMap id="feedWithPictureMap" type="Feed">
+  <resultMap id="feedBase" type="Feed">
     <id property="f_no" column="f_no"/>
     <result property="f_memberno" column="f_memberno"/>
     <result property="f_content" column="f_content"/>
     <result property="f_date" column="f_date"/>
-    <association property="feedPicture" javaType="FeedPicture">
-        <id property="fp_no" column="fp_no"/>
-        <result property="fp_attachdata" column="fp_attachdata"/>
-        <result property="fp_attachtype" column="fp_attachtype"/>
-        <result property="fp_attachoname" column="fp_attachoname"/>
-    </association>
   </resultMap>
 
   <!--구현-->
@@ -30,20 +24,46 @@
     VALUES (#{f_no}, #{f_memberno}, #{f_content}, SYSDATE)
   </insert>
 
-  <select id="selectByFno" parameterType="int" resultMap="feedWithPictureMap">
-    SELECT f.f_no, f.f_memberno, f.f_content, f.f_date,
-           p.fp_no, p.fp_attachdata, p.fp_attachtype, p.fp_attachoname
-    FROM feed f
-    LEFT JOIN feedpicture p ON f.f_no = p.fp_feedno
-    WHERE f.f_no = #{f_no}
+  <select id="selectByPage" resultMap="feedBase">
+  <![CDATA[
+    SELECT rnum, f_no, f_memberno, f_content, f_date
+    FROM (
+      SELECT rownum AS rnum, f_no, f_memberno, f_content, f_date
+      FROM (
+        SELECT f_no, f_memberno, f_content, f_date
+        FROM feed
+        WHERE f_memberno = #{m_no}
+        ORDER BY f_date DESC
+      )
+      WHERE rownum <= #{pager.endRowNo}
+    )
+    WHERE rnum >= #{pager.startRowNo}
+  ]]>
   </select>
 
-  <select id="selectAllByMno" parameterType="int" resultType="Feed">
+  <select id="selectAllByMno" parameterType="int" resultMap="feedBase">
     SELECT f_no, f_memberno, f_content, f_date
     FROM feed
     WHERE f_memberno = #{f_memberno}
   </select>
 
-  
+  <update id="update" parameterType="Feed">
+    UPDATE feed
+    SET   f_content = #{f_content},
+          f_date = SYSDATE
+    WHERE f_no = #{f_no}
+  </update>
+
+  <delete id="delete"
+          parameterType="int">
+    DELETE FROM feed
+    WHERE f_no = #{f_no}
+  </delete>
+
+  <select id="countAll" parameterType="int" resultType="int">
+    SELECT count(*)
+    FROM feed
+    WHERE f_memberno = #{f_memberno}
+  </select>
 
 </mapper>

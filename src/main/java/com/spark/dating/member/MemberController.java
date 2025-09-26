@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -26,18 +27,26 @@ public class MemberController {
   @Autowired
   JwtService jwtService;
 
+  //회원정보 생성
   @PostMapping("member/create")
   public ApiResponse<Integer> Create(@RequestPart("member") Member member,
       @RequestPart("file") MultipartFile file) {
     return memberService.CreateMember(member, file);
   }
 
+  //회원정보 로그인
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody Member memberlogin) {
     return memberService.login(memberlogin);
   }
 
+  //회원정보 수정
+  @PutMapping("/member")
+  public ApiResponse<Integer> UpdateMember(@RequestBody Member member){
+    return memberService.updateMember(member);
+  }
 
+  
   @PostMapping("/member")
   public ApiResponse<Integer> insertMember(@RequestBody Member member) {
     return memberService.insertMember(member);

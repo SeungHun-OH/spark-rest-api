@@ -34,8 +34,7 @@ public class MemberService {
     ApiResponse<Integer> response = insertMember(member);
     if (response.getData() == null) {
       return response;
-    } 
-    else {
+    } else {
       ApiResponse<Integer> responsePicture = insertMemberPicture(member.getM_no(), file);
       return responsePicture;
     }
@@ -65,9 +64,9 @@ public class MemberService {
       memberPicture.setMp_attachdata(file.getBytes());
 
       memberPictureDao.insertMemberPicture(memberPicture);
-      return new ApiResponse<>("success", "사진등록성공",  m_no);
+      return new ApiResponse<>("success", "사진등록성공", m_no);
     } catch (Exception e) {
-      return new ApiResponse<>("fail", e.getMessage(),  m_no);
+      return new ApiResponse<>("fail", e.getMessage(), m_no);
     }
   }
 
@@ -96,7 +95,7 @@ public class MemberService {
       } else {
         map.put("result", "fail");
         map.put("message", "비밀번호가 틀립니다");
-      } 
+      }
       map.put("data", member);
     }
     return map;
@@ -127,6 +126,24 @@ public class MemberService {
       }
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
+    }
+  }
+
+  public ApiResponse<Integer> updateMember(Member member) {
+    try {
+      int updateCount = memberDao.updateMember(member);
+      PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
+      String encodedPassword = passwordEncode.encode(member.getM_password());
+      member.setM_password(encodedPassword);
+      
+      if (updateCount >= 1) {
+        return new ApiResponse<>("success", "회원정보가 수정되었습니다", updateCount);
+
+      } else {
+        return new ApiResponse<>("fail", "수정할 회원이 존재하지 않습니다", 0);
+      }
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "회원 수정 중 오류 발생" + e.getMessage(), 0);
     }
   }
 }
