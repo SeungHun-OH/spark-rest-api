@@ -27,45 +27,56 @@ public class MemberController {
   @Autowired
   JwtService jwtService;
 
-  //회원정보 생성
+  // 회원정보 생성
   @PostMapping("member/create")
   public ApiResponse<Integer> Create(@RequestPart("member") Member member,
       @RequestPart("file") MultipartFile file) {
+
+    log.info("Login MemberController CreateMember값은?" + member);
+
     return memberService.CreateMember(member, file);
   }
 
-  //회원정보 로그인
+  // 회원정보 로그인
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody Member memberlogin) {
     return memberService.login(memberlogin);
   }
 
-  //회원정보 수정
+  // 회원정보 수정
   @PutMapping("/member")
-  public ApiResponse<Integer> UpdateMember(@RequestBody Member member){
+  public ApiResponse<Integer> UpdateMember(@RequestBody Member member) {
     return memberService.updateMember(member);
   }
 
-  
   @PostMapping("/member")
   public ApiResponse<Integer> insertMember(@RequestBody Member member) {
+
+    // log.info("MemberController insertMember값은?" + member);
+    // return new ApiResponse<>("fail", member.toString(), 1);
+
+    // if(member.getMId() == ""){
+    //   log.info("member가 비었습니다");
+    //   return new ApiResponse<>("fail", "member가 비었습니다", 1);
+    // }
+
     return memberService.insertMember(member);
   }
 
   @PostMapping("/member/picture")
-  public ApiResponse<Integer> insertMemberPicture(@RequestParam("m_no") int m_no,
+  public ApiResponse<Integer> insertMemberPicture(@RequestParam("mNo") int mNo,
       @RequestParam("file") MultipartFile file) {
-    return memberService.insertMemberPicture(m_no, file);
+    return memberService.insertMemberPicture(mNo, file);
   }
 
   @GetMapping("/member")
-  public ApiResponse<Member> SelectMemberByM_id(@RequestParam("m_id") String m_id) {
-    return memberService.SelectMemberByM_id(m_id);
+  public ApiResponse<Member> SelectMemberByM_id(@RequestParam("mId") String mId) {
+    return memberService.SelectMemberByM_id(mId);
   }
 
   @GetMapping("/member/picture")
-  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("m_no") int m_no) {
+  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("mNo") int mNo) {
 
-    return memberService.SelectMemberPictureByM_no(m_no);
+    return memberService.SelectMemberPictureByM_no(mNo);
   }
 }
