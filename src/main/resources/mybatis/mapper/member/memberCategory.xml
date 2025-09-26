@@ -7,16 +7,16 @@
 <mapper namespace="com.spark.dating.member.MemberCategoryDao">
 
   <resultMap id="PreferenceCategoryMap" type="PreferenceCategory">
-    <id property="pc_no" column="PC_NO"/>
-    <result property="pc_type" column="PC_TYPE"/>
-    <result property="pc_typenum" column="PC_TYPENUM"/>
-    <result property="pc_group" column="PC_GROUP"/>
-    <result property="pc_name" column="PC_NAME"/>
-    <result property="pc_desc" column="PC_DESC"/>
+    <id property="pcNo" column="PC_NO"/>
+    <result property="pcType" column="PC_TYPE"/>
+    <result property="pcTypeNum" column="PC_TYPENUM"/>
+    <result property="pcGroup" column="PC_GROUP"/>
+    <result property="pcName" column="PC_NAME"/>
+    <result property="pcDesc" column="PC_DESC"/>
   </resultMap>
 
   <resultMap id="PreferenceResponseMap" type="PreferenceResponse">
-    <result property="memberNo" column="MEMBER_NO"/>
+    <result property="memberNo" column="MEMBERNO"/>
 
     <collection property="selfPrefers" 
                 ofType = "PreferenceCategory"
@@ -48,7 +48,13 @@
   </select>
 
   <select id = "selectSelfPrefers" parameterType="int" resultMap="PreferenceResponseMap">
-    SELECT PC.PC_NO, PC.PC_TYPE, PC.PC_TYPENUM, PC.PC_GROUP, PC.PC_NAME, PC.PC_DESC
+    SELECT PC.PC_NO, 
+           PC.PC_TYPE, 
+           PC.PC_TYPENUM, 
+           PC.PC_GROUP, 
+           PC.PC_NAME, 
+           PC.PC_DESC,
+           MC.MC_MEMBERNO AS MEMBERNO
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
