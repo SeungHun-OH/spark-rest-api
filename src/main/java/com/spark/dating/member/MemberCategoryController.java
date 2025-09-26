@@ -25,7 +25,7 @@ public class MemberCategoryController {
   @PostMapping("/member/categories")
   public ApiResponse<Integer> insertMemberCategories(@RequestBody PreferenceRequest request) {
     try {
-      int insertedCount = memberCategoryService.insertMemberCategories(request.getMember_no(), request.getPreferNos());
+      int insertedCount = memberCategoryService.insertMemberCategories(request.getMemberNo(), request.getPreferNos());
       return new ApiResponse<Integer>("success", insertedCount + "개의 카테고리 저장 완료", insertedCount);
     } catch (Exception e) {
       return new ApiResponse<Integer>("fail", e.getMessage(), null);
@@ -41,9 +41,9 @@ public class MemberCategoryController {
   // public ApiResponse<Member> SelectMemberByM_id
   // (@RequestParam("m_id") String m_id) {
   @GetMapping("/member/membercategories")
-  public ApiResponse<PreferenceResponse> getPreferenceByMember_No(@RequestParam("member_no") int member_no) {
+  public ApiResponse<PreferenceResponse> getPreferenceByMember_No(@RequestParam("memberNo") int memberNo) {
     try {
-      PreferenceResponse response = memberCategoryService.getPreferenceByMember_No(member_no);
+      PreferenceResponse response = memberCategoryService.getPreferenceByMember_No(memberNo);
       return new ApiResponse<>("success", "조회 성공", response);
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);

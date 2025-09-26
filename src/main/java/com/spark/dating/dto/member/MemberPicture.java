@@ -6,13 +6,14 @@ import lombok.Data;
 
 @Data
 public class MemberPicture {
-	
-	private int mp_no;
-	private int mp_memberno;
-	
-	private MultipartFile mp_attach;
-	
-	private String mp_attachtype;
-	private String mp_attachoname;
-	private byte[] mp_attachdata;
+
+	private int mpNo;
+	private int mpMemberNo;
+
+	private MultipartFile mpAttach;
+
+	private String mpAttachType;
+	private String mpAttachOname;
+	private byte[] mpAttachData;
+
 }

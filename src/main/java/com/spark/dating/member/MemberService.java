@@ -35,7 +35,7 @@ public class MemberService {
     if (response.getData() == null) {
       return response;
     } else {
-      ApiResponse<Integer> responsePicture = insertMemberPicture(member.getM_no(), file);
+      ApiResponse<Integer> responsePicture = insertMemberPicture(member.getMNo(), file);
       return responsePicture;
     }
   }
@@ -43,11 +43,11 @@ public class MemberService {
   public ApiResponse<Integer> insertMember(Member member) {
 
     PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-    String encodedPassword = passwordEncode.encode(member.getM_password());
-    member.setM_password(encodedPassword);
+    String encodedPassword = passwordEncode.encode(member.getMPassword());
+    member.setMPassword(encodedPassword);
     try {
       memberDao.insertMember(member);
-      return new ApiResponse<>("success", "회원 가입을 환영합니다" + member.getM_no() + "님", member.getM_no());
+      return new ApiResponse<>("success", "회원 가입을 환영합니다" + member.getMNo() + "님", member.getMNo());
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
@@ -58,10 +58,9 @@ public class MemberService {
       MemberPicture memberPicture = new MemberPicture();
 
       log.info("setMp_memberno(m_no)값은?" + m_no);
-      memberPicture.setMp_memberno(m_no);
-      memberPicture.setMp_attachoname(file.getOriginalFilename());
-      memberPicture.setMp_attachtype(file.getContentType());
-      memberPicture.setMp_attachdata(file.getBytes());
+      memberPicture.setMpMemberNo(m_no);
+      memberPicture.setMpAttachOname(file.getOriginalFilename()); 
+      memberPicture.setMpAttachData(file.getBytes());
 
       memberPictureDao.insertMemberPicture(memberPicture);
       return new ApiResponse<>("success", "사진등록성공", m_no);
@@ -73,25 +72,25 @@ public class MemberService {
   public Map<String, Object> login(@RequestBody Member memberlogin) {
     Map<String, Object> map = new HashMap<>();
 
-    Member member = memberDao.SelectMemberByM_id(memberlogin.getM_id());
+    Member member = memberDao.SelectMemberByM_id(memberlogin.getMId());
     if (member == null) {
       map.put("result", "fail");
       map.put("message", "아이디가 유효하지 않습니다");
     } else {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-      map.put("member_pw", member.getM_password());
-      map.put("memberlogin_pw", memberlogin.getM_password());
-      boolean result = passwordEncoder.matches(memberlogin.getM_password(), member.getM_password());
+      map.put("member_pw", member.getMPassword());
+      map.put("memberlogin_pw", memberlogin.getMPassword());  
+      boolean result = passwordEncoder.matches(memberlogin.getMPassword(), member.getMPassword());
 
       if (result) {
-        String jwt = jwtService.createJWT(member.getM_id(), member.getM_email());
+        String jwt = jwtService.createJWT(member.getMId(), member.getMEmail());
 
         map.put("result", "success");
-        map.put("m_id", member.getM_id());
-        map.put("m_name", member.getM_name());
+        map.put("m_id", member.getMId());
+        map.put("m_name", member.getMName());
         map.put("jwt", jwt);
-        map.put("message", member.getM_name() + "님 환영합니다");
-        map.put("m_no", member.getM_no());
+        map.put("message", member.getMName() + "님 환영합니다");
+        map.put("m_no", member.getMNo());
       } else {
         map.put("result", "fail");
         map.put("message", "비밀번호가 틀립니다");
@@ -108,7 +107,7 @@ public class MemberService {
         return new ApiResponse<>("fail", "해당 아이디의 회원을 찾을 수 없습니다.", member);
 
       } else {
-        return new ApiResponse<>("success", member.getM_name() + "회원님 로그인 환영합니다", member);
+        return new ApiResponse<>("success", member.getMName() + "회원님 로그인 환영합니다", member);
       }
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
@@ -133,9 +132,9 @@ public class MemberService {
     try {
       int updateCount = memberDao.updateMember(member);
       PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-      String encodedPassword = passwordEncode.encode(member.getM_password());
-      member.setM_password(encodedPassword);
-      
+      String encodedPassword = passwordEncode.encode(member.getMPassword());
+      member.setMPassword(encodedPassword);  
+
       if (updateCount >= 1) {
         return new ApiResponse<>("success", "회원정보가 수정되었습니다", updateCount);
 
