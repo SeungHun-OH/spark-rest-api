@@ -13,6 +13,7 @@ public interface MemberCategoryDao {
       @Param("preferNo") int preferNo);
 
   List<PreferenceCategory> getAllCategoryStatic();
+  
   List<PreferenceCategory> selectSelfPrefers(@Param("memberNo") int memberNo);
   // List<PreferenceCategory> selectPartnerPrefers(@Param("member_No") int member_no);
 }

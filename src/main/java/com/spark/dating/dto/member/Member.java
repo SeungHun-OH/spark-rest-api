@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class Member {
+	 @JsonProperty("mNo")
     private int mNo;
 
     @JsonProperty("mId")
