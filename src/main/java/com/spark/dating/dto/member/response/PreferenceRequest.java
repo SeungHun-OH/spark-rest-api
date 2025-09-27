@@ -8,7 +8,7 @@ import lombok.Data;
 public class PreferenceRequest {
   
   private int memberNo;
-  private char memberWho;
+  private String memberWho;
   
   private List<Integer> preferNos;
 }

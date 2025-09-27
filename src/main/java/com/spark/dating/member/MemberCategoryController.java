@@ -25,7 +25,7 @@ public class MemberCategoryController {
   @PostMapping("/member/categories")
   public ApiResponse<Integer> insertMemberCategories(@RequestBody PreferenceRequest request) {
     try {
-      int insertedCount = memberCategoryService.insertMemberCategories(request.getMemberNo(), request.getPreferNos());
+      int insertedCount = memberCategoryService.insertMemberCategories(request.getMemberNo(), request.getMemberWho(), request.getPreferNos());
       return new ApiResponse<Integer>("success", insertedCount + "개의 카테고리 저장 완료", insertedCount);
     } catch (Exception e) {
       return new ApiResponse<Integer>("fail", e.getMessage(), null);

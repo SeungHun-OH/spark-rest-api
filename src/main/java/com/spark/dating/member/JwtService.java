@@ -23,9 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtService {
 
   private String strkey = "com.mycompany.backendapi.secret.key";
-
   private SecretKey secretKey;
-
   private long jwtDuration = 24 * 60 * 60 * 1000;
 
   public JwtService() throws Exception {
@@ -40,7 +38,6 @@ public class JwtService {
     jwtBuilder.claim("memail", memail);
 
     jwtBuilder.expiration(new Date(new Date().getTime() + jwtDuration));
-
     jwtBuilder.signWith(secretKey);
 
     String jwt = jwtBuilder.compact();

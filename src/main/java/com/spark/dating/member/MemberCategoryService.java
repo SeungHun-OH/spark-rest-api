@@ -14,10 +14,10 @@ public class MemberCategoryService {
   @Autowired
   private MemberCategoryDao memberCategoryDao;
 
-  public int insertMemberCategories(int memberNo, List<Integer> preferNos){
+  public int insertMemberCategories(int memberNo, String memberWho, List<Integer> preferNos){
     int insertCount = 0;
     for(Integer preferNo : preferNos){
-        memberCategoryDao.insertMemberCategories(memberNo, preferNo);
+        memberCategoryDao.insertMemberCategories(memberNo, memberWho, preferNo);
         insertCount++;
     }
     return insertCount;

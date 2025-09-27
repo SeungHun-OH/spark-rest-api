@@ -108,7 +108,6 @@ public class MemberService {
       Member member = memberDao.SelectMemberByM_id(mId);
       if (member == null) {
         return new ApiResponse<>("fail", "해당 아이디의 회원을 찾을 수 없습니다.", member);
-
       } else {
         return new ApiResponse<>("success", member.getMName() + "회원님 로그인 환영합니다", member);
       }
@@ -140,7 +139,6 @@ public class MemberService {
 
       if (updateCount >= 1) {
         return new ApiResponse<>("success", "회원정보가 수정되었습니다", updateCount);
-
       } else {
         return new ApiResponse<>("fail", "수정할 회원이 존재하지 않습니다", 0);
       }

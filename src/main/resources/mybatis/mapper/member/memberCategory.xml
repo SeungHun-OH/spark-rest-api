@@ -30,13 +30,15 @@
     INSERT INTO MEMBERCATEGORY(
       MC_NO, 
       MC_MEMBERNO, 
-      MC_PREFERNO, 
+      MC_MEMBERWHO,
+      MC_PREFERNO,      
       MC_CREATEDAT
     )
     VALUES(
       MEMBERCATEGORY_SEQ.nextval,  
-      #{memberNo},            
-      #{preferNo},                
+      #{memberNo},     
+      #{memberWho},        
+      #{preferNo},                    
       SYSDATE                      
     )
   </insert>
@@ -53,14 +55,14 @@
            PC.PC_GROUP, 
            PC.PC_NAME, 
            PC.PC_DESC,
-           MC.MC_WHO,
+           MC.MC_MEMBERWHO,
 
            MC.MC_MEMBERNO AS MEMBERNO
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
     WHERE MC.MC_MEMBERNO = #{memberNo}
-      AND MC.MC_WHO = 'S'
+      AND MC.MC_MEMBERWHO = 'S'
   </select>
 
   <select id="selectPartnerPrefers" parameterType="int" resultMap="PreferenceCategoryMap">
@@ -70,16 +72,16 @@
            PC.PC_GROUP, 
            PC.PC_NAME, 
            PC.PC_DESC,
-           MC.MC_WHO,
+           MC.MC_MEMBERWHO,
 
            MC.MC_MEMBERNO AS MEMBERNO
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
     WHERE MC.MC_MEMBERNO = #{memberNo}     
-      AND MC.MC_WHO = 'P'
+      AND MC.MC_MEMBERWHO = 'P'
   </select>
-  
+
 </mapper>
 
 <!-- <insert id="insertMemberCategories" parameterType="map">

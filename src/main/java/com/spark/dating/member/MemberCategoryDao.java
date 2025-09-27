@@ -10,7 +10,8 @@ import com.spark.dating.dto.member.response.PreferenceCategory;
 @Mapper
 public interface MemberCategoryDao {
   int insertMemberCategories(@Param("memberNo") int memberNo,
-      @Param("preferNo") int preferNo);
+                             @Param("memberWho") String memberWho,
+                             @Param("preferNo") int preferNo);
 
   List<PreferenceCategory> getAllCategoryStatic();
 
