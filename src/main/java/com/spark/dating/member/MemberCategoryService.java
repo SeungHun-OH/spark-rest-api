@@ -34,8 +34,8 @@ public class MemberCategoryService {
     List<PreferenceCategory> selfPrefers = memberCategoryDao.selectSelfPrefers(memberNo);
     response.setSelfPrefers(selfPrefers);
     
-    // List<PreferenceCategory> partnerPrefers = memberCategoryDao.selectPartnerPrefers(member_no);
-    // response.setPartnerPrefers(partnerPrefers);
+    List<PreferenceCategory> partnerPrefers = memberCategoryDao.selectPartnerPrefers(memberNo);
+    response.setPartnerPrefers(partnerPrefers);
 
     return response;
   }

@@ -12,4 +12,5 @@ public class PreferenceCategory {
   private String pcName;
   private String pcDesc;
 
+  private char pcWho; // 'S' 또는 'P'
 }

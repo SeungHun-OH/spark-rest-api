@@ -13,19 +13,18 @@
     <result property="pcGroup" column="PC_GROUP"/>
     <result property="pcName" column="PC_NAME"/>
     <result property="pcDesc" column="PC_DESC"/>
+    <!-- <result property="pcWho" column="PC_WHO"/> -->
   </resultMap>
 
-  <resultMap id="PreferenceResponseMap" type="PreferenceResponse">
+  <!-- <resultMap id="PreferenceResponseMap" type="PreferenceResponse">
     <result property="memberNo" column="MEMBERNO"/>
 
     <collection property="selfPrefers" 
                 ofType = "PreferenceCategory"
                 resultMap ="PreferenceCategoryMap"/>
 
-    <collection property="partnerPrefers" 
-                ofType="PreferenceCategory" 
-                resultMap="PreferenceCategoryMap"/>
-  </resultMap>
+    <collection property="partnerPrefers" ofType="PreferenceCategory" resultMap="PreferenceCategoryMap"/>
+  </resultMap> -->
 
   <insert id="insertMemberCategories">
     INSERT INTO MEMBERCATEGORY(
@@ -47,28 +46,40 @@
     FROM PREFERENCECATEGORY
   </select>
 
-  <select id = "selectSelfPrefers" parameterType="int" resultMap="PreferenceResponseMap">
+  <select id = "selectSelfPrefers" parameterType="int" resultMap="PreferenceCategoryMap">
     SELECT PC.PC_NO, 
            PC.PC_TYPE, 
            PC.PC_TYPENUM, 
            PC.PC_GROUP, 
            PC.PC_NAME, 
            PC.PC_DESC,
+           MC.MC_WHO,
+
            MC.MC_MEMBERNO AS MEMBERNO
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
     WHERE MC.MC_MEMBERNO = #{memberNo}
+      AND MC.MC_WHO = 'S'
   </select>
 
-  <select id="selectPartnerPrefers" parameterType="int" resultMap="PreferenceResponseMap">
-    SELECT PC.PC_NO, PC.PC_TYPE, PC.PC_TYPENUM, PC.PC_GROUP, PC.PC_NAME, PC.PC_DESC
+  <select id="selectPartnerPrefers" parameterType="int" resultMap="PreferenceCategoryMap">
+    SELECT PC.PC_NO, 
+           PC.PC_TYPE, 
+           PC.PC_TYPENUM, 
+           PC.PC_GROUP, 
+           PC.PC_NAME, 
+           PC.PC_DESC,
+           MC.MC_WHO,
+
+           MC.MC_MEMBERNO AS MEMBERNO
     FROM MEMBERCATEGORY MC
 
     JOIN PREFERENCECATEGORY PC ON MC.MC_PREFERNO = PC.PC_NO
-    WHERE MC.MC_MEMBERNO = #{memberNo}  <!-- partner용 조건 필요시 수정 -->
+    WHERE MC.MC_MEMBERNO = #{memberNo}     
+      AND MC.MC_WHO = 'P'
   </select>
-
+  
 </mapper>
 
 <!-- <insert id="insertMemberCategories" parameterType="map">
