@@ -8,8 +8,6 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +35,7 @@ public class ChatController implements ChatControllerDocs{
 	private ChatRoomService chatRoomService;
 	@Autowired
 	private ChatMessageService chatMessageService;
+	
 
 	@PostMapping("/rooms")
 	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest ChatRoomCreateRequest) {
@@ -60,9 +59,9 @@ public class ChatController implements ChatControllerDocs{
 		Map<String, Object> resultMap = new HashMap<>();
 		return resultMap;
 	}
-	@Validated
+	
 	@MessageMapping("/room/{roomId}")
-	@SendTo("sub/room/{roomId}")
+//	@SendTo("sub/room/{roomId}")
 	public void sendMessage(@DestinationVariable("roomId") int roomId, @Valid ChatMessageSend chatMessageSend) {
 		
 		
@@ -73,6 +72,7 @@ public class ChatController implements ChatControllerDocs{
 
 		//		log.info(chatMessage.toString() + "-----------");
 		//		chatMessageService.insertChatMessage(chatMessage);
-		//		chatMessageService.sendMessage(roomId, chatMessage.getCm_msg());
+				chatMessageService.sendMessage(roomId, chatMessageSend.getCmMessage());
+		
 	}
 }

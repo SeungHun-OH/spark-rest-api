@@ -3,12 +3,14 @@ package com.spark.dating.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import com.spark.dating.interceptor.ChatChannelInterceptor;
 import com.spark.dating.interceptor.ChatHandshakeInterceptor;
 
 @Configuration
@@ -21,9 +23,19 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer{
 		return new ChatHandshakeInterceptor();
 	}
 	
+	@Bean
+	public ChatChannelInterceptor chatChannelInterceptor() {
+		return new ChatChannelInterceptor();
+	}
+	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/chat").setAllowedOrigins("*").addInterceptors(chatHandshakeInterceptor());
+		registry.addEndpoint("/ws-stomp").setAllowedOrigins("*").addInterceptors(chatHandshakeInterceptor());
+	}
+	
+	@Override
+	public void configureClientInboundChannel(ChannelRegistration registration) {
+		registration.interceptors(chatChannelInterceptor());
 	}
 	
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -33,11 +45,11 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer{
 		registry.setApplicationDestinationPrefixes("/pub");
 	}
 	
-	@EventListener
-	public void onDisconnectEvent(SessionDisconnectEvent event) {
-		String session = event.getSessionId();
-		System.err.println(session+" "+ event.getUser());
-		
-	}
+//	@EventListener
+//	public void onDisconnectEvent(SessionDisconnectEvent event) {
+//		String session = event.getSessionId();
+//		System.err.println(session+" "+ event.getUser());
+//		
+//	}
 	
 }

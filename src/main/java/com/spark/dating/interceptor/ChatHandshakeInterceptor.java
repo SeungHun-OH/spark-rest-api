@@ -23,7 +23,7 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 			Map<String, Object> attributes) throws Exception {
 		// 추후 jwt를 통해 로그인 검증 과정 추가
 		String jwt = "";
-		String memberId = "tesst";
+		String memberId = "test";
 
 		if (stompService.isMemberExist(memberId) == 0) {
 			return false;
