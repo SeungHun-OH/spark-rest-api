@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 @Tag(name = "채팅 컨트롤러", description = "채팅 관련해서 처리하는 컨트롤러입니다.")
 public interface ChatControllerDocs {
@@ -30,11 +32,11 @@ public interface ChatControllerDocs {
 	@Operation(summary = "채팅방 조회", description = "로그인한 사용자의 m_id를 통해 채팅방 리스트를 조회합니다.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "유저 정보 저장 성공"),
 			@ApiResponse(responseCode = "409", description = "유저 정보 저장 실패(유저 중복)") })
-	public List<ChatRoomSelectRequest> chatRoomList(@RequestParam("m_id") final int userNo);
+	public List<ChatRoomSelectRequest> chatRoomList(@RequestParam(value = "memberNo", required = true) @Min(1) Long memberNo);
 
 	@Operation(summary = "채팅방 메세지 조회", description = "클라이언트가 요청한 rooId를 통해 해당 방에 있는 메세지들을 조회합니다.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "유저 정보 저장 성공"),
 			@ApiResponse(responseCode = "409", description = "유저 정보 저장 실패(유저 중복)") })
-	public List<ChatMessageSelectRequest> chatMessage(@PathVariable("roomId") final int roomId);
+	public List<ChatMessageSelectRequest> chatMessage(@PathVariable("chatroom-uuid") String chatRoomUUID);
 
 }

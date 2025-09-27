@@ -28,14 +28,14 @@
 	VALUES(#{cmNo},#{cmSendUser},#{cmChatRoomNo},#{cmMessage},#{cmDate})
 </insert>
 
-<select id="getChattingMessage" parameterType="int" resultMap="ChatMessageRequest">
+<select id="getChattingMessage" parameterType="String" resultMap="ChatMessageRequest">
 	SELECT
 	    m.M_NAME AS CM_SENDUSERNAME,
 	    c.CM_MSG,
 	    c.CM_DATE
 	FROM CHATMESSAGE c
 	JOIN MEMBER m ON c.CM_SENDUSER = m.M_NO
-	WHERE c.CM_CHATROOMNO = #{value}
+	WHERE c.CM_CHATROOMNO = #{memberNo}
 	ORDER BY c.CM_DATE ASC
 </select>
 

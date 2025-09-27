@@ -21,7 +21,7 @@ public class ChatMessageService {
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
 
-	public void sendMessage(int roomId, String message) {
+	public void sendMessage(String roomId, String message) {
 		simpMessagingTemplate.convertAndSend("/sub/room/"+roomId, message);
 	}
 	
@@ -29,7 +29,7 @@ public class ChatMessageService {
 		chatMessageDao.insertChatMessage(chatMessageSend);
 	}
 	
-	public List<ChatMessageSelectRequest> getChattingMessage(int chatroomId){
-		return chatMessageDao.getChattingMessage(chatroomId);
+	public List<ChatMessageSelectRequest> getChattingMessage(String chatRoomUUID){
+		return chatMessageDao.getChattingMessage(chatRoomUUID);
 	}
 }
