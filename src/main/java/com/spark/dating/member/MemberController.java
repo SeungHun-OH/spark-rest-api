@@ -46,6 +46,7 @@ public class MemberController {
   // 회원정보 수정
   @PutMapping("/member")
   public ApiResponse<Integer> UpdateMember(@RequestBody Member member) {
+    log.info("멤버 업데이트" + member.toString());
     return memberService.updateMember(member);
   }
 

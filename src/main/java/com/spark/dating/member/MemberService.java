@@ -132,10 +132,10 @@ public class MemberService {
 
   public ApiResponse<Integer> updateMember(Member member) {
     try {
+      // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
+      // String encodedPassword = passwordEncode.encode(member.getMPassword());
+      // member.setMPassword(encodedPassword);  
       int updateCount = memberDao.updateMember(member);
-      PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-      String encodedPassword = passwordEncode.encode(member.getMPassword());
-      member.setMPassword(encodedPassword);  
 
       if (updateCount >= 1) {
         return new ApiResponse<>("success", "회원정보가 수정되었습니다", updateCount);
