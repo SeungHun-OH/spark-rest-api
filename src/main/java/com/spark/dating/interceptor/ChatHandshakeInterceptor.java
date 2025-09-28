@@ -25,13 +25,14 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 		String jwt = "";
 		String memberId = "test";
 
+		// 추후 jwt유효 검증 및 아이디 검증 
 		if (stompService.isMemberExist(memberId) == 0) {
 			return false;
 		}
 
 		if (request instanceof ServletServerHttpRequest) {
 			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request; // 추후에 헤더에서 jwt 가져오는데 사용
-			attributes.put("memberId", memberId); // 추후에 jwt저장하면 될듯
+			attributes.put("memberId", memberId);
 		}
 
 		return true;

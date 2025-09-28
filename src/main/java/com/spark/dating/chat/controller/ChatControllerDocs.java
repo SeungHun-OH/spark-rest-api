@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.spark.dating.dto.chat.ChatMessageSelectRequest;
+import com.spark.dating.dto.chat.ChatMessageSelectResponse;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 import com.spark.dating.dto.chat.ChatRoomSelectRequest;
 
@@ -37,6 +37,6 @@ public interface ChatControllerDocs {
 	@Operation(summary = "채팅방 메세지 조회", description = "클라이언트가 요청한 rooId를 통해 해당 방에 있는 메세지들을 조회합니다.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "유저 정보 저장 성공"),
 			@ApiResponse(responseCode = "409", description = "유저 정보 저장 실패(유저 중복)") })
-	public List<ChatMessageSelectRequest> chatMessage(@PathVariable("chatroom-uuid") String chatRoomUUID);
+	public List<ChatMessageSelectResponse> chatMessage(@PathVariable("chatroom-uuid") String chatRoomUUID);
 
 }

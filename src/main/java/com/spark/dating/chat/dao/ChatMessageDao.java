@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.spark.dating.dto.chat.ChatMessageSelectRequest;
+import com.spark.dating.dto.chat.ChatMessageSelectResponse;
 import com.spark.dating.dto.chat.ChatMessageSend;
 import com.spark.dating.dto.chat.ChatRoom;
 
@@ -14,5 +14,5 @@ public interface ChatMessageDao {
 	public void createChatRoom(ChatRoom ChatRoom);
 	public List<ChatRoom> selectAllChatRoom(int userNo);
 	public void insertChatMessage(ChatMessageSend chatMessageSend);
-	public List<ChatMessageSelectRequest> getChattingMessage(String chatRoomUUID);
+	public List<ChatMessageSelectResponse> getChattingMessage(String chatRoomUUID);
 }

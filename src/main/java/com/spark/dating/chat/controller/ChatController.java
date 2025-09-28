@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.chat.service.ChatMessageService;
 import com.spark.dating.chat.service.ChatRoomService;
-import com.spark.dating.dto.chat.ChatMessageSelectRequest;
+import com.spark.dating.dto.chat.ChatMessageSelectResponse;
 import com.spark.dating.dto.chat.ChatMessageSend;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 import com.spark.dating.dto.chat.ChatRoomSelectRequest;
@@ -45,7 +45,7 @@ public class ChatController implements ChatControllerDocs {
 	}
 
 	@GetMapping("/chatting/{chatroom-uuid}")
-	public List<ChatMessageSelectRequest> chatMessage(@PathVariable("chatroom-uuid") String chatRoomUUID) {
+	public List<ChatMessageSelectResponse> chatMessage(@PathVariable("chatroom-uuid") String chatRoomUUID) {
 		return chatMessageService.getChattingMessage(chatRoomUUID);
 	}
 

@@ -39,9 +39,9 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer{
 	}
 	
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		// 메시지를 구독하는 클라이언트들에게 메세지 전달
+		// 메시지를 구독하는 클라이언트들에게 메세지 전달할 때 prefix주소
 		registry.enableSimpleBroker("/sub");
-		// 클라이언트에서 보낸 메세지를 받을 prefix
+		// 클라이언트에서 보낸 메세지를 받을 prefix주소
 		registry.setApplicationDestinationPrefixes("/pub");
 	}
 	
