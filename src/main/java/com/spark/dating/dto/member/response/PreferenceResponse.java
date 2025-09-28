@@ -8,7 +8,6 @@ import lombok.Data;
 public class PreferenceResponse {
   private int memberNo;
   private char memberWho;
-
-  private List<PreferenceCategory> SelfPrefers;
+  private List<PreferenceCategory> selfPrefers;
   private List<PreferenceCategory> partnerPrefers;
 }

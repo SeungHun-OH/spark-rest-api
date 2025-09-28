@@ -102,7 +102,7 @@ public class MemberService {
     }
     return map;
   }
-
+  //회원 조회(단일)
   public ApiResponse<Member> SelectMemberByM_id(String mId) {
     try {
       Member member = memberDao.SelectMemberByM_id(mId);
@@ -115,13 +115,12 @@ public class MemberService {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
-
+  //회원 사진 조회(단일)
   public ApiResponse<MemberPicture> SelectMemberPictureByM_no(int mNo) {
     try {
       MemberPicture memberPicture = memberPictureDao.SelectMemberPictureByM_no(mNo);
       if (memberPicture == null) {
         return new ApiResponse<>("fail", "해당 넘버의 사진을 찾을 수 없습니다.", memberPicture);
-
       } else {
         return new ApiResponse<>("success", "사진 조회 성공", memberPicture);
       }
@@ -129,14 +128,10 @@ public class MemberService {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
-
+  //회원 수정(단일)
   public ApiResponse<Integer> updateMember(Member member) {
     try {
-      // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-      // String encodedPassword = passwordEncode.encode(member.getMPassword());
-      // member.setMPassword(encodedPassword);  
       int updateCount = memberDao.updateMember(member);
-
       if (updateCount >= 1) {
         return new ApiResponse<>("success", "회원정보가 수정되었습니다", updateCount);
       } else {
@@ -147,3 +142,7 @@ public class MemberService {
     }
   }
 }
+
+ // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
+      // String encodedPassword = passwordEncode.encode(member.getMPassword());
+      // member.setMPassword(encodedPassword);  

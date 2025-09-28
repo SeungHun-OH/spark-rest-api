@@ -17,4 +17,7 @@ public interface MemberCategoryDao {
 
   List<PreferenceCategory> selectSelfPrefers(@Param("memberNo") int memberNo);
   List<PreferenceCategory> selectPartnerPrefers(@Param("memberNo") int memberNo);
+
+  int deleteCategoriesByMemberWho(@Param("memberNo") int memberNo,
+                                  @Param("memberWho") String memberWho);
 }

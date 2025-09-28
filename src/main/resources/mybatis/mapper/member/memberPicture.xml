@@ -23,13 +23,6 @@
     )
   </insert>
 
-  <!-- <select id= "SelectMemberPictureByM_no" parameterType="int" resultType="MemberPicture">
-    select *
-    from memberpicture
-    where MP_MEMBERNO = #{value}
-
-  </select> -->
-
   <select id="SelectMemberPictureByM_no" parameterType="int" resultMap="MemberPicture">
   SELECT *
   FROM memberpicture

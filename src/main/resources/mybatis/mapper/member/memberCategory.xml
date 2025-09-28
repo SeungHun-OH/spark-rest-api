@@ -82,6 +82,12 @@
       AND MC.MC_MEMBERWHO = 'P'
   </select>
 
+  <delete id = "deleteCategoriesByMemberWho" parameterType="map">
+    DELETE FROM MemberCategory
+    WHERE MC_MEMBERNO  = #{memberNo}
+      AND MC_MEMBERWHO = #{memberWho}
+  </delete>
+
 </mapper>
 
 <!-- <insert id="insertMemberCategories" parameterType="map">

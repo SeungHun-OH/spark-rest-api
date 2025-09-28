@@ -14,6 +14,7 @@ public class MemberCategoryService {
   @Autowired
   private MemberCategoryDao memberCategoryDao;
 
+  // 멤버 카테고리 등록 여러개 등록
   public int insertMemberCategories(int memberNo, String memberWho, List<Integer> preferNos){
     int insertCount = 0;
     for(Integer preferNo : preferNos){
@@ -22,11 +23,11 @@ public class MemberCategoryService {
     }
     return insertCount;
   }
-
+  // 카테고리 목록 조회(Static)
   public List<PreferenceCategory> getAllCategoryStatic(){
     return memberCategoryDao.getAllCategoryStatic();
   }
-
+  // 멤버 선택 카테고리 조회 (memberNo 참조키 / selfPrefers 배열 / partnerPrefers 배열) 
   public PreferenceResponse getPreferenceByMember_No(int memberNo){
     PreferenceResponse response = new PreferenceResponse();
     response.setMemberNo(memberNo);
@@ -39,4 +40,8 @@ public class MemberCategoryService {
 
     return response;
   }
+  // 멤버 전체 카테고리 삭제 
+  public int deleteCategoriesByMemberWho(int memberNo, String memberWho) {
+    return memberCategoryDao.deleteCategoriesByMemberWho(memberNo, memberWho);
+  } 
 }

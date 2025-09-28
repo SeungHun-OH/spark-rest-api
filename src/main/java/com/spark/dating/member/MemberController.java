@@ -27,33 +27,47 @@ public class MemberController {
   @Autowired
   JwtService jwtService;
 
-  // 회원정보 생성
+  // 회원 생성
   @PostMapping("member/create")
-  public ApiResponse<Integer> Create(@RequestPart("member") Member member,
-      @RequestPart("file") MultipartFile file) {
-
-    log.info("Login MemberController CreateMember값은?" + member);
-
+  public ApiResponse<Integer> Create(@RequestPart("member") Member member, @RequestPart("file") MultipartFile file) {
     return memberService.CreateMember(member, file);
   }
-
-  // 회원정보 로그인
+  // 회원 로그인
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody Member memberlogin) {
     return memberService.login(memberlogin);
   }
-
-  // 회원정보 수정
+  // 회원 수정
   @PutMapping("/member")
   public ApiResponse<Integer> UpdateMember(@RequestBody Member member) {
     log.info("멤버 업데이트" + member.toString());
     return memberService.updateMember(member);
   }
-
+  // 회원 수정
   @PostMapping("/member")
   public ApiResponse<Integer> insertMember(@RequestBody Member member) {
+    return memberService.insertMember(member);
+  }
+  // 회원 등록
+  @PostMapping("/member/picture")
+  public ApiResponse<Integer> insertMemberPicture(@RequestParam("mNo") int mNo,  @RequestParam("file") MultipartFile file) {
+    return memberService.insertMemberPicture(mNo, file);
+  }
+  // 회원 조회(단일)
+  @GetMapping("/member")
+  public ApiResponse<Member> SelectMemberByM_id(@RequestParam("mId") String mId) {
+    return memberService.SelectMemberByM_id(mId);
+  }
+   // 회원 조회(단일))
+  @GetMapping("/member/picture")
+  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("mNo") int mNo) {
+    return memberService.SelectMemberPictureByM_no(mNo);
+  }
+}
 
-    // log.info("MemberController insertMember값은?" + member);
+
+
+ // log.info("MemberController insertMember값은?" + member);
     // return new ApiResponse<>("fail", member.toString(), 1);
 
     // if(member.getMId() == ""){
@@ -61,23 +75,3 @@ public class MemberController {
     //   return new ApiResponse<>("fail", "member가 비었습니다", 1);
     // }
 
-    return memberService.insertMember(member);
-  }
-
-  @PostMapping("/member/picture")
-  public ApiResponse<Integer> insertMemberPicture(@RequestParam("mNo") int mNo,
-      @RequestParam("file") MultipartFile file) {
-    return memberService.insertMemberPicture(mNo, file);
-  }
-
-  @GetMapping("/member")
-  public ApiResponse<Member> SelectMemberByM_id(@RequestParam("mId") String mId) {
-    return memberService.SelectMemberByM_id(mId);
-  }
-
-  @GetMapping("/member/picture")
-  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("mNo") int mNo) {
-
-    return memberService.SelectMemberPictureByM_no(mNo);
-  }
-}
