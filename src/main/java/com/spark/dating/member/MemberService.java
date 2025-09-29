@@ -29,7 +29,7 @@ public class MemberService {
   @Autowired
   MemberPictureDao memberPictureDao;
 
-  public ApiResponse<Integer> CreateMember(Member member, MultipartFile file) {
+  public ApiResponse<Integer> createMember(Member member, MultipartFile file) {
 
     ApiResponse<Integer> response = insertMember(member);
     if (response.getData() == null) {
@@ -103,7 +103,7 @@ public class MemberService {
     return map;
   }
   //회원 조회(단일)
-  public ApiResponse<Member> SelectMemberByM_id(String mId) {
+  public ApiResponse<Member> selectMemberByM_id(String mId) {
     try {
       Member member = memberDao.SelectMemberByM_id(mId);
       if (member == null) {
@@ -116,9 +116,9 @@ public class MemberService {
     }
   }
   //회원 사진 조회(단일)
-  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(int mNo) {
+  public ApiResponse<MemberPicture> selectMemberPictureByM_no(int mNo) {
     try {
-      MemberPicture memberPicture = memberPictureDao.SelectMemberPictureByM_no(mNo);
+      MemberPicture memberPicture = memberPictureDao.selectMemberPictureByM_no(mNo);
       if (memberPicture == null) {
         return new ApiResponse<>("fail", "해당 넘버의 사진을 찾을 수 없습니다.", memberPicture);
       } else {

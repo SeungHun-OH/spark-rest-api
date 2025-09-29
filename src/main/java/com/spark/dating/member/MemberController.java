@@ -29,8 +29,8 @@ public class MemberController {
 
   // 회원 생성
   @PostMapping("member/create")
-  public ApiResponse<Integer> Create(@RequestPart("member") Member member, @RequestPart("file") MultipartFile file) {
-    return memberService.CreateMember(member, file);
+  public ApiResponse<Integer> create(@RequestPart("member") Member member, @RequestPart("file") MultipartFile file) {
+    return memberService.createMember(member, file);
   }
   // 회원 로그인
   @PostMapping("member/login")
@@ -39,7 +39,7 @@ public class MemberController {
   }
   // 회원 수정
   @PutMapping("/member")
-  public ApiResponse<Integer> UpdateMember(@RequestBody Member member) {
+  public ApiResponse<Integer> updateMember(@RequestBody Member member) {
     log.info("멤버 업데이트" + member.toString());
     return memberService.updateMember(member);
   }
@@ -55,13 +55,13 @@ public class MemberController {
   }
   // 회원 조회(단일)
   @GetMapping("/member")
-  public ApiResponse<Member> SelectMemberByM_id(@RequestParam("mId") String mId) {
-    return memberService.SelectMemberByM_id(mId);
+  public ApiResponse<Member> selectMemberByM_id(@RequestParam("mId") String mId) {
+    return memberService.selectMemberByM_id(mId);
   }
    // 회원 조회(단일))
   @GetMapping("/member/picture")
-  public ApiResponse<MemberPicture> SelectMemberPictureByM_no(@RequestParam("mNo") int mNo) {
-    return memberService.SelectMemberPictureByM_no(mNo);
+  public ApiResponse<MemberPicture> selectMemberPictureByM_no(@RequestParam("mNo") int mNo) {
+    return memberService.selectMemberPictureByM_no(mNo);
   }
 }
 
