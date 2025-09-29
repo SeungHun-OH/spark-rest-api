@@ -31,11 +31,12 @@ public class JwtService {
     secretKey = Keys.hmacShaKeyFor(bytes);
   }
 
-  public String createJWT(String mid, String memail) {
+  public String createJWT(String mid, String memail, int mno) {
     JwtBuilder jwtBuilder = Jwts.builder();
 
     jwtBuilder.subject(mid);
     jwtBuilder.claim("memail", memail);
+    jwtBuilder.claim("mno", mno);
 
     jwtBuilder.expiration(new Date(new Date().getTime() + jwtDuration));
     jwtBuilder.signWith(secretKey);
@@ -76,6 +77,7 @@ public class JwtService {
     Map<String, String>map = new HashMap<>();
     map.put("mid", claims.getSubject());
     map.put("memail", claims.get("memail").toString()); 
+    map.put("mno", claims.get("mno").toString());
 
     return map;
   }

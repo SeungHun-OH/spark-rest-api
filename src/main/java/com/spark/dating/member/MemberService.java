@@ -86,7 +86,7 @@ public class MemberService {
       boolean result = passwordEncoder.matches(memberlogin.getMPassword(), member.getMPassword());
 
       if (result) {
-        String jwt = jwtService.createJWT(member.getMId(), member.getMEmail());
+        String jwt = jwtService.createJWT(member.getMId(), member.getMEmail(), member.getMNo());
 
         map.put("result", "success");
         map.put("mId", member.getMId());
@@ -140,6 +140,15 @@ public class MemberService {
     } catch (Exception e) {
       return new ApiResponse<>("fail", "회원 수정 중 오류 발생" + e.getMessage(), 0);
     }
+  }
+
+  public ApiResponse<Member> selectMemberByJwt(String jwt) {
+    ApiResponse<Member> response = new ApiResponse<>();
+    Member jwtMember = new Member();
+    
+    Map<String, String> claims = jwtService.getClaims(jwt);
+    response.setMessage("mid |" +claims.get("mid") + "memail |" + claims.get("memail") + "mno |" +claims.get("mno"));
+    return response;
   }
 }
 
