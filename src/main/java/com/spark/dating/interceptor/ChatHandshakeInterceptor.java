@@ -2,36 +2,45 @@ package com.spark.dating.interceptor;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import jakarta.servlet.http.HttpSession;
+import com.spark.dating.chat.service.StompService;
 
+@Component
 public class ChatHandshakeInterceptor implements HandshakeInterceptor {
+
+	@Autowired
+	private StompService stompService;
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Map<String, Object> attributes) throws Exception {
-		
-		//추후 jwt를 통해 로그인 검증 과정 추가
+		// 추후 jwt를 통해 로그인 검증 과정 추가
 		String jwt = "";
-		
-		ServletServerHttpRequest servletRequest = (ServletServerHttpRequest)request;
-		
-		HttpSession session = servletRequest.getServletRequest().getSession();
-		
-		attributes.put("session", session);
-		
+		String memberId = "test";
+
+		// 추후 jwt유효 검증 및 아이디 검증 
+		if (stompService.isMemberExist(memberId) == 0) {
+			return false;
+		}
+
+		if (request instanceof ServletServerHttpRequest) {
+			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request; // 추후에 헤더에서 jwt 가져오는데 사용
+			attributes.put("memberId", memberId);
+		}
+
 		return true;
 	}
 
 	@Override
 	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Exception exception) {
-		// TODO Auto-generated method stub
 
 	}
 

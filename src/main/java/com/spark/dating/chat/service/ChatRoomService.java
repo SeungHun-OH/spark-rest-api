@@ -23,21 +23,24 @@ public class ChatRoomService {
 
 	@Transactional
 	public void createChatRoom(ChatRoomCreateRequest chatRoomCreateRequest) {
-		if (chatRoomDao.isUserInMatching(chatRoomCreateRequest.getMatchingNo()) == 0) {
+
+		if (chatRoomDao.existsMatchingNo(chatRoomCreateRequest.getMatchingNo()) != 1) {
+			throw new RestApiException(ChatErrorCode.MATCHING_NOT_FOUND);
+		}
+		if (chatRoomDao.isValidMatchingUser(chatRoomCreateRequest.getMatchingNo()) != 1) {
 			throw new RestApiException(ChatErrorCode.USER_NOT_IN_MATCHING);
 		}
-
-		Long chatRoomNo = chatRoomDao.createChatRoom(UUID.randomUUID().toString().replace("-", ""));
-		chatRoomDao.insertMatchingRoomMapping(MatchingRoomMapping.builder().mcMatchingNo(chatRoomCreateRequest.getMatchingNo())
-				.mcChatRoomNo(chatRoomNo).build());
+		chatRoomCreateRequest.setChatRoomUUID(UUID.randomUUID().toString().replace("-", ""));
+		System.out.println(chatRoomCreateRequest.toString());
+		chatRoomDao.createChatRoom(chatRoomCreateRequest);
+		chatRoomDao.insertMatchingRoomMapping(
+				MatchingRoomMapping.builder().mcMatchingNo(chatRoomCreateRequest.getMatchingNo())
+						.mcChatRoomNo(chatRoomCreateRequest.getChatRoomNo()).build());
 	}
 
-	public List<ChatRoomSelectRequest> selectAllChatRoom(int userNo) {
-		return chatRoomDao.selectAllChatRoom(userNo);
-	}
-
-	public ChatRoom select(int m_id) {
-		return chatRoomDao.select(m_id);
+	public List<ChatRoomSelectRequest> selectAllChatRoom(Long memberNo) {
+		List<ChatRoomSelectRequest> chatRoomList = ChatRoom.toDtoList(chatRoomDao.selectAllChatRoom(memberNo));
+		return chatRoomList;
 	}
 
 }

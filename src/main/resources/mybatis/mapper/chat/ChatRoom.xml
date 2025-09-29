@@ -14,12 +14,12 @@
 	<result column="CR_LASTMESSAGEDATE"  property="crLastMessageDate"/>
 </resultMap>
 
-<insert id="createChatRoom" parameterType="String">
-	INSERT INTO CHATROOM 
-		VALUES (SEQ_CHATROOM_NO.NEXTVAL, HEXTORAW(#{chatRoomUUID}))
-	<selectKey order="AFTER" resultType="Long">
-		SELECT SEQ_CHATROOM_NO.CURRVAL FROM DUAL
+<insert id="createChatRoom" parameterType="com.spark.dating.dto.chat.ChatRoomCreateRequest" >
+	<selectKey keyProperty="chatRoomNo" keyColumn="CR_NO" resultType="int" order="BEFORE">
+		select SEQ_CHATROOM_NO.NEXTVAL FROM DUAL
 	</selectKey>
+	INSERT INTO CHATROOM (CR_NO, CR_UUID)
+		VALUES (#{chatRoomNo}, HEXTORAW(#{chatRoomUUID}))
 </insert>
 
 <insert id="insertMatchingRoomMapping" parameterType="com.spark.dating.dto.chat.MatchingRoomMapping">
@@ -27,58 +27,56 @@
 		VALUES (SEQ_MATCHINGROOMMAPPING_NO.NEXTVAL, #{mcMatchingNo}, #{mcChatRoomNo})
 </insert>
 
-<select id="isUserInMatching" parameterType="Long" resultType="int">
-	SELECT CASE WHEN EXISTS (
-	    SELECT 1
-	    FROM MATCHING M
-	    JOIN HEARTS H ON M.MT_HEARTSNO = H.H_NO
-	    WHERE MT_NO = #{matchingNo}
-	      AND (#{memberNo} = H.H_SENDUSER OR #{memberNo} = H.H_RECEIVEUSER)
-	  ) THEN 1 ELSE 0 END AS IS_VALID
-	  FROM DUAL
+<select id="existsMatchingNo" parameterType="long" resultType="int">
+    SELECT CASE 
+             WHEN EXISTS (
+               SELECT 1
+               FROM MATCHING M
+               WHERE M.MT_NO = #{matchingNo}
+             )
+             THEN 1 ELSE 0
+           END
+    FROM DUAL
 </select>
 
-<select id="selectAllChatRoom" parameterType="int" resultMap="ChatRoomRequest">
-	SELECT 
-	    CR.CR_NO as cr_no,             
-	    
-	    CASE 
-	        WHEN h.H_SENDUSER = #{value} THEN receiver.M_NAME
-	        ELSE sender.M_NAME
-	    END AS cr_name,
-	
-	    CASE 
-	        WHEN h.H_SENDUSER = #{value} THEN receiver.M_AGE
-	        ELSE sender.M_AGE
-	    END AS cr_age,
-	
-	    msg.CM_MSG AS cr_lastMessage,
-	    msg.CM_DATE AS cr_lastMessageDate
-	
-	FROM HEARTS h
-	JOIN MEMBER sender   ON h.H_SENDUSER = sender.M_NO
-	JOIN MEMBER receiver ON h.H_RECEIVEUSER = receiver.M_NO
-	JOIN MATCHING m      ON h.H_NO = m.MT_HEARTSNO
-	JOIN CHATROOM cr     ON cr.CR_MATCHINGNO = m.MT_HEARTSNO
-	
-	-- 🔽 채팅방별 가장 마지막 메시지를 가져오는 서브쿼리
-	LEFT JOIN (
-	    SELECT cm1.*
-	    FROM CHATMESSAGE cm1
-	    JOIN (
-	        SELECT CM_CHATROOMNO, MAX(CM_DATE) AS MAX_DATE
-	        FROM CHATMESSAGE
-	        GROUP BY CM_CHATROOMNO
-	    ) cm2
-	    ON cm1.CM_CHATROOMNO = cm2.CM_CHATROOMNO AND cm1.CM_DATE = cm2.MAX_DATE
-	) msg ON msg.CM_CHATROOMNO = cr.CR_NO
-	
-	-- 🔐 로그인 유저 기준 필터링
-	WHERE h.H_SENDUSER = #{value}
-	   OR h.H_RECEIVEUSER = #{value}
-	
-	-- 📅 마지막 메시지 날짜 기준으로 정렬
-	ORDER BY msg.CM_DATE ASC
+<select id="isValidMatchingUser" parameterType="com.spark.dating.dto.chat.ChatRoomCreateRequest" resultType="int">
+    SELECT CASE 
+             WHEN EXISTS (
+               SELECT 1
+               FROM MATCHING M
+               JOIN HEARTS H ON M.MT_HEARTSNO = H.H_NO
+               WHERE M.MT_NO = 2
+                 AND (H.H_SENDUSER = 1 OR H.H_RECEIVEUSER = 1)
+             )
+             THEN 1 ELSE 0 
+           END AS
+    FROM DUAL
+</select>
+
+<select id="selectAllChatRoom" parameterType="Long" resultType="ChatRoom">
+	SELECT
+        CR.CR_UUID as cr_UUID,
+        M.M_NAME as cr_Name,
+        CM.CM_MSG as cr_Message,
+        M.M_AGE as cr_Age,
+        CM.CM_DATE as cr_Date
+    FROM CHATROOM CR
+    JOIN MATCHINGCHATROOMMAPPING MC
+         ON CR.CR_NO = MC.MC_CHATROOMNO
+    JOIN MATCHING MT
+         ON MC.MC_MATCHINGNO = MT.MT_NO
+    JOIN HEARTS H
+         ON MT.MT_HEARTSNO = H.H_NO
+    JOIN MEMBER M
+         ON M.M_NO = CASE
+                        WHEN H.H_SENDUSER = #{memberNo}
+                        THEN H.H_RECEIVEUSER
+                        ELSE H.H_SENDUSER
+                     END
+    LEFT JOIN CHATMESSAGE CM
+         ON CR.CR_LASTMESSAGENO = CM.CM_NO
+    WHERE #{memberNo} IN (H.H_SENDUSER, H.H_RECEIVEUSER)
+    ORDER BY CM.CM_DATE DESC NULLS LAST
 </select>
 
 </mapper>

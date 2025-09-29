@@ -7,7 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.spark.dating.chat.dao.ChatMessageDao;
-import com.spark.dating.dto.chat.ChatMessageSelectRequest;
+import com.spark.dating.dto.chat.ChatMessageSelectResponse;
 import com.spark.dating.dto.chat.ChatMessageSend;
 
 import lombok.RequiredArgsConstructor;
@@ -18,10 +18,11 @@ public class ChatMessageService {
 
 	@Autowired
 	private ChatMessageDao chatMessageDao;
-	private final SimpMessagingTemplate simpMessagingTemplate;
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
 
 
-	public void sendMessage(int roomId, String message) {
+	public void sendMessage(String roomId, String message) {
 		simpMessagingTemplate.convertAndSend("/sub/room/"+roomId, message);
 	}
 	
@@ -29,7 +30,7 @@ public class ChatMessageService {
 		chatMessageDao.insertChatMessage(chatMessageSend);
 	}
 	
-	public List<ChatMessageSelectRequest> getChattingMessage(int chatroomId){
-		return chatMessageDao.getChattingMessage(chatroomId);
+	public List<ChatMessageSelectResponse> getChattingMessage(String chatRoomUUID){
+		return chatMessageDao.getChattingMessage(chatRoomUUID);
 	}
 }

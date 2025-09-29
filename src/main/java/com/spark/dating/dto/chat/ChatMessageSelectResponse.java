@@ -4,13 +4,12 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Getter
-public class ChatMessageSelectRequest {
+public class ChatMessageSelectResponse {
 
 	private String cmSendUserName;
 	private String cmMsg;

@@ -1,15 +1,10 @@
 package com.spark.dating.chat.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,18 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.chat.service.ChatMessageService;
 import com.spark.dating.chat.service.ChatRoomService;
-import com.spark.dating.dto.chat.ChatMessageSelectRequest;
+import com.spark.dating.dto.chat.ChatMessageSelectResponse;
 import com.spark.dating.dto.chat.ChatMessageSend;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 import com.spark.dating.dto.chat.ChatRoomSelectRequest;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestMapping("/matching-chat")
 @RestController
-public class ChatController implements ChatControllerDocs{
+public class ChatController implements ChatControllerDocs {
 
 	@Autowired
 	private ChatRoomService chatRoomService;
@@ -40,39 +36,34 @@ public class ChatController implements ChatControllerDocs{
 
 	@PostMapping("/rooms")
 	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest ChatRoomCreateRequest) {
-		
 		chatRoomService.createChatRoom(ChatRoomCreateRequest);
 	}
 
 	@GetMapping("/rooms")
-	public List<ChatRoomSelectRequest> chatRoomList(@RequestParam("m_id") final int userNo) {
-		System.out.println("여기");
-		return chatRoomService.selectAllChatRoom(userNo);
+	public List<ChatRoomSelectRequest> chatRoomList(@RequestParam(value = "memberNo", required = true) @Min(1) Long memberNo) {
+		return chatRoomService.selectAllChatRoom(memberNo);
 	}
 
-	@GetMapping("/chatting/{roomId}")
-	public List<ChatMessageSelectRequest> chatMessage(@PathVariable("roomId") final int roomId) {
-		return chatMessageService.getChattingMessage(roomId);
+	@GetMapping("/chatting/{chatroom-uuid}")
+	public List<ChatMessageSelectResponse> chatMessage(@PathVariable("chatroom-uuid") String chatRoomUUID) {
+		return chatMessageService.getChattingMessage(chatRoomUUID);
 	}
 
-	@Delete("/leave/{roomId}")	// 보류
-	public Map<String, Object> leaveChatRoom(@PathVariable("roomId") final int roomId) {
-		Map<String, Object> resultMap = new HashMap<>();
-		return resultMap;
-	}
-	@Validated
-	@MessageMapping("/room/{roomId}")
-	@SendTo("sub/room/{roomId}")
-	public void sendMessage(@DestinationVariable("roomId") int roomId, @Valid ChatMessageSend chatMessageSend) {
-		
-		
-		//		ChatMessage2 chatMessage = ChatMessage2.createChatMessage(sendChatData.getCm_senduser(), roomId,
-		//				sendChatData.getCm_msg());
-		log.info(chatMessageSend+toString());
-		log.info(roomId+"");
+//	@Delete("/leave/{roomId}") //
+//	public Map<String, Object> leaveChatRoom(@PathVariable("roomId") final int roomId) {
+//		Map<String, Object> resultMap = new HashMap<>();
+//		return resultMap;
+//	}
 
-		//		log.info(chatMessage.toString() + "-----------");
-		//		chatMessageService.insertChatMessage(chatMessage);
-		//		chatMessageService.sendMessage(roomId, chatMessage.getCm_msg());
+	@MessageMapping("/room/{chatroom-uuid}")
+//	@SendTo("sub/room/{roomId}")
+	public void sendMessage(@DestinationVariable("chatroom-uuid") String chatRoomUUID, @Valid ChatMessageSend chatMessageSend) {
+
+		log.info(chatRoomUUID);
+		log.info(chatMessageSend + toString());
+
+//		 chatMessageService.insertChatMessage(chatMessage);
+		chatMessageService.sendMessage(chatRoomUUID, chatMessageSend.getCmMessage());
+
 	}
 }
