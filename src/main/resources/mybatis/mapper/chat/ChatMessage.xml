@@ -6,7 +6,7 @@
 
 <mapper namespace="com.spark.dating.chat.dao.ChatMessageDao">
 
-<resultMap id="ChatMessageResponse" type="com.spark.dating.dto.chat.ChatMessageResponse">
+<resultMap id="ChatMessageResponse" type="com.spark.dating.dto.chat.ChatMessageSelectResponse">
 	<result column="CM_SENDUSERNAME" property="cmSendUserName"/>
 	<result column="CM_MSG" property="cmMsg"/>
 	<result column="CM_DATE" property="cmDate"/>
