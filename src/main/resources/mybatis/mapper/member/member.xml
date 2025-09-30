@@ -6,25 +6,25 @@
 
 <mapper namespace="com.spark.dating.member.MemberDao">
 
-  <resultMap id="Member" type="Member">
-    <id property="m_no" column="M_NO"/>
-    <result property="m_id" column="M_ID"/>
-    <result property="m_password" column="M_PASSWORD"/>
-    <result property="m_name" column="M_NAME"/>
-    <result property="m_ssn" column="M_SSN"/>
-    <result property="m_age" column="M_AGE"/>
-    <result property="m_email" column="M_EMAIL"/>
-    <result property="m_gender" column="M_GENDER"/>
-    <result property="m_phone" column="M_PHONE"/>
-    <result property="m_nickname" column="M_NICKNAME"/>
-    <result property="m_region" column="M_REGION"/>
-    <result property="m_bio" column="M_BIO"/>
-    <result property="m_mbti" column="M_MBTI"/>
-    <result property="m_active" column="M_ACTIVE"/>
-  </resultMap>
+  <!-- <resultMap id="Member" type="Member">
+    <id property="mNo" column="M_NO"/>
+    <result property="mId" column="M_ID"/>
+    <result property="mPassword" column="M_PASSWORD"/>
+    <result property="mName" column="M_NAME"/>
+    <result property="mSsn" column="M_SSN"/>
+    <result property="mAge" column="M_AGE"/>
+    <result property="mEmail" column="M_EMAIL"/>
+    <result property="mGender" column="M_GENDER"/>
+    <result property="mPhone" column="M_PHONE"/>
+    <result property="mNickname" column="M_NICKNAME"/>
+    <result property="mRegion" column="M_REGION"/>
+    <result property="mBio" column="M_BIO"/>
+    <result property="mMbti" column="M_MBTI"/>
+    <result property="mActive" column="M_ACTIVE"/>
+  </resultMap> -->
 
   <insert id = "insertMember" parameterType="Member">
-    <selectKey keyProperty="m_no" resultType="int" order="BEFORE">
+    <selectKey keyProperty="mNo" resultType="int" order="BEFORE">
     SELECT MEMBER_SEQ.NEXTVAL FROM dual
     </selectKey>
     
@@ -34,32 +34,32 @@
       M_BIO, M_MBTI, M_ACTIVE
     ) 
     VALUES (
-      #{m_no}, #{m_id}, #{m_password}, #{m_name}, #{m_ssn}, #{m_age},
-      #{m_email}, #{m_gender}, #{m_phone}, #{m_nickname}, #{m_region},
-      #{m_bio}, #{m_mbti}, #{m_active}
+      #{mNo}, #{mId}, #{mPassword}, #{mName}, #{mSsn}, #{mAge},
+      #{mEmail}, #{mGender}, #{mPhone}, #{mNickname}, #{mRegion},
+      #{mBio}, #{mMbti}, #{mActive}
     )
   </insert>
 
   <update id = "updateMember" parameterType="Member">
     update member
     set
-       M_PASSWORD = #{m_password},
-       M_NAME = #{m_name},
-       M_SSN = #{m_ssn},
-       M_AGE = #{m_age},
-       M_EMAIL = #{m_email},
-       M_GENDER = #{m_gender},
-       M_PHONE = #{m_phone},
-       M_NICKNAME = #{m_nickname},
-       M_REGION = #{m_region},
-       M_BIO = #{m_bio},
-       M_MBTI = #{m_mbti},
-       M_ACTIVE = #{m_active}
+       M_PASSWORD = #{mPassword},
+       M_NAME = #{mName},
+       M_SSN = #{mSsn},
+       M_AGE = #{mAge},
+       M_EMAIL = #{mEmail},
+       M_GENDER = #{mGender},
+       M_PHONE = #{mPhone},
+       M_NICKNAME = #{mNickname},
+       M_REGION = #{mRegion},
+       M_BIO = #{mBio},
+       M_MBTI = #{mMbti},
+       M_ACTIVE = #{mActive}
        
-      where m_no = #{m_no}
+      where m_no = #{mNo}
   </update>
 
-  <select id="SelectMemberByM_id" resultMap="Member" parameterType="String">
+  <select id="SelectMemberByM_id" resultType="Member" parameterType="String">
     SELECT *
 	  from member
     where M_ID = #{value}
