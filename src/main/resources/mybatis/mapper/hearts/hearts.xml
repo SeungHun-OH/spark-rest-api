@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.hearts.HeartsDao">
+
+  <!--ResultMap-->
+  <!-- 
+  <resultMap id="feedBase" type="Feed">
+    <id property="f_no" column="f_no"/>
+    <result property="f_memberno" column="f_memberno"/>
+    <result property="f_content" column="f_content"/>
+    <result property="f_date" column="f_date"/>
+  </resultMap>
+  -->
+
+  <!--구현-->
+  <insert id="create"
+          parameterType="Hearts">
+    <selectKey keyProperty="hNo" resultType="int" order="BEFORE">
+      SELECT h_no_seq.NEXTVAL FROM dual
+    </selectKey>
+    INSERT INTO hearts (h_no, h_senduser, h_receiveuser, h_date, h_requestchanel)
+    VALUES (#{hNo}, #{hSenduser}, #{hReceiveuser}, SYSDATE, #{hRequestchanel})
+  </insert>
+
+  <select id="selectByMno" parameterType="int" resultType="Hearts">
+    SELECT f_no, f_memberno, f_content, f_date
+    FROM feed
+    WHERE f_no = #{fNo}
+  </select>
+
+  <delete id="delete"
+          parameterType="int">
+    DELETE FROM hearts
+    WHERE h_no = #{hNo}
+  </delete>
+
+  <select id="countAll" parameterType="int" resultType="int">
+    SELECT count(*)
+    FROM feed
+    WHERE f_memberno = #{fMemberno}
+  </select>
+
+</mapper>

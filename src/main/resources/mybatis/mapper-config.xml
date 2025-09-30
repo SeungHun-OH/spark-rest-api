@@ -18,6 +18,8 @@
   <typeAliases>
     <typeAlias type="com.spark.dating.dto.feed.Feed" alias="Feed"/>
     <typeAlias type="com.spark.dating.dto.feed.FeedPicture" alias="FeedPicture"/>
+    <typeAlias type="com.spark.dating.dto.hearts.Hearts" alias="Hearts"/>
+    <typeAlias type="com.spark.dating.dto.matching.Matching" alias="Matching"/>
     <typeAlias type="com.spark.dating.dto.chat.ChatRoom" alias="ChatRoom"/>
     <typeAlias type="com.spark.dating.dto.chat.ChatMessage" alias="ChatMessage"/>
     <typeAlias type="com.spark.dating.dto.member.Member" alias="Member"/>

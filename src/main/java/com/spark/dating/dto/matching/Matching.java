@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class Matching {
-
-	private int mt_no;
-	private int mt_heartsno;
-	private Date mt_date;
+	private int mtNo;
+	private int mtHeartsno;
+	private Date mtDate;
 }

@@ -36,18 +36,11 @@ public class FeedPictureController {
         .body(feedPicture.getFpAttachdata());
     }
     
-//    @GetMapping("/picture")
-//    public ResponseEntity<byte[]> getFeedPicture(@RequestParam("fp_no") int fp_no) {
-//        FeedPicture feedPicture = feedPictureService.getPicture(fp_no);
-//        return ResponseEntity
-//        .ok()
-//        .contentType(MediaType.parseMediaType(feedPicture.getFpAttachtype()))
-//        .body(feedPicture.getFpAttachdata());
-//    }
-    
-    //List<FeedPicture>로 리턴하면 jackson에서 feedPicture 객체를 json으로 직렬화하면서 byte[]
-    //필드를 Base64문자열로 바꿔서 내려줌
-    //-> 이미지 자체(byte[]
+    /*
+        List<FeedPicture>로 리턴하면 jackson에서 feedPicture 객체를 json으로 직렬화하면서 byte[]
+        필드를 Base64문자열로 바꿔서 내려줌
+        -> 이미지 자체(byte[]
+    */
     @GetMapping("/firstImg")
     public List<FeedPicture> getFirstImageofFeed(@RequestParam("m_no") int m_no) {
     	return feedPictureService.getFirstImgOfFeed(m_no);
