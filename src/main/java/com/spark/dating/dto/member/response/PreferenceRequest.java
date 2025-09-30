@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class PreferenceRequest {
-  
-  private int member_No;
+  private int memberNo;
+  private String memberWho;
   private List<Integer> preferNos;
 }

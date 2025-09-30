@@ -8,5 +8,5 @@ import com.spark.dating.dto.member.MemberPicture;
 public interface MemberPictureDao {
   int insertMemberPicture(MemberPicture memberPicture);
 
-  MemberPicture SelectMemberPictureByM_no(int m_no);
+  MemberPicture selectMemberPictureByM_no(int mNo);
 }

@@ -39,7 +39,7 @@ public class FeedController {
     @Autowired
     private FeedService feedService;
 
-    @PostMapping("/")
+    @PostMapping("/")   
     public Map<String, Object> createFeed(@RequestPart("feed") Feed feed,
             @RequestPart("files") MultipartFile[] files) throws IOException {
         feedService.createFeed(feed, files);
