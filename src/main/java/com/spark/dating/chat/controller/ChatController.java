@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.chat.service.ChatMessageService;
@@ -20,10 +19,8 @@ import com.spark.dating.dto.chat.ChatMessageSelectResponse;
 import com.spark.dating.dto.chat.ChatMessageSend;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 import com.spark.dating.dto.chat.ChatRoomSelectRequest;
-import com.spark.dating.dto.member.Member;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

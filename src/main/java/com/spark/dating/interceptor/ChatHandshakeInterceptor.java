@@ -11,12 +11,17 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import com.spark.dating.chat.service.StompService;
+import com.spark.dating.utils.JwtUtil;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Component
 public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 
 	@Autowired
 	private StompService stompService;
+	@Autowired
+	private JwtUtil jwtUtil;
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
@@ -25,16 +30,25 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 		String jwt = "";
 		String memberId = "test";
 
-		// 추후 jwt유효 검증 및 아이디 검증 
-		if (stompService.isMemberExist(memberId) == 0) {
-			return false;
-		}
-
+		
+		
+		
 		if (request instanceof ServletServerHttpRequest) {
 			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request; // 추후에 헤더에서 jwt 가져오는데 사용
-			attributes.put("memberId", memberId);
+			
+//			attributes.put("memberId", memberId);
 		}
+		
+		
+		
+		
+		
+		// 추후 jwt유효 검증 및 아이디 검증 
+//		if (stompService.isMemberExist(memberId) == 0) {
+//			return false;
+//		}
 
+		log.info("핸드셰이크 ~~~~~~~~~~");
 		return true;
 	}
 

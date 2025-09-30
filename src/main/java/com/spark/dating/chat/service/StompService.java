@@ -12,8 +12,6 @@ public class StompService {
 	private StompDao stompDao;
 	
 	public int isMemberExist(String memberId) {
-		
-		System.out.println("==========");
 		return stompDao.isMemberExist(memberId);
 	}
 }
