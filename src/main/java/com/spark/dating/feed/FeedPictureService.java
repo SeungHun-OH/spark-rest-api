@@ -24,7 +24,11 @@ public class FeedPictureService {
     }
 
     public FeedPicture getPicture(int fp_no) {
-        return feedPictureDao.selectByFpno(fp_no);
+        return feedPictureDao.selectImgByFpno(fp_no);
+    }
+    
+    public List<FeedPicture> getFirstImgOfFeed(int m_no) {
+    	return feedPictureDao.selectFirstImg(m_no);
     }
 
 }

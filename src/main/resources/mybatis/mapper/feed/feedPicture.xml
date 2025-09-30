@@ -27,16 +27,36 @@
   <select id="selectByFno"
     parameterType="int"
     resultType="FeedPicture"> 
-    SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
+    SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname
     FROM feedPicture WHERE fp_feedno = #{fpFeedNo} 
   </select>
 
-  <select id="selectByFpno"
+  <select id="selectImgByFpno"
     parameterType="int"
     resultType="FeedPicture"> 
     SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
-    FROM feedPicture WHERE fp_no = #{fpNo} 
+    FROM feedPicture WHERE fp_no = #{fpNo}
+     
   </select>
+
+	<select id="selectFirstImg"
+		parameterType="int"
+		resultType="FeedPicture">
+		WITH ranked_pictures AS (
+			SELECT fp.*,
+				ROW_NUMBER() OVER (PARTITION BY fp.fp_feedno ORDER BY fp.fp_no ASC) AS rn
+			FROM FEEDPICTURE fp
+		)
+		SELECT f.f_no AS fpFeedNo, 
+				p.fp_no, 
+				p.fp_attachtype, 
+				p.fp_attachoname 
+		FROM feed f
+		LEFT JOIN ranked_pictures p
+		ON f.f_no = p.fp_feedno
+		AND p.rn = 1
+		WHERE f.f_memberno = #{value}
+	</select>
 
   <delete id="delete"
           parameterType="int">

@@ -9,8 +9,9 @@ import com.spark.dating.dto.feed.FeedPicture;
 public interface FeedPictureDao {
     public int create(FeedPicture feedPicture);
     public List<FeedPicture> selectByFno(int f_no);
-    public FeedPicture selectByFpno(int fp_no);
+    public FeedPicture selectImgByFpno(int fp_no);
+    public List<FeedPicture> selectFirstImg(int f_no);
     // public int update(FeedPicture feedPicture);
-    public int delete(int fp_feedno);
+    public int delete(int m_no);
     public int countAll(int m_no);
 }
