@@ -1,25 +1,17 @@
 package com.spark.dating.dto.member;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, 
+                getterVisibility = JsonAutoDetect.Visibility.NONE, 
+                isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
+                setterVisibility = JsonAutoDetect.Visibility.NONE)
+
 @Data
 public class Member {
-    // private int mNo;
-    // private String mId;
-    // private String mPassword;
-    // private String mName;
-    // private String mSsn;
-    // private int mAge;
-    // private String mEmail;
-    // private String mGender;
-    // private String mPhone;
-    // private String mNickname;
-    // private String mRegion;
-    // private String mBio;
-    // private String mMbti;
-    // private String mActive = "T";
     
     @JsonProperty("mNo")
     private int mNo;

@@ -1,6 +1,5 @@
 package com.spark.dating.member;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberPicture;
+import com.spark.dating.dto.member.request.MemberLoginRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,16 +40,16 @@ public class MemberController {
 
   // 회원 로그인
   @PostMapping("member/login")
-  public Map<String, Object> login(@RequestBody Member memberlogin) {
-    return memberService.login(memberlogin);
+  public Map<String, Object> login(@RequestBody MemberLoginRequest memberlogin) {
 
-    // Map map = memberService.login(memberlogin);
-    // Map<String, Object> response = new HashMap<>();
+    log.info("프론트 넘어오는 memberLogin찍기" + memberlogin.toString());
 
-    // response.put("member", map.get("data"));
-    // log.info("백엔드 로그인 데이터 확인하기" + map.get("data").toString());
-    // log.info("백엔드 로그인 Response 확인하기" + response);
-    // return response;
+    Map<String, Object> map = memberService.login(memberlogin);
+
+    log.info("백엔드 받아오는 memberLogin찍기" + map);
+
+    return map;
+
   }
 
   // 회원 수정
@@ -100,6 +103,13 @@ public class MemberController {
     return memberService.selectMemberByJwt(token);
   }
 
+  @GetMapping("/member/test")
+  @ResponseBody
+  public String Test() throws JsonProcessingException {
+    Member member = new Member();
+    member.setMEmail("www@www.www");
+    return new ObjectMapper().writeValueAsString(member);
+  }
 }
 
 // log.info("MemberController insertMember값은?" + member);

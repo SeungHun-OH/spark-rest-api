@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberPicture;
+import com.spark.dating.dto.member.request.MemberLoginRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,7 +71,7 @@ public class MemberService {
     }
   }
 
-  public Map<String, Object> login(@RequestBody Member memberlogin) {
+  public Map<String, Object> login(@RequestBody MemberLoginRequest memberlogin) {
     Map<String, Object> map = new HashMap<>();
 
     log.info("Login MemberService memberLogin값은?" + memberlogin);
@@ -82,18 +83,18 @@ public class MemberService {
     } else {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       boolean result = passwordEncoder.matches(memberlogin.getMPassword(), member.getMPassword());
-      // map.put("member_pw", member.getMPassword());
-      // map.put("memberlogin_pw", memberlogin.getMPassword());
       if (result) {
         String jwt = jwtService.createJWT(member.getMId(), member.getMEmail(), member.getMNo());
 
         map.put("result", "success");
+        
         // map.put("mId", member.getMId());
         // map.put("mName", member.getMName());
-        // map.put("mNo", member.getMNo());
 
         map.put("jwt", jwt);
         map.put("message", member.getMName() + "님 환영합니다");
+        map.put("mNo", member.getMNo());
+
       } else {
         map.put("result", "fail");
         map.put("message", "비밀번호가 틀립니다");
