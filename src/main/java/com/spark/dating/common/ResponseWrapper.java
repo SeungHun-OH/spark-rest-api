@@ -28,7 +28,7 @@ public class ResponseWrapper implements ResponseBodyAdvice<Object> {
 		if (converterType.equals(ByteArrayHttpMessageConverter.class)) {
             return false;
         }
-		return false;
+		return true;
 //		return returnType.getDeclaringClass().getPackageName().startsWith("com.spark.dating.chat.controller");
 	}
 

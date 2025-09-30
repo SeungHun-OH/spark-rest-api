@@ -28,6 +28,10 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 			// 추후 해당 채팅방에 들어올 수 있는 유저인지 검증(유저의 채팅방 리스트)
 			System.err.println("presend 구독");
 		}
+		
+		if (accessor.getCommand() == StompCommand.UNSUBSCRIBE) {
+			
+		}
 
 		return message;
 	}
