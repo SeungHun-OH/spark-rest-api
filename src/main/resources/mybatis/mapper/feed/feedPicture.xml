@@ -4,6 +4,7 @@
 <mapper namespace="com.spark.dating.feed.FeedPictureDao">
 
   <!--ResultMap-->
+  <!-- 
   <resultMap id="feedPictureBase" type="FeedPicture">
     <id property="fp_no" column="fp_no"/>
     <result property="fp_feedno" column="fp_feedno"/>
@@ -11,27 +12,55 @@
     <result property="fp_attachoname" column="fp_attachoname"/>
     <result property="fp_attachdata" column="fp_attachdata"/>
   </resultMap>
+  -->
 
   <!--구현-->
   <insert id="create"
     parameterType="FeedPicture">
-    <selectKey keyProperty="fp_no" resultType="int" order="BEFORE"> 
+    <selectKey keyProperty="fpNo" resultType="int" order="BEFORE"> 
       SELECT fp_no_seq.NEXTVAL FROM dual 
     </selectKey> 
     INSERT INTO feedPicture (fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata) 
-    VALUES (#{fp_no}, #{fp_feedno}, #{fp_attachtype}, #{fp_attachoname}, #{fp_attachdata})
+    VALUES (#{fpNo}, #{fpFeedNo}, #{fpAttachtype}, #{fpAttachoname}, #{fpAttachdata})
   </insert>
 
   <select id="selectByFno"
     parameterType="int"
-    resultMap="feedPictureBase"> 
-    SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
-    FROM feedPicture WHERE fp_feedno = #{fp_feedno} 
+    resultType="FeedPicture"> 
+    SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname
+    FROM feedPicture WHERE fp_feedno = #{fpFeedNo} 
   </select>
+
+  <select id="selectImgByFpno"
+    parameterType="int"
+    resultType="FeedPicture"> 
+    SELECT fp_no, fp_feedno, fp_attachtype, fp_attachoname, fp_attachdata
+    FROM feedPicture WHERE fp_no = #{fpNo}
+     
+  </select>
+
+	<select id="selectFirstImg"
+		parameterType="int"
+		resultType="FeedPicture">
+		WITH ranked_pictures AS (
+			SELECT fp.*,
+				ROW_NUMBER() OVER (PARTITION BY fp.fp_feedno ORDER BY fp.fp_no ASC) AS rn
+			FROM FEEDPICTURE fp
+		)
+		SELECT f.f_no AS fpFeedNo, 
+				p.fp_no, 
+				p.fp_attachtype, 
+				p.fp_attachoname 
+		FROM feed f
+		LEFT JOIN ranked_pictures p
+		ON f.f_no = p.fp_feedno
+		AND p.rn = 1
+		WHERE f.f_memberno = #{value}
+	</select>
 
   <delete id="delete"
           parameterType="int">
     DELETE FROM feedPicture
-    WHERE fp_feedno = #{fp_feedno}
+    WHERE fp_feedno = #{fpFeedNo}
   </delete>
 </mapper>

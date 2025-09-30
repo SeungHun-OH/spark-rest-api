@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RestApiResponse<T> {
 
 	@JsonFormat(pattern = "yyyy년 MM월 dd일 HH'시'mm'분'ss'초'", timezone = "UTC")

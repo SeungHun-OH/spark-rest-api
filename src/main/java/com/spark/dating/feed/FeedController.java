@@ -45,7 +45,7 @@ public class FeedController {
         feedService.createFeed(feed, files);
 
         Map<String, Object> map = new HashMap<>();
-        map = feedService.getFeed(feed.getF_no());
+        map = feedService.getFeed(feed.getFNo());
         return map;
     }
 
@@ -78,5 +78,4 @@ public class FeedController {
         int rows = feedService.deleteFeed(f_no);
         return rows;
     }
-
 }
