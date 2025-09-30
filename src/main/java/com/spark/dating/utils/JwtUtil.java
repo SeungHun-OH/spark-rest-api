@@ -33,10 +33,10 @@ public class JwtUtil {
 
     private final SecretKey secretKey = Keys.hmacShaKeyFor(secret);
     
-    public String generateToken(String memberId) {
+    public String generateToken(Long memberNo) {
     	long now = System.currentTimeMillis();
         Claims claims = Jwts.claims()
-        		.add("memberId", memberId)
+        		.add("memberNo", memberNo)
         		.build();
     	return Jwts.builder()
         		.claims(claims)
@@ -51,7 +51,7 @@ public class JwtUtil {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
             return true;
         }catch (SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT", e);
+        	log.info("Invalid JWT", e);
             throw new RestApiException(JwtErrorCode.INVALID_JWT);
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT", e);
@@ -76,15 +76,15 @@ public class JwtUtil {
 		}
     }
     
-    public Boolean isTokenExpired(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration()
-                .before(new Date());
-    }
+//    public Boolean isTokenExpired(String token) {
+//        return Jwts.parser()
+//                .verifyWith(secretKey)
+//                .build()
+//                .parseSignedClaims(token)
+//                .getPayload()
+//                .getExpiration()
+//                .before(new Date());
+//    }
     
     public String getToken(String token){
         if(token == null) {
@@ -96,11 +96,12 @@ public class JwtUtil {
         return token.substring(7);
     }
     
-    public String getMemberId(String token) {
-		return parseClaims(token).get("memberId", String.class);
+    public boolean existsByNo(Long memberId) {
+    	return memberService.existsByNo(memberId);
+    }
+    
+    public Long getMemberNo(String token) {
+		return parseClaims(token).get("memberNo", Long.class);
 	}
     
-//    public boolean existsById() {
-//    	return 
-//    }
 }

@@ -64,5 +64,15 @@
 	  from member
     where M_ID = #{value}
   </select>
+  
+  <select id="existsByNo" resultType="int" parameterType="Long">
+	SELECT CASE 
+	         WHEN EXISTS (
+	           SELECT 1 FROM MEMBER WHERE M_NO = #{M_NO}
+	         ) THEN 1
+	         ELSE 0
+	       END AS IS_EXIST
+	FROM DUAL
+  </select>
 
 </mapper>
