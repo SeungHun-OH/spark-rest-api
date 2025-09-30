@@ -6,7 +6,7 @@
 
 <mapper namespace="com.spark.dating.member.MemberDao">
 
-  <resultMap id="Member" type="Member">
+  <!-- <resultMap id="Member" type="Member">
     <id property="mNo" column="M_NO"/>
     <result property="mId" column="M_ID"/>
     <result property="mPassword" column="M_PASSWORD"/>
@@ -21,7 +21,7 @@
     <result property="mBio" column="M_BIO"/>
     <result property="mMbti" column="M_MBTI"/>
     <result property="mActive" column="M_ACTIVE"/>
-  </resultMap>
+  </resultMap> -->
 
   <insert id = "insertMember" parameterType="Member">
     <selectKey keyProperty="mNo" resultType="int" order="BEFORE">
@@ -59,7 +59,7 @@
       where m_no = #{mNo}
   </update>
 
-  <select id="SelectMemberByM_id" resultMap="Member" parameterType="String">
+  <select id="SelectMemberByM_id" resultType="Member" parameterType="String">
     SELECT *
 	  from member
     where M_ID = #{value}

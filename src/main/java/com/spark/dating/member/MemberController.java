@@ -1,5 +1,6 @@
 package com.spark.dating.member;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,14 @@ public class MemberController {
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody Member memberlogin) {
     return memberService.login(memberlogin);
+
+    // Map map = memberService.login(memberlogin);
+    // Map<String, Object> response = new HashMap<>();
+
+    // response.put("member", map.get("data"));
+    // log.info("백엔드 로그인 데이터 확인하기" + map.get("data").toString());
+    // log.info("백엔드 로그인 Response 확인하기" + response);
+    // return response;
   }
 
   // 회원 수정
@@ -63,10 +72,14 @@ public class MemberController {
   // 회원 조회(단일)
   @GetMapping("/member")
   public ApiResponse<Member> selectMemberByM_id(@RequestParam("mId") String mId) {
-    return memberService.selectMemberByM_id(mId);
+    ApiResponse<Member> response = memberService.selectMemberByM_id(mId);
+
+    log.info("로그인 데이터 머가 들어오니" + response.getData().toString());
+
+    return response;
   }
 
-  // 회원 조회(단일))
+  // 회원 사진 조회(단일))
   @GetMapping("/member/picture")
   public ApiResponse<MemberPicture> selectMemberPictureByM_no(@RequestParam("mNo") int mNo) {
     return memberService.selectMemberPictureByM_no(mNo);
@@ -74,10 +87,12 @@ public class MemberController {
 
   // jwt 토큰으로 회원정보 조회
   // @GetMapping("member/jwt")
-  // public ApiResponse<Member> selectMemberByJwt(@RequestParam("jwt") String jwt) {
-  //   return memberService.selectMemberByJwt(jwt);
+  // public ApiResponse<Member> selectMemberByJwt(@RequestParam("jwt") String jwt)
+  // {
+  // return memberService.selectMemberByJwt(jwt);
   // }
 
+  // jwt 토큰으로 회원정보 조회
   @GetMapping("/member/jwt")
   public ApiResponse<Member> selectMemberByJwt(@RequestHeader("Authorization") String authHeader) {
     // "Bearer eyJ..." 에서 "Bearer " 제거

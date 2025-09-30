@@ -12,7 +12,6 @@
     <result property="mpAttachType" column="MP_ATTACHTYPE"/>
     <result property="mpAttachOname" column="MP_ATTACHONAME"/>
     <result property="mpAttachData" column="MP_ATTACHDATA"/>
-
   </resultMap>
 
   <insert id = "insertMemberPicture" parameterType="memberPicture">

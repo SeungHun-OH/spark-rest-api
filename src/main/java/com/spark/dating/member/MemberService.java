@@ -41,7 +41,7 @@ public class MemberService {
   }
 
   public ApiResponse<Integer> insertMember(Member member) {
-    
+
     PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
     String encodedPassword = passwordEncode.encode(member.getMPassword());
     member.setMPassword(encodedPassword);
@@ -59,7 +59,7 @@ public class MemberService {
 
       log.info("setMp_memberno(m_no)값은?" + mNo);
       memberPicture.setMpMemberNo(mNo);
-      memberPicture.setMpAttachOname(file.getOriginalFilename()); 
+      memberPicture.setMpAttachOname(file.getOriginalFilename());
       memberPicture.setMpAttachData(file.getBytes());
       memberPicture.setMpAttachType(file.getContentType());
 
@@ -81,19 +81,19 @@ public class MemberService {
       map.put("message", "아이디가 유효하지 않습니다");
     } else {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-      map.put("member_pw", member.getMPassword());
-      map.put("memberlogin_pw", memberlogin.getMPassword());  
       boolean result = passwordEncoder.matches(memberlogin.getMPassword(), member.getMPassword());
-
+      // map.put("member_pw", member.getMPassword());
+      // map.put("memberlogin_pw", memberlogin.getMPassword());
       if (result) {
         String jwt = jwtService.createJWT(member.getMId(), member.getMEmail(), member.getMNo());
 
         map.put("result", "success");
-        map.put("mId", member.getMId());
-        map.put("mName", member.getMName());
+        // map.put("mId", member.getMId());
+        // map.put("mName", member.getMName());
+        // map.put("mNo", member.getMNo());
+
         map.put("jwt", jwt);
         map.put("message", member.getMName() + "님 환영합니다");
-        map.put("mNo", member.getMNo());
       } else {
         map.put("result", "fail");
         map.put("message", "비밀번호가 틀립니다");
@@ -102,7 +102,8 @@ public class MemberService {
     }
     return map;
   }
-  //회원 조회(단일)
+
+  // 회원 조회(단일)
   public ApiResponse<Member> selectMemberByM_id(String mId) {
     try {
       Member member = memberDao.SelectMemberByM_id(mId);
@@ -115,7 +116,8 @@ public class MemberService {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
-  //회원 사진 조회(단일)
+
+  // 회원 사진 조회(단일)
   public ApiResponse<MemberPicture> selectMemberPictureByM_no(int mNo) {
     try {
       MemberPicture memberPicture = memberPictureDao.selectMemberPictureByM_no(mNo);
@@ -128,7 +130,8 @@ public class MemberService {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }
   }
-  //회원 수정(단일)
+
+  // 회원 수정(단일)
   public ApiResponse<Integer> updateMember(Member member) {
     try {
       int updateCount = memberDao.updateMember(member);
@@ -145,13 +148,13 @@ public class MemberService {
   public ApiResponse<Member> selectMemberByJwt(String jwt) {
     ApiResponse<Member> response = new ApiResponse<>();
     Member jwtMember = new Member();
-    
+
     Map<String, String> claims = jwtService.getClaims(jwt);
-    response.setMessage("mid |" +claims.get("mid") + "memail |" + claims.get("memail") + "mno |" +claims.get("mno"));
+    response.setMessage("mid |" + claims.get("mid") + "memail |" + claims.get("memail") + "mno |" + claims.get("mno"));
     return response;
   }
 }
 
- // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-      // String encodedPassword = passwordEncode.encode(member.getMPassword());
-      // member.setMPassword(encodedPassword);  
+// PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
+// String encodedPassword = passwordEncode.encode(member.getMPassword());
+// member.setMPassword(encodedPassword);
