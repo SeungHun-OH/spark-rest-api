@@ -92,10 +92,8 @@ public class MemberController {
   @GetMapping("/member/getjwt")
   public ApiResponse<Map<String, String>> selectMemberByJwt(@RequestHeader("Authorization") String authHeader) {
     // "Bearer eyJ..." 에서 "Bearer " 제거
-    log.info("토큰자르기전" + authHeader.toString());
-    String token = authHeader.substring(7).trim();
-    log.info("토큰자르기후" + token);
-    return memberService.selectMemberByJwt(token);
+  
+    return memberService.selectMemberByJwt(authHeader);
   }
 
   @GetMapping("/member/test")

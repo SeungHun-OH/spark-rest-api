@@ -148,11 +148,17 @@ public class MemberService {
     }
   }
 
-  public ApiResponse<Map<String, String>> selectMemberByJwt(String jwt) {
+  public ApiResponse<Map<String, String>> selectMemberByJwt(String authHeader) {
 
-    Map<String, String> claims = jwtService.getClaims(jwt);
+    log.info("토큰자르기전" + authHeader.toString());
+    String token = authHeader.substring(7).trim();
+    log.info("토큰자르기후" + token);
+
+    Map<String, String> claims = jwtService.getClaims(token);
     
     log.info("selectMemberByJwt Jwt서비스 실행" + claims);
+
+     
 
     return new ApiResponse<Map<String, String>>("success", "토큰생성 성공", claims);
   }
