@@ -9,10 +9,15 @@ import com.spark.dating.dto.member.response.PreferenceCategory;
 
 @Mapper
 public interface MemberCategoryDao {
-  int insertMemberCategories(@Param("mp_memberNo") int mp_memberNo,
-      @Param("preferNo") int preferNo);
+  int insertMemberCategories(@Param("memberNo") int memberNo,
+                             @Param("memberWho") String memberWho,
+                             @Param("preferNo") int preferNo);
 
   List<PreferenceCategory> getAllCategoryStatic();
-  List<PreferenceCategory> selectSelfPrefers(@Param("member_No") int member_No);
-  // List<PreferenceCategory> selectPartnerPrefers(@Param("member_No") int member_no);
+
+  List<PreferenceCategory> selectSelfPrefers(@Param("memberNo") int memberNo);
+  List<PreferenceCategory> selectPartnerPrefers(@Param("memberNo") int memberNo);
+
+  int deleteCategoriesByMemberWho(@Param("memberNo") int memberNo,
+                                  @Param("memberWho") String memberWho);
 }

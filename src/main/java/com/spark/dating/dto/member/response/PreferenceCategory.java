@@ -4,12 +4,11 @@ import lombok.Data;
 
 @Data
 public class PreferenceCategory {
-
-  private int    pc_no;
-  private String pc_type;
-  private int    pc_typenum;
-  private String pc_group;
-  private String pc_name;
-  private String pc_desc;
-
+  private int pcNo;
+  private String pcType;
+  private int pcTypeNum;
+  private String pcGroup;
+  private String pcName;
+  private String pcDesc;
+  private char pcWho; // 'S' 또는 'P'
 }

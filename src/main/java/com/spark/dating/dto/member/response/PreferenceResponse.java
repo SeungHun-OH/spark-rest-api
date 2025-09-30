@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class PreferenceResponse {
-  private int member_No;
-
-  private List<PreferenceCategory> SelfPrefers;
+  private int memberNo;
+  private char memberWho;
+  private List<PreferenceCategory> selfPrefers;
   private List<PreferenceCategory> partnerPrefers;
 }
