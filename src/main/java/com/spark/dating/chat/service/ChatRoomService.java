@@ -38,7 +38,7 @@ public class ChatRoomService {
 						.mcChatRoomNo(chatRoomCreateRequest.getChatRoomNo()).build());
 	}
 
-	public List<ChatRoomSelectRequest> selectAllChatRoom(Long memberNo) {
+	public List<ChatRoomSelectRequest> selectAllChatRoom(int memberNo) {
 		List<ChatRoomSelectRequest> chatRoomList = ChatRoom.toDtoList(chatRoomDao.selectAllChatRoom(memberNo));
 		return chatRoomList;
 	}

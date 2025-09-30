@@ -53,7 +53,7 @@
     FROM DUAL
 </select>
 
-<select id="selectAllChatRoom" parameterType="Long" resultType="ChatRoom">
+<select id="selectAllChatRoom" parameterType="int" resultType="ChatRoom">
 	SELECT
         CR.CR_UUID as cr_UUID,
         M.M_NAME as cr_Name,

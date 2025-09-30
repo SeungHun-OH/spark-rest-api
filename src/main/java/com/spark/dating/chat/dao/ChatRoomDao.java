@@ -13,7 +13,7 @@ public interface ChatRoomDao {
     
 	public long createChatRoom(ChatRoomCreateRequest chatRoomCreateRequest);
 	public int isValidMatchingUser(Long clientMatchingNo);
-	public List<ChatRoom> selectAllChatRoom(Long memberNo);
+	public List<ChatRoom> selectAllChatRoom(int memberNo);
 	public void insertMatchingRoomMapping(MatchingRoomMapping matchingRoomMapping);
 	public int existsMatchingNo(Long clientMatchingNo);
 }

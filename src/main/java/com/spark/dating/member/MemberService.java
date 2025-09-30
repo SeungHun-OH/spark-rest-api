@@ -154,6 +154,10 @@ public class MemberService {
     response.setMessage("mid |" + claims.get("mid") + "memail |" + claims.get("memail") + "mno |" + claims.get("mno"));
     return response;
   }
+  
+  public boolean existsByNo(Long memberId) {
+	  return memberDao.existsByNo(memberId) == 1 ? true : false;
+  }
 }
 
 // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();
