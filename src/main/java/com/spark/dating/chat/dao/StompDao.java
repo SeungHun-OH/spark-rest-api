@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface StompDao {
 
 	public int isMemberExist(String memberId);
+	
 }

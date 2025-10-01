@@ -1,5 +1,8 @@
 package com.spark.dating.interceptor;
 
+import java.util.Set;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -8,8 +11,9 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
-import com.spark.dating.common.AuthenticationContextHolder;
+import com.spark.dating.chat.service.ChatRoomService;
 import com.spark.dating.common.RestApiException;
+import com.spark.dating.common.StompPrincipal;
 import com.spark.dating.common.exception.JwtErrorCode;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.utils.JwtUtil;
@@ -22,6 +26,9 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
 	@Autowired
 	private JwtUtil jwtUtil;
+	
+	@Autowired
+	private ChatRoomService chatRoomService;
 
 	private StompHeaderAccessor accessor;
 
@@ -46,6 +53,15 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 				if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
 					throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
 				}
+				accessor.setUser(new StompPrincipal(jwtUtil.getMemberNo(jwtToken).toString()));
+				Set<String> chatroomBase62UuidList = chatRoomService.selectAllChatRoomUUID(accessor.getUser().getName());
+				if(!chatroomBase62UuidList.isEmpty() || chatroomBase62UuidList != null) {
+					System.err.println(chatroomBase62UuidList.toString());
+					accessor.getSessionAttributes().put("rooms", chatroomBase62UuidList);
+				}
+//				for (UUID u : chatroomUuidList) {
+//					System.out.println(u.toString());
+//				}
 			}
 		}
 

@@ -79,4 +79,26 @@
     ORDER BY CM.CM_DATE DESC NULLS LAST
 </select>
 
+<select id="selectAllChatRoomUUID" parameterType="String" resultType="java.util.UUID">
+	SELECT
+        CR.CR_UUID as cr_UUID
+    FROM CHATROOM CR
+    JOIN MATCHINGCHATROOMMAPPING MC
+         ON CR.CR_NO = MC.MC_CHATROOMNO
+    JOIN MATCHING MT
+         ON MC.MC_MATCHINGNO = MT.MT_NO
+    JOIN HEARTS H
+         ON MT.MT_HEARTSNO = H.H_NO
+    JOIN MEMBER M
+         ON M.M_NO = CASE
+                        WHEN H.H_SENDUSER = #{memberNo}
+                        THEN H.H_RECEIVEUSER
+                        ELSE H.H_SENDUSER
+                     END
+    LEFT JOIN CHATMESSAGE CM
+         ON CR.CR_LASTMESSAGENO = CM.CM_NO
+    WHERE #{memberNo} IN (H.H_SENDUSER, H.H_RECEIVEUSER)
+    ORDER BY CM.CM_DATE DESC NULLS LAST
+</select>
+
 </mapper>
