@@ -78,6 +78,7 @@ public class MemberService {
     log.info("Login MemberService memberLogin값은?" + memberlogin);
 
     Member member = memberDao.SelectMemberByM_id(memberlogin.getMId());
+    
     if (member == null) {
       map.put("result", "fail");
       map.put("message", "아이디가 유효하지 않습니다");

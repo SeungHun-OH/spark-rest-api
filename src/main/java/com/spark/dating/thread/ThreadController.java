@@ -1,0 +1,29 @@
+package com.spark.dating.thread;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.spark.dating.dto.member.ApiResponse;
+import com.spark.dating.dto.thread.ThreadBoard;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestController
+public class ThreadController {
+  @Autowired
+  ThreadService threadService;
+
+  @PostMapping("/thread/board")
+  public ApiResponse<Integer> insertThreadBoard(@RequestBody ThreadBoard threadBoard) {
+    log.info("insertTreadBoard 콘트롤러 threadBoard멍미" + threadBoard.toString());
+    try {
+      int memberNo = threadService.insertThreadBoard(threadBoard);
+      return new ApiResponse<>("success", "threadBaord 등록 성공", memberNo);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "threadBaord 등록 실패" + e, 0);
+    }
+  }
+}

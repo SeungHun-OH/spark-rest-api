@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.thread.ThreadDao">
+
+  <insert id = "insertThreadBoard" parameterType="ThreadBoard">
+    <selectKey keyProperty="tbNo" resultType="int" order="BEFORE">
+      SELECT THREAD_BOARD_SEQ.NEXTVAL FROM dual
+    </selectKey>
+    INSERT INTO THREAD_BOARD
+     (TB_NO, 
+      TB_TITLE, 
+      TB_CONTENT, 
+      TB_MEMBERNO, 
+      TB_ACTIVE, 
+      TB_DATE, 
+      CREATEDAT)
+    VALUES
+     (#{tbNo}, 
+      #{tbTitle}, 
+      #{tbContent}, 
+      #{tbMemberNo}, 
+      'Y', 
+      SYSDATE, 
+      SYSDATE)
+  </insert>
+
+</mapper>
