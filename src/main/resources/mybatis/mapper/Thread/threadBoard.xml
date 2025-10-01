@@ -9,7 +9,7 @@
     <selectKey keyProperty="tbNo" resultType="int" order="BEFORE">
       SELECT THREAD_BOARD_SEQ.NEXTVAL FROM dual
     </selectKey>
-    INSERT INTO THREAD_BOARD
+    INSERT INTO THREADBOARD
      (TB_NO, 
       TB_TITLE, 
       TB_CONTENT, 
@@ -26,5 +26,26 @@
       SYSDATE, 
       SYSDATE)
   </insert>
+
+  <select id = "getThreadBoardList" resultType="ThreadBoard">
+    SELECT    
+      TB_NO as tbNo,
+      TB_TITLE as tbTitle,
+      TB_CONTENT as tbContent,
+      TO_CHAR(TB_DATE, 'YYYY-MM-DD HH24:MI:SS') as tbDate,
+      TB_ACTIVE as tbActive,
+      TB_LIKECOUNT as tbLikeCount,
+      TB_MEMBERNO as tbMemberNo,
+      TB_VIEWCOUNT as tbViewCount,
+      TB_IMAGENO as tbImageNo,
+      CREATEDAT as createdAt,
+      UPDATEDAT as updatedAt
+
+      FROM THREADBOARD
+      WHERE TB_ACTIVE = 'Y'
+      ORDER BY TB_NO DESC
+  </select>
+
+
 
 </mapper>
