@@ -40,7 +40,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 		switch (accessor.getCommand()) {
 		case CONNECT:
 			String jwtToken = jwtUtil.getToken(accessor.getFirstNativeHeader("Authorization"));
-			System.err.println(jwtToken);
+			log.info(jwtToken);
 //			String token = jwtUtil.generateToken(2L);
 			if (jwtUtil.isValidToken(jwtToken)) {
 				if (jwtUtil.getMemberNo(jwtToken) == null) {
@@ -48,8 +48,8 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 				}
 				Member member = new Member();
 				member.setMNo(jwtUtil.getMemberNo(jwtToken).intValue());
-				System.err.println(member.toString());
-				System.err.println(jwtUtil.parseClaims(jwtToken));
+				log.info(member.toString());
+				log.info(jwtUtil.parseClaims(jwtToken)+"");
 				if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
 					throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
 				}
@@ -71,23 +71,22 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 			if (sessionAttribute != null && sessionAttribute.containsKey("rooms")) {
 				Set<String> rooms = (Set<String>) accessor.getSessionAttributes().get("rooms");
 				String userDestinationRoomUUID = accessor.getDestination().substring(10);
-				System.err.println(rooms.toString());
-				System.err.println("des:  " + userDestinationRoomUUID);
+				log.info(rooms.toString());
+				log.info("des:  " + userDestinationRoomUUID);
 				if (rooms.contains(userDestinationRoomUUID)) {
-					System.err.println("presend 구독");
-					System.err.print("해당 유저의 채팅방");
+					log.info("presend 구독");
+					log.info("올바른 채팅");
 				} else {
 					Map<String, Object> memberNoAndUuid = new HashMap<>();
 					memberNoAndUuid.put("memberNo", accessor.getSessionAttributes().get("memberNo").toString());
 					memberNoAndUuid.put("roomUUID",
 							UuidBase62Utils.fromBase62(userDestinationRoomUUID).toString().replace("-", ""));
-					System.out.println(memberNoAndUuid.toString() + "+++++++++++++++++++++++++++++++++++");
 					if (chatRoomService.existsChatroomByMemberNoAndUuid(memberNoAndUuid) == false) {
 						throw new RestApiException(ChatErrorCode.USER_NOT_IN_CHAT);
 					}
 					rooms.add(userDestinationRoomUUID);
 					sessionAttribute.put("rooms", rooms);
-					System.err.println("해당 방 추가" + sessionAttribute.get("rooms"));
+					log.info("해당 방 추가" + sessionAttribute.get("rooms"));
 				}
 			}
 			break;
@@ -99,10 +98,6 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 		default:
 			break;
 		}
-
-//		if (accessor.getUser().getName() == null) return new 
-
-//		message.
 
 		return message;
 	}

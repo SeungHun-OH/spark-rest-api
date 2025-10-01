@@ -32,7 +32,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 		String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
 //		String token = jwtUtil.generateToken(2L);
-		System.err.println(jwtToken);
+		log.info("JWT 토큰 {}",jwtToken);
 		if (jwtToken != null && !jwtToken.equals("")) {
 			if (jwtUtil.isValidToken(jwtToken)) {
 				if (jwtUtil.getMemberNo(jwtToken) == null) {
@@ -40,8 +40,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 				}
 				Member member = new Member();
 				member.setMNo(jwtUtil.getMemberNo(jwtToken).intValue());
-				System.err.println(member.toString());
-				System.err.println(jwtUtil.parseClaims(jwtToken));
+				log.info("JWT 토큰 파싱 {}", jwtUtil.parseClaims(jwtToken));
 				if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
 					throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
 				}

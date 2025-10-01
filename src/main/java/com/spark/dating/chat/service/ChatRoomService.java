@@ -26,14 +26,16 @@ public class ChatRoomService {
 	private ChatRoomDao chatRoomDao;
 
 	@Transactional
-	public void createChatRoom(ChatRoomCreateRequest chatRoomCreateRequest) {
+	public void createChatRoom(ChatRoomCreateRequest chatRoomCreateRequest, int memberNo) {
+
+		chatRoomCreateRequest.setMemberNo(Long.valueOf(memberNo));
 
 		if (chatRoomDao.existsMatchingNo(chatRoomCreateRequest.getMatchingNo()) != 1) {
 			throw new RestApiException(ChatErrorCode.MATCHING_NOT_FOUND);
 		}
-		if (chatRoomDao.isValidMatchingUser(chatRoomCreateRequest.getMatchingNo()) != 1) {
-			throw new RestApiException(ChatErrorCode.USER_NOT_IN_MATCHING);
-		}
+//		if (chatRoomDao.isValidMatchingUser(chatRoomCreateRequest.getMatchingNo()) != 1) {
+//			throw new RestApiException(ChatErrorCode.USER_NOT_IN_MATCHING);
+//		}
 		chatRoomCreateRequest.setChatRoomUUID(UUID.randomUUID().toString().replace("-", ""));
 		System.out.println(chatRoomCreateRequest.toString());
 		chatRoomDao.createChatRoom(chatRoomCreateRequest);
@@ -63,8 +65,9 @@ public class ChatRoomService {
 	public boolean existsChatroomByMemberNoAndUuid(Map<String, Object> memberNoAndUuid) {
 		return chatRoomDao.existsChatroomByMemberNoAndUuid(memberNoAndUuid) == 1 ? true : false;
 	}
-	
+
 	public Long findChatRoomIdByUuid(String chatRoomUUID) {
+		
 		return chatRoomDao.findChatRoomIdByUuid(chatRoomUUID);
 	}
 

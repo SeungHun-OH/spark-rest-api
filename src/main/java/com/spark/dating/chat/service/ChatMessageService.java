@@ -42,7 +42,9 @@ public class ChatMessageService {
 		simpMessagingTemplate.convertAndSend("/sub/room/"+chatBase62RoomUUID, chatMessageSend.getCmMessage());
 	}
 	
-	public List<ChatMessageSelectResponse> getChattingMessage(String chatRoomUUID){
-		return chatMessageDao.getChattingMessage(chatRoomUUID);
+	public List<ChatMessageSelectResponse> getChattingMessage(String chatBase62RoomUUID){
+		String chatRoomUUID = UuidBase62Utils.fromBase62(chatBase62RoomUUID).toString().replace("-", "").toUpperCase();
+		Long chatRoomNo = chatRoomService.findChatRoomIdByUuid(chatRoomUUID);
+		return chatMessageDao.getChattingMessage(chatRoomNo);
 	}
 }

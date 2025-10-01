@@ -19,7 +19,6 @@
     <typeAlias type="com.spark.dating.dto.feed.Feed" alias="Feed"/>
     <typeAlias type="com.spark.dating.dto.feed.FeedPicture" alias="FeedPicture"/>
     <typeAlias type="com.spark.dating.dto.chat.ChatRoom" alias="ChatRoom"/>
-    <typeAlias type="com.spark.dating.dto.chat.ChatMessage" alias="ChatMessage"/>
     <typeAlias type="com.spark.dating.dto.member.Member" alias="Member"/>
     <typeAlias type="com.spark.dating.dto.member.MemberPicture" alias="MemberPicture"/>
     <typeAlias type="com.spark.dating.dto.member.MemberCategory" alias="MemberCategory"/>

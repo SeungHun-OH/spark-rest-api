@@ -14,5 +14,5 @@ public interface ChatMessageDao {
 	public void createChatRoom(ChatRoom ChatRoom);
 	public List<ChatRoom> selectAllChatRoom(int userNo);
 	public void insertChatMessage(ChatMessageSend chatMessageSend);
-	public List<ChatMessageSelectResponse> getChattingMessage(String chatRoomUUID);
+	public List<ChatMessageSelectResponse> getChattingMessage(Long chatRoomNo);
 }

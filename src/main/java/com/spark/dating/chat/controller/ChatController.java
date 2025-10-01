@@ -37,19 +37,19 @@ public class ChatController implements ChatControllerDocs {
 
 	@PostMapping("/rooms")
 	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest ChatRoomCreateRequest) {
-		chatRoomService.createChatRoom(ChatRoomCreateRequest);
+		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+		chatRoomService.createChatRoom(ChatRoomCreateRequest, memberNo);
 	}
 
 	@GetMapping("/rooms")
 	public List<ChatRoomSelectRequest> chatRoomList() {
 		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
-		System.err.println(memberNo);
 		return chatRoomService.selectAllChatRoom(memberNo);
 	}
 
 	@GetMapping("/chatting/{chatroom-uuid}")
-	public List<ChatMessageSelectResponse> chatMessage(@PathVariable("chatroom-uuid") String chatRoomUUID) {
-		return chatMessageService.getChattingMessage(chatRoomUUID);
+	public List<ChatMessageSelectResponse> chatMessage(@PathVariable("chatroom-uuid") String chatBase62RoomUUID) {
+		return chatMessageService.getChattingMessage(chatBase62RoomUUID);
 	}
 
 //	@Delete("/leave/{roomId}") //
