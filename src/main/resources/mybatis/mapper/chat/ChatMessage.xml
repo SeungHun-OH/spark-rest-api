@@ -21,11 +21,11 @@
 </resultMap>
 
 <insert id="insertChatMessage" parameterType="com.spark.dating.dto.chat.ChatMessageSend">
-	<selectKey keyProperty="cm_no" resultType="int" order="BEFORE">
+	<selectKey keyProperty="cmNo" resultType="Long" order="BEFORE">
 	      SELECT SEQ_CHATMESSAGE_NO.NEXTVAL FROM DUAL
 	</selectKey>
 	INSERT INTO CHATMESSAGE
-	VALUES(#{cmNo},#{cmSendUser},#{cmChatRoomNo},#{cmMessage},#{cmDate})
+	VALUES(#{cmNo},#{cmSendMember},#{cmChatRoomNo},#{cmMessage},#{cmDate})
 </insert>
 
 <select id="getChattingMessage" parameterType="String" resultMap="ChatMessageResponse">

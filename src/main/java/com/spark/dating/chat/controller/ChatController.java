@@ -1,9 +1,11 @@
 package com.spark.dating.chat.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,13 +60,13 @@ public class ChatController implements ChatControllerDocs {
 
 	@MessageMapping("/room/{chatroom-uuid}")
 //	@SendTo("sub/room/{roomId}")
-	public void sendMessage(@DestinationVariable("chatroom-uuid") String chatRoomUUID, @Valid ChatMessageSend chatMessageSend) {
+	public void sendMessage(@DestinationVariable("chatroom-uuid") String chatBase62RoomUUID,
+			@Valid ChatMessageSend chatMessageSend,
+			@Header("simpSessionAttributes") Map<String, Object> sessionAttributes) {
 
-		log.info(chatRoomUUID);
-		log.info(chatMessageSend + toString());
-
-//		 chatMessageService.insertChatMessage(chatMessage);
-		chatMessageService.sendMessage(chatRoomUUID, chatMessageSend.getCmMessage());
+		log.info(chatBase62RoomUUID);
+		Long sendMemberNo = (Long) sessionAttributes.get("memberNo");
+		chatMessageService.insertChatMessage(sendMemberNo, chatBase62RoomUUID, chatMessageSend);
 
 	}
 }

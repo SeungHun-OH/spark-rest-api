@@ -1,6 +1,7 @@
 package com.spark.dating.chat.dao;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -18,4 +19,6 @@ public interface ChatRoomDao {
 	public void insertMatchingRoomMapping(MatchingRoomMapping matchingRoomMapping);
 	public int existsMatchingNo(Long clientMatchingNo);
 	public List<UUID> selectAllChatRoomUUID(String memberNo);
+	public int existsChatroomByMemberNoAndUuid(Map<String,Object> memberNoAndUuid);
+	public Long findChatRoomIdByUuid(String chatRoomUUID);
 }

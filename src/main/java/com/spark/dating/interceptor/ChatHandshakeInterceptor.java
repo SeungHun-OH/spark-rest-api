@@ -3,11 +3,14 @@ package com.spark.dating.interceptor;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import com.spark.dating.chat.service.StompService;
@@ -57,5 +60,18 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 			Exception exception) {
 
 	}
+	
+	@EventListener
+	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+	    StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+	    String sessionId = accessor.getSessionId();
+	    Long memberId = (Long) accessor.getSessionAttributes().get("memberId");
+
+	    // 세션 데이터 정리
+	    
+
+	    log.info("세션 종료: {} (사용자: {})", sessionId, memberId);
+	}
+
 
 }

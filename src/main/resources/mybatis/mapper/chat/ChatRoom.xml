@@ -101,4 +101,30 @@
     ORDER BY CM.CM_DATE DESC NULLS LAST
 </select>
 
+<select id="existsChatroomByMemberNoAndUuid" parameterType="hashmap" resultType="int">
+	SELECT CASE 
+	         WHEN EXISTS (
+	            SELECT 1
+	            FROM CHATROOM CR
+	            JOIN MATCHINGCHATROOMMAPPING MC
+	              ON CR.CR_NO = MC.MC_CHATROOMNO
+	            JOIN MATCHING MT
+	              ON MC.MC_MATCHINGNO = MT.MT_NO
+	            JOIN HEARTS H
+	              ON MT.MT_HEARTSNO = H.H_NO
+	            WHERE CR.CR_UUID = #{roomUUID}
+	              AND #{memberNo} IN (H.H_SENDUSER, H.H_RECEIVEUSER)
+	         )
+	         THEN 1
+	         ELSE 0
+	       END AS is_valid
+	FROM dual
+</select>
+
+<select id="findChatRoomIdByUuid" parameterType="String" resultType="Long">
+	SELECT CR_NO
+	FROM CHATROOM
+	WHERE CR_UUID = #{chatRoomUUID}
+</select>
+
 </mapper>

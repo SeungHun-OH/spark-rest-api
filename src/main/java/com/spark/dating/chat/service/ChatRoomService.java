@@ -2,6 +2,7 @@ package com.spark.dating.chat.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -57,6 +58,14 @@ public class ChatRoomService {
 		}
 
 		return chatroomUuidBase62List;
+	}
+
+	public boolean existsChatroomByMemberNoAndUuid(Map<String, Object> memberNoAndUuid) {
+		return chatRoomDao.existsChatroomByMemberNoAndUuid(memberNoAndUuid) == 1 ? true : false;
+	}
+	
+	public Long findChatRoomIdByUuid(String chatRoomUUID) {
+		return chatRoomDao.findChatRoomIdByUuid(chatRoomUUID);
 	}
 
 }
