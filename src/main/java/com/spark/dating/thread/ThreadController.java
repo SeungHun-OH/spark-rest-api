@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.dto.member.ApiResponse;
+import com.spark.dating.dto.thread.BoardReply;
 import com.spark.dating.dto.thread.ThreadBoard;
+import com.spark.dating.dto.thread.response.ThreadBoardResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,12 +33,23 @@ public class ThreadController {
   }
 
   @GetMapping("/thread/boardList")
-  public ApiResponse<List<ThreadBoard>> getThreadBoardList() {
+  public ApiResponse<List<ThreadBoardResponse>> getThreadBoardList() {
     try {
-      List<ThreadBoard> threadBoardList = threadService.getThreadBoardList();
+      List<ThreadBoardResponse> threadBoardList = threadService.getThreadBoardList();
       return new ApiResponse<>("success", "threadBoard 목록 조회 성공", threadBoardList);
     } catch (Exception e) {
       return new ApiResponse<>("fail", "threadBoard 목록 조회 실패" + e, null);
     }
+  }
+
+
+  @PostMapping("/thread/boardreply")
+  public ApiResponse<Integer> insertBoardReply(@RequestBody BoardReply boardReply) {
+    try {
+      int memberNo = threadService.insertBoardReply(boardReply);
+      return new ApiResponse<>("success", "BoardReply 등록 성공", memberNo);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "threadBaord 등록 실패" + e, 0);
+    } 
   }
 }

@@ -27,7 +27,34 @@
       SYSDATE)
   </insert>
 
-  <select id = "getThreadBoardList" resultType="ThreadBoard">
+  <select id = "getThreadBoardList" resultType="ThreadBoardResponse">
+    SELECT    
+      TB.TB_NO,
+      TB.TB_TITLE,
+      TB.TB_CONTENT,
+      TO_CHAR(TB.TB_DATE, 'YYYY-MM-DD HH24:MI:SS') as tbDate,
+      TB.TB_ACTIVE as tbActive,
+      TB.TB_LIKECOUNT as tbLikeCount,
+      TB.TB_MEMBERNO,
+      TB.TB_VIEWCOUNT as tbViewCount,
+      TB.TB_IMAGENO as tbImageNo,
+
+      TB.CREATEDAT as createdAt,
+      TB.UPDATEDAT as updatedAt,
+      M.M_ID       as memberId,
+      M.M_NAME     as memberName,
+      MP.MP_ATTACHDATA as memberPicture
+
+      FROM THREADBOARD TB
+      JOIN MEMBER M ON TB.TB_MEMBERNO = M.M_NO
+      JOIN MEMBERPICTURE MP ON TB.TB_MEMBERNO = MP.MP_MEMBERNO 
+      
+      WHERE TB.TB_ACTIVE = 'Y'
+      ORDER BY TB.TB_NO DESC
+  </select>
+
+
+  <!-- <select id = "getThreadBoardList" resultType="ThreadBoard">
     SELECT    
       TB_NO as tbNo,
       TB_TITLE as tbTitle,
@@ -44,7 +71,7 @@
       FROM THREADBOARD
       WHERE TB_ACTIVE = 'Y'
       ORDER BY TB_NO DESC
-  </select>
+  </select> -->
 
 
 

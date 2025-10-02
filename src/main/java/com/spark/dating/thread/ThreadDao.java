@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.spark.dating.dto.thread.BoardReply;
 import com.spark.dating.dto.thread.ThreadBoard;
+import com.spark.dating.dto.thread.response.ThreadBoardResponse;
 
 @Mapper
 public interface ThreadDao {
 
   int insertThreadBoard(ThreadBoard threadBoard);
 
-  List<ThreadBoard> getThreadBoardList();
+  List<ThreadBoardResponse> getThreadBoardList();
+
 }

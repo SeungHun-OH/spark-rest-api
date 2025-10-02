@@ -3,6 +3,7 @@ package com.spark.dating.dto.thread.response;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -32,6 +33,9 @@ public class ThreadBoardResponse {
   private Date updatedAt;
 
   //Member 
-  private String userId;
-  private String userNickname;
+  private String memberId;
+  private String memberName;
+
+  //MemberPicture
+  private byte[] memberPicture;
 }

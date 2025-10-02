@@ -78,7 +78,7 @@ public class MemberService {
     log.info("Login MemberService memberLogin값은?" + memberlogin);
 
     Member member = memberDao.SelectMemberByM_id(memberlogin.getMId());
-    
+
     if (member == null) {
       map.put("result", "fail");
       map.put("message", "아이디가 유효하지 않습니다");
@@ -91,9 +91,6 @@ public class MemberService {
 
         map.put("result", "success");
         
-        // map.put("mId", member.getMId());
-        // map.put("mName", member.getMName());
-
         map.put("jwt", jwt);
         map.put("message", member.getMName() + "님 환영합니다");
         map.put("mNo", member.getMNo());
@@ -158,8 +155,6 @@ public class MemberService {
     Map<String, String> claims = jwtService.getClaims(token);
     
     log.info("selectMemberByJwt Jwt서비스 실행" + claims);
-
-     
 
     return new ApiResponse<Map<String, String>>("success", "토큰생성 성공", claims);
   }

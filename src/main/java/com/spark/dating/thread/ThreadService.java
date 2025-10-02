@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spark.dating.dto.thread.BoardReply;
 import com.spark.dating.dto.thread.ThreadBoard;
+import com.spark.dating.dto.thread.response.ThreadBoardResponse;
 
 @Service
 public class ThreadService {
@@ -18,7 +20,12 @@ public class ThreadService {
     return threadBoard.getTbNo(); 
   }
 
-  public List<ThreadBoard> getThreadBoardList() {
+  public List<ThreadBoardResponse> getThreadBoardList() {
     return threadDao.getThreadBoardList();
+  }
+
+  public int insertBoardReply(BoardReply boardReply) {
+    BoardReply.insertBoardReply(boardReply);
+    return boardReply.getBrNo();
   }
 }
