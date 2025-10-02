@@ -2,29 +2,41 @@ package com.spark.dating.dto.chat;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotBlank;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class ChatMessageSend {
 
+	@JsonIgnore
 	private Long cmNo;
-	
-//	@NotNull(message = "사용자 번호는 필수입니다.")
-//	@Min(value = 1, message = "올바른 사용자 번호가 아닙니다.")
-//	@Positive(message = "올바른 사용자 번호가 아닙니다.")
-	private Long cmSendUser;
-	
+
+	@JsonIgnore
+	private Long cmSendMember;
+
+	@JsonIgnore
+	private Long cmChatRoomNo;
+
 	@NotBlank(message = "메세지를 입력해주세요.")
 	private String cmMessage;
 	
-	private Long cmChatRoomNo;
-	
+	@JsonIgnore
+	@Builder.Default
 	private LocalDateTime cmDate = LocalDateTime.now();
+
+	public void setcmMessage(String cmMessage) {
+		this.cmMessage = cmMessage;
+	}
 
 }

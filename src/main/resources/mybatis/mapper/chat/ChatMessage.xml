@@ -21,21 +21,26 @@
 </resultMap>
 
 <insert id="insertChatMessage" parameterType="com.spark.dating.dto.chat.ChatMessageSend">
-	<selectKey keyProperty="cm_no" resultType="int" order="BEFORE">
+	<selectKey keyProperty="cmNo" resultType="Long" order="BEFORE">
 	      SELECT SEQ_CHATMESSAGE_NO.NEXTVAL FROM DUAL
 	</selectKey>
 	INSERT INTO CHATMESSAGE
-	VALUES(#{cmNo},#{cmSendUser},#{cmChatRoomNo},#{cmMessage},#{cmDate})
+	VALUES(#{cmNo},#{cmSendMember},#{cmChatRoomNo},#{cmMessage},#{cmDate})
 </insert>
 
-<select id="getChattingMessage" parameterType="String" resultMap="ChatMessageResponse">
+<select id="getChattingMessage" parameterType="hashmap" resultMap="ChatMessageResponse">
 	SELECT
-	    m.M_NAME AS CM_SENDUSERNAME,
-	    c.CM_MSG,
-	    c.CM_DATE
+	c.CM_NO,
+    m.M_NAME AS CM_SENDUSERNAME,
+    c.CM_MSG,
+    c.CM_DATE,
+    CASE 
+        WHEN c.CM_SENDUSER = #{memberNo} THEN 1
+        ELSE 0
+    END AS cmSendUserFlag
 	FROM CHATMESSAGE c
 	JOIN MEMBER m ON c.CM_SENDUSER = m.M_NO
-	WHERE c.CM_CHATROOMNO = #{memberNo}
+	WHERE c.CM_CHATROOMNO = #{chatRoomNo}
 	ORDER BY c.CM_DATE ASC
 </select>
 

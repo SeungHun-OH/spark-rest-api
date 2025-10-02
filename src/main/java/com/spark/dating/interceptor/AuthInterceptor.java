@@ -33,23 +33,22 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 		String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
 //		String token = jwtUtil.generateToken(2L);
-		System.err.println(jwtToken);
-		if (jwtToken != null && !jwtToken.equals("")) {
-			if (jwtUtil.isValidToken(jwtToken)) {
-				if (jwtUtil.getMemberNo(jwtToken) == null) {
-					throw new RestApiException(JwtErrorCode.EMPTY_JWT);
-				}
-				Member member = new Member();
-				member.setMNo(jwtUtil.getMemberNo(jwtToken).intValue());
-				System.err.println(member.toString());
-				System.err.println(jwtUtil.parseClaims(jwtToken));
-				if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
-					throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
-				}
-				AuthenticationContextHolder.setContext(member);
-
-				return true;
+		log.info("JWT 토큰 {}", jwtToken);
+		if (jwtUtil.isValidToken(jwtToken)) {
+			Long memberNo = jwtUtil.getMemberNo(jwtToken);
+			if (memberNo == null) {
+				throw new RestApiException(JwtErrorCode.EMPTY_JWT);
 			}
+			Member member = new Member();
+			member.setMNo(memberNo.intValue());
+			log.info("JWT 토큰 파싱 {}", jwtUtil.parseClaims(jwtToken));
+			if (!jwtUtil.existsByNo(memberNo)) {
+				throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
+			}
+
+			AuthenticationContextHolder.setContext(member);
+
+			return true;
 		}
 
 		return false;
