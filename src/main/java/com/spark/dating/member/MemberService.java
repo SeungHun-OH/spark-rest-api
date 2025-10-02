@@ -16,6 +16,7 @@ import com.spark.dating.dto.member.MemberForFeed;
 import com.spark.dating.dto.member.MemberPicture;
 import com.spark.dating.dto.member.request.MemberLoginRequest;
 
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -78,6 +79,7 @@ public class MemberService {
     log.info("Login MemberService memberLogin값은?" + memberlogin);
 
     Member member = memberDao.SelectMemberByM_id(memberlogin.getMId());
+
     if (member == null) {
       map.put("result", "fail");
       map.put("message", "아이디가 유효하지 않습니다");
@@ -85,13 +87,11 @@ public class MemberService {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       boolean result = passwordEncoder.matches(memberlogin.getMPassword(), member.getMPassword());
       if (result) {
+
         String jwt = jwtService.createJWT(member.getMId(), member.getMEmail(), member.getMNo());
 
         map.put("result", "success");
         
-        // map.put("mId", member.getMId());
-        // map.put("mName", member.getMName());
-
         map.put("jwt", jwt);
         map.put("message", member.getMName() + "님 환영합니다");
         map.put("mNo", member.getMNo());
@@ -147,13 +147,17 @@ public class MemberService {
     }
   }
 
-  public ApiResponse<Member> selectMemberByJwt(String jwt) {
-    ApiResponse<Member> response = new ApiResponse<>();
-    Member jwtMember = new Member();
+  public ApiResponse<Map<String, String>> selectMemberByJwt(String authHeader) {
 
-    Map<String, String> claims = jwtService.getClaims(jwt);
-    response.setMessage("mid |" + claims.get("mid") + "memail |" + claims.get("memail") + "mno |" + claims.get("mno"));
-    return response;
+    log.info("토큰자르기전" + authHeader.toString());
+    String token = authHeader.substring(7).trim();
+    log.info("토큰자르기후" + token);
+
+    Map<String, String> claims = jwtService.getClaims(token);
+    
+    log.info("selectMemberByJwt Jwt서비스 실행" + claims);
+
+    return new ApiResponse<Map<String, String>>("success", "토큰생성 성공", claims);
   }
   
   public boolean existsByNo(Long memberId) {
