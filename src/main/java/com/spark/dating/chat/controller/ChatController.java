@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/matching-chat")
+@RequestMapping("/chat")
 @RestController
 public class ChatController implements ChatControllerDocs {
 
@@ -41,7 +41,7 @@ public class ChatController implements ChatControllerDocs {
 		chatRoomService.createChatRoom(ChatRoomCreateRequest, memberNo);
 	}
 
-	@GetMapping("/rooms")
+	@GetMapping("/list")
 	public List<ChatRoomSelectRequest> chatRoomList() {
 		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
 		return chatRoomService.selectAllChatRoom(memberNo);
@@ -49,7 +49,8 @@ public class ChatController implements ChatControllerDocs {
 
 	@GetMapping("/chatting/{chatroom-uuid}")
 	public List<ChatMessageSelectResponse> chatMessage(@PathVariable("chatroom-uuid") String chatBase62RoomUUID) {
-		return chatMessageService.getChattingMessage(chatBase62RoomUUID);
+		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+		return chatMessageService.getChattingMessage(chatBase62RoomUUID, memberNo);
 	}
 
 //	@Delete("/leave/{roomId}") //

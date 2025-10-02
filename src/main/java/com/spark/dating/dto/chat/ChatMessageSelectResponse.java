@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ChatMessageSelectResponse {
 
+	private Long cmNo;
+	private boolean cmSendUserFlag;
 	private String cmSendUserName;
 	private String cmMsg;
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")

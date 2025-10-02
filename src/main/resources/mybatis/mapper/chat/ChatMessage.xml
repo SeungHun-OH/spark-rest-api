@@ -28,11 +28,16 @@
 	VALUES(#{cmNo},#{cmSendMember},#{cmChatRoomNo},#{cmMessage},#{cmDate})
 </insert>
 
-<select id="getChattingMessage" parameterType="Long" resultMap="ChatMessageResponse">
+<select id="getChattingMessage" parameterType="hashmap" resultMap="ChatMessageResponse">
 	SELECT
-	    m.M_NAME AS CM_SENDUSERNAME,
-	    c.CM_MSG,
-	    c.CM_DATE
+	c.CM_NO,
+    m.M_NAME AS CM_SENDUSERNAME,
+    c.CM_MSG,
+    c.CM_DATE,
+    CASE 
+        WHEN c.CM_SENDUSER = #{memberNo} THEN 1
+        ELSE 0
+    END AS cmSendUserFlag
 	FROM CHATMESSAGE c
 	JOIN MEMBER m ON c.CM_SENDUSER = m.M_NO
 	WHERE c.CM_CHATROOMNO = #{chatRoomNo}

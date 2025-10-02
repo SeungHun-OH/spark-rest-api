@@ -1,6 +1,8 @@
 package com.spark.dating.chat.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -42,9 +44,12 @@ public class ChatMessageService {
 		simpMessagingTemplate.convertAndSend("/sub/room/"+chatBase62RoomUUID, chatMessageSend.getCmMessage());
 	}
 	
-	public List<ChatMessageSelectResponse> getChattingMessage(String chatBase62RoomUUID){
+	public List<ChatMessageSelectResponse> getChattingMessage(String chatBase62RoomUUID, int memberNo){
 		String chatRoomUUID = UuidBase62Utils.fromBase62(chatBase62RoomUUID).toString().replace("-", "").toUpperCase();
 		Long chatRoomNo = chatRoomService.findChatRoomIdByUuid(chatRoomUUID);
-		return chatMessageDao.getChattingMessage(chatRoomNo);
+		Map<String, Object> chatMessageMap = new HashMap<>();
+		chatMessageMap.put("chatRoomNo", chatRoomNo);
+		chatMessageMap.put("memberNo", memberNo);		
+		return chatMessageDao.getChattingMessage(chatMessageMap);
 	}
 }
