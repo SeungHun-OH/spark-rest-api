@@ -3,6 +3,7 @@ package com.spark.dating.member;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.dto.member.MemberForFeed;
 
 @Mapper
 public interface MemberDao {
@@ -13,4 +14,6 @@ public interface MemberDao {
   int updateMember(Member member);
   
   int existsByNo(Long memberId);
+
+  MemberForFeed selectMemberByMnickname(String m_nickname);
 }

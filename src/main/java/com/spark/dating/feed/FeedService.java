@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.Pager;
 import com.spark.dating.dto.feed.Feed;
 import com.spark.dating.dto.feed.FeedPicture;
@@ -24,11 +25,15 @@ public class FeedService {
     private FeedPictureDao feedPictureDao;
 
     public void createFeed(Feed feed, MultipartFile[] files) throws IOException {
-        int rows = feedDao.create(feed);
+        int m_no = AuthenticationContextHolder.getContextMemberNo();
+        Feed dbFeed = new Feed();
+        dbFeed.setfMemberNo(m_no);
+        dbFeed.setfContent(feed.getfContent());
+        int rows = feedDao.create(dbFeed);
 
         if (files != null) {
             for (int i=0; i<files.length; i++) {
-                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getFNo(), files[i]);
+                FeedPicture feedPicture = FeedPicture.insertFeedPictures(dbFeed.getfNo(), files[i]);
                 feedPictureDao.create(feedPicture);
             }
         }
@@ -40,12 +45,12 @@ public class FeedService {
 
         if (files != null) {
             for (int i=0; i<files.length; i++) {
-                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getFNo(), files[i]);
+                FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getfNo(), files[i]);
                 feedPicRows += feedPictureDao.create(feedPicture);
             }
         }
         int feedRows = feedDao.update(feed);
-        map.put("수정된 feedPictureRows", feedPicRows);
+        map.put("추가된 feedPictureRows", feedPicRows);
         map.put("수정된 feedRows", feedRows);
         return map;
     }
@@ -63,7 +68,6 @@ public class FeedService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("feed", feed);
-//        map.put("feedPicture", list);
 
         return map;
     }

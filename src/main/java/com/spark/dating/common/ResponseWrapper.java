@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
@@ -20,9 +18,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.spark.dating.common.exception.BaseErrorCode;
-import com.spark.dating.common.exception.CommonErrorCode;
 
-@RestControllerAdvice(basePackages = { "com.spark.dating.chat", "com.spark.dating.feed", "com.spark.dating.common" })
+@RestControllerAdvice(basePackages = { "com.spark.dating.chat", "com.spark.dating.feed", "com.spark.dating.common", "com.spark.dating.hearts" })
 public class ResponseWrapper implements ResponseBodyAdvice<Object> {
 
 	@Override
@@ -76,5 +73,4 @@ public class ResponseWrapper implements ResponseBodyAdvice<Object> {
 //		return ResponseEntity.status(CommonErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
 //				.body(CommonErrorCode.INTERNAL_SERVER_ERROR);
 //	}
-
 }

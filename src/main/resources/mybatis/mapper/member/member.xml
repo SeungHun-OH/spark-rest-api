@@ -75,4 +75,10 @@
 	FROM DUAL
   </select>
 
+  <select id="selectMemberByMnickname" resultType="MemberForFeed" parameterType="String">
+    SELECT M_NO, M_ID, M_NAME, M_AGE, M_NICKNAME, M_BIO, M_MBTI
+	  from member
+    where m_nickname = #{mNickname}
+  </select>
+
 </mapper>

@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.Pager;
 import com.spark.dating.dto.feed.Feed;
+import com.spark.dating.dto.member.MemberForFeed;
+import com.spark.dating.member.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,15 +41,13 @@ public class FeedController {
 
     @Autowired
     private FeedService feedService;
+    @Autowired
+    private MemberService memberService;
 
-    @PostMapping("/")   
-    public Map<String, Object> createFeed(@RequestPart("feed") Feed feed,
+    @PostMapping("/")
+    public void createFeed(@RequestPart("feed") Feed feed,
             @RequestPart("files") MultipartFile[] files) throws IOException {
         feedService.createFeed(feed, files);
-
-        Map<String, Object> map = new HashMap<>();
-        map = feedService.getFeed(feed.getFNo());
-        return map;
     }
 
     @GetMapping("/")
@@ -56,10 +57,28 @@ public class FeedController {
         return map;
     }
 
-    @GetMapping("/list")
-    public List<Feed> getFeedList(@RequestParam("m_no") int m_no,
-            @RequestParam(value = "page_no", defaultValue = "1") int page_no) {
+    @GetMapping("/myfeed")
+    public List<Feed> getMyFeedList(@RequestParam(value = "page_no", defaultValue = "1") int page_no) {
+
+        int m_no = AuthenticationContextHolder.getContextMemberNo();
         int totalRows = feedService.totalRows(m_no);
+        Pager pager = new Pager(10, 10, totalRows, page_no);
+        List<Feed> feedList = feedService.getListByPage(m_no, pager);
+
+        return feedList;
+    }
+
+    // 타인 피드
+    // (pathvariable / requestParam : mid) + 하나 생성
+    @GetMapping("/list")
+    public List<Feed> getFeedList(@RequestParam("m_nickname") String m_nickname,
+            @RequestParam(value = "page_no", defaultValue = "1") int page_no) {
+
+        MemberForFeed memberForFeed = memberService.selectMemberByMnickname(m_nickname);
+
+        int m_no = memberForFeed.getmNo();
+        int totalRows = feedService.totalRows(m_no);
+
         Pager pager = new Pager(10, 10, totalRows, page_no);
         List<Feed> feedList = feedService.getListByPage(m_no, pager);
 

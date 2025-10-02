@@ -41,5 +41,4 @@ public class Member {
     private String mMbti;
     @JsonProperty("mActive")
     private String mActive = "T";
-
 }

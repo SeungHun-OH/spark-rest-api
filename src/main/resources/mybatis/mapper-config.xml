@@ -23,6 +23,7 @@
     <typeAlias type="com.spark.dating.dto.chat.ChatRoom" alias="ChatRoom"/>
     <typeAlias type="com.spark.dating.dto.chat.ChatMessage" alias="ChatMessage"/>
     <typeAlias type="com.spark.dating.dto.member.Member" alias="Member"/>
+    <typeAlias type="com.spark.dating.dto.member.MemberForFeed" alias="MemberForFeed"/>
     <typeAlias type="com.spark.dating.dto.member.MemberPicture" alias="MemberPicture"/>
     <typeAlias type="com.spark.dating.dto.member.MemberCategory" alias="MemberCategory"/>
 

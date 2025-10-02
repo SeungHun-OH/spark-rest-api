@@ -102,6 +102,5 @@ public class JwtUtil {
     
     public Long getMemberNo(String token) {
 		return parseClaims(token).get("memberNo", Long.class);
-	}
-    
+	}   
 }

@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.dto.member.MemberForFeed;
 import com.spark.dating.dto.member.MemberPicture;
 import com.spark.dating.dto.member.request.MemberLoginRequest;
 
@@ -158,6 +159,12 @@ public class MemberService {
   public boolean existsByNo(Long memberId) {
 	  return memberDao.existsByNo(memberId) == 1 ? true : false;
   }
+
+  //m_nickname으로 조회
+  public MemberForFeed selectMemberByMnickname(String m_nickname) {
+    return memberDao.selectMemberByMnickname(m_nickname);
+  }
+  
 }
 
 // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();

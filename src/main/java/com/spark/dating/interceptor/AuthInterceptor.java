@@ -26,6 +26,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		log.info(handler.getClass() + "");
 		if (!(handler instanceof HandlerMethod)) {
 			return true; // 컨트롤러 메서드가 아닌 경우는 그냥 통과
 		}
@@ -45,7 +46,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 				if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
 					throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
 				}
-				
 				AuthenticationContextHolder.setContext(member);
 
 				return true;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.feed.FeedPicture;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,8 @@ public class FeedPictureController {
         -> 이미지 자체(byte[]
     */
     @GetMapping("/firstImg")
-    public List<FeedPicture> getFirstImageofFeed(@RequestParam("m_no") int m_no) {
+    public List<FeedPicture> getFirstImageofFeed() {
+        int m_no = AuthenticationContextHolder.getContextMemberNo();
     	return feedPictureService.getFirstImgOfFeed(m_no);
     }
 }
