@@ -6,13 +6,13 @@
 
 <mapper namespace="com.spark.dating.chat.dao.ChatMessageDao">
 
-<resultMap id="ChatMessageResponse" type="com.spark.dating.dto.chat.ChatMessageSelectResponse">
+<resultMap id="ChatMessageSelect" type="com.spark.dating.dto.chat.ChatMessageSelect">
 	<result column="CM_SENDUSERNAME" property="cmSendUserName"/>
 	<result column="CM_MSG" property="cmMsg"/>
 	<result column="CM_DATE" property="cmDate"/>
 </resultMap>
 
-<resultMap id="ChatMessageSend" type="com.spark.dating.dto.chat.ChatMessageSend">
+<resultMap id="ChatMessageSend" type="com.spark.dating.dto.chat.ChatMessage">
 <id column="CM_NO" property="cmNo" />
 <result column="CM_SENDUSER" property="cmSendUser" />
 <result column="CM_CHATROOMNO" property="cmMessage" />
@@ -20,7 +20,14 @@
 <result column="CM_DATE" property="cmDate" />
 </resultMap>
 
-<insert id="insertChatMessage" parameterType="com.spark.dating.dto.chat.ChatMessageSend">
+<resultMap id="ChatMemberProfile" type="com.spark.dating.dto.chat.ChatMemberProfile">
+<result column="M_NAME" property="mName" />
+<result column="M_AGE" property="mAge" />
+<result column="MP_ATTACHTYPE" property="mpAttachType" />
+<result column="MP_ATTACHDATA" property="mpBase64Data" jdbcType="BLOB" javaType="byte[]"/>
+</resultMap>
+
+<insert id="insertChatMessage" parameterType="com.spark.dating.dto.chat.ChatMessage">
 	<selectKey keyProperty="cmNo" resultType="Long" order="BEFORE">
 	      SELECT SEQ_CHATMESSAGE_NO.NEXTVAL FROM DUAL
 	</selectKey>
@@ -28,11 +35,10 @@
 	VALUES(#{cmNo},#{cmSendMember},#{cmChatRoomNo},#{cmMessage},#{cmDate})
 </insert>
 
-<select id="getChattingMessage" parameterType="hashmap" resultMap="ChatMessageResponse">
+<select id="getChattingMessage" parameterType="hashmap" resultMap="ChatMessageSelect">
 	SELECT
 	c.CM_NO,
-    m.M_NAME AS CM_SENDUSERNAME,
-    c.CM_MSG,
+    c.CM_MSG AS CM_MESSAGE,
     c.CM_DATE,
     CASE 
         WHEN c.CM_SENDUSER = #{memberNo} THEN 1
@@ -42,6 +48,36 @@
 	JOIN MEMBER m ON c.CM_SENDUSER = m.M_NO
 	WHERE c.CM_CHATROOMNO = #{chatRoomNo}
 	ORDER BY c.CM_DATE ASC
+</select>
+
+<update id="updateLastMessage" parameterType="com.spark.dating.dto.chat.ChatMessage">
+	UPDATE CHATROOM
+	   SET CR_LASTMESSAGENO = #{cmNo}
+	 WHERE CR_NO = #{cmChatRoomNo}
+</update>
+
+<select id="getOpponentMnoByChatRoom" parameterType="hashmap" resultType="Long">
+	SELECT
+	  CASE
+	    WHEN H.h_senduser = #{memberNo} THEN H.h_receiveuser
+	    WHEN H.h_receiveuser = #{memberNo} THEN H.h_senduser
+	  END AS other_mno
+	FROM MatchingChatRoomMapping MCRM
+	JOIN Matching M ON MCRM.MC_MATCHINGNO = M.mt_no
+	JOIN Hearts H ON M.mt_heartsno = H.h_no
+	WHERE MCRM.MC_CHATROOMNO = #{chatRoomNo}
+	  AND (#{memberNo} IN (H.h_senduser, H.h_receiveuser))
+</select>
+
+<select id="getOpponentProfileByMno" parameterType="Long" resultMap="ChatMemberProfile">
+	SELECT 
+	  M.M_NAME, 
+	  M.M_AGE, 
+	  MP.MP_ATTACHTYPE, 
+	  MP.MP_ATTACHDATA
+	FROM MEMBER M
+	LEFT JOIN MEMBERPICTURE MP ON M.M_NO = MP.MP_MEMBERNO
+	WHERE M.M_NO = #{mpMemberNo}
 </select>
 
 </mapper>

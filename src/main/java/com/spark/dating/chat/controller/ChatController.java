@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spark.dating.chat.service.ChatMessageService;
 import com.spark.dating.chat.service.ChatRoomService;
 import com.spark.dating.common.AuthenticationContextHolder;
-import com.spark.dating.dto.chat.ChatMessageSelectResponse;
-import com.spark.dating.dto.chat.ChatMessageSend;
+import com.spark.dating.dto.chat.ChatMessageSendRequest;
+import com.spark.dating.dto.chat.ChatMessageWithMemberResponse;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 import com.spark.dating.dto.chat.ChatRoomSelectRequest;
 
@@ -48,7 +48,7 @@ public class ChatController implements ChatControllerDocs {
 	}
 
 	@GetMapping("/chatting/{chatroom-uuid}")
-	public List<ChatMessageSelectResponse> chatMessage(@PathVariable("chatroom-uuid") String chatBase62RoomUUID) {
+	public ChatMessageWithMemberResponse chatMessage(@PathVariable("chatroom-uuid") String chatBase62RoomUUID) {
 		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
 		return chatMessageService.getChattingMessage(chatBase62RoomUUID, memberNo);
 	}
@@ -62,12 +62,12 @@ public class ChatController implements ChatControllerDocs {
 	@MessageMapping("/room/{chatroom-uuid}")
 //	@SendTo("sub/room/{roomId}")
 	public void sendMessage(@DestinationVariable("chatroom-uuid") String chatBase62RoomUUID,
-			@Valid ChatMessageSend chatMessageSend,
+			@Valid ChatMessageSendRequest request,
 			@Header("simpSessionAttributes") Map<String, Object> sessionAttributes) {
 
 		log.info(chatBase62RoomUUID);
 		Long sendMemberNo = (Long) sessionAttributes.get("memberNo");
-		chatMessageService.insertChatMessage(sendMemberNo, chatBase62RoomUUID, chatMessageSend);
+		chatMessageService.insertChatMessage(sendMemberNo, chatBase62RoomUUID, request);
 
 	}
 }

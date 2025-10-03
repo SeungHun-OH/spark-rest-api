@@ -47,7 +47,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 			}
 
 			AuthenticationContextHolder.setContext(member);
-
+			
 			return true;
 		}
 

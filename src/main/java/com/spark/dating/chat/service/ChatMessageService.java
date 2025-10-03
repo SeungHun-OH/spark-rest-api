@@ -7,10 +7,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spark.dating.chat.dao.ChatMessageDao;
-import com.spark.dating.dto.chat.ChatMessageSelectResponse;
-import com.spark.dating.dto.chat.ChatMessageSend;
+import com.spark.dating.dto.chat.ChatMemberProfile;
+import com.spark.dating.dto.chat.ChatMessage;
+import com.spark.dating.dto.chat.ChatMessageSelect;
+import com.spark.dating.dto.chat.ChatMessageSendRequest;
+import com.spark.dating.dto.chat.ChatMessageSendResponse;
+import com.spark.dating.dto.chat.ChatMessageWithMemberResponse;
 import com.spark.dating.utils.UuidBase62Utils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,23 +38,30 @@ public class ChatMessageService {
 		simpMessagingTemplate.convertAndSend("/sub/room/"+roomId, message);
 	}
 	
-	public void insertChatMessage(Long sendMemberNo,String chatBase62RoomUUID, ChatMessageSend chatMessageSend) {
+	@Transactional
+	public void insertChatMessage(Long sendMemberNo,String chatBase62RoomUUID, ChatMessageSendRequest request) {
 		
 		String chatRoomUUID = UuidBase62Utils.fromBase62(chatBase62RoomUUID).toString().replace("-", "").toUpperCase();
 		
 		Long chatRoomNo = chatRoomService.findChatRoomIdByUuid(chatRoomUUID);
-		chatMessageSend = chatMessageSend.toBuilder().cmSendMember(sendMemberNo).cmChatRoomNo(chatRoomNo).build();
-		log.info(chatMessageSend.toString());
-		chatMessageDao.insertChatMessage(chatMessageSend);
-		simpMessagingTemplate.convertAndSend("/sub/room/"+chatBase62RoomUUID, chatMessageSend.getCmMessage());
+		ChatMessage chatMessage = ChatMessage.builder().cmMessage(request.getCmMessage()).cmSendMember(sendMemberNo).cmChatRoomNo(chatRoomNo).build();
+		log.info("chatMessageSend {}"+chatMessage.toString());
+		chatMessageDao.insertChatMessage(chatMessage);
+		chatMessageDao.updateLastMessage(chatMessage);
+		simpMessagingTemplate.convertAndSend("/sub/room/"+chatBase62RoomUUID, ChatMessageSendResponse.from(chatMessage, request));
 	}
 	
-	public List<ChatMessageSelectResponse> getChattingMessage(String chatBase62RoomUUID, int memberNo){
+	@Transactional
+	public ChatMessageWithMemberResponse getChattingMessage(String chatBase62RoomUUID, int memberNo){
 		String chatRoomUUID = UuidBase62Utils.fromBase62(chatBase62RoomUUID).toString().replace("-", "").toUpperCase();
 		Long chatRoomNo = chatRoomService.findChatRoomIdByUuid(chatRoomUUID);
 		Map<String, Object> chatMessageMap = new HashMap<>();
 		chatMessageMap.put("chatRoomNo", chatRoomNo);
-		chatMessageMap.put("memberNo", memberNo);		
-		return chatMessageDao.getChattingMessage(chatMessageMap);
+		chatMessageMap.put("memberNo", memberNo);
+		List<ChatMessageSelect> messages = chatMessageDao.getChattingMessage(chatMessageMap);
+		Long opponentMno = chatMessageDao.getOpponentMnoByChatRoom(chatMessageMap);
+		ChatMemberProfile profile = chatMessageDao.getOpponentProfileByMno(opponentMno);
+		ChatMessageWithMemberResponse response = ChatMessageWithMemberResponse.builder().chatMemberProfile(profile).chatMessages(messages).build();
+		return response;
 	}
 }
