@@ -15,7 +15,7 @@ import com.spark.dating.common.RestApiException;
 import com.spark.dating.common.exception.ChatErrorCode;
 import com.spark.dating.dto.chat.ChatRoom;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
-import com.spark.dating.dto.chat.ChatRoomSelectRequest;
+import com.spark.dating.dto.chat.ChatRoomSelectResponse;
 import com.spark.dating.dto.chat.MatchingRoomMapping;
 import com.spark.dating.utils.UuidBase62Utils;
 
@@ -44,8 +44,10 @@ public class ChatRoomService {
 						.mcChatRoomNo(chatRoomCreateRequest.getChatRoomNo()).build());
 	}
 
-	public List<ChatRoomSelectRequest> selectAllChatRoom(int memberNo) {
-		List<ChatRoomSelectRequest> chatRoomList = ChatRoom.toDtoList(chatRoomDao.selectAllChatRoom(memberNo));
+	public List<ChatRoomSelectResponse> selectAllChatRoom(int memberNo) {
+		List<ChatRoomSelectResponse> chatRoomList = ChatRoom.toDtoList(chatRoomDao.selectAllChatRoom(memberNo));
+		
+		
 		return chatRoomList;
 	}
 

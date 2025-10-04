@@ -1,5 +1,9 @@
 package com.spark.dating.dto.chat;
 
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +12,17 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class ChatRoomSelectRequest {
+public class ChatRoomSelectResponse {
 
 
 	private String encodedUUID;
 	private String chatRoomName;
 	private String lastMessage;
 	private Integer age;
-	private String date;
+	private Integer unreadCount;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+	private LocalDateTime date;
 
 	
 	

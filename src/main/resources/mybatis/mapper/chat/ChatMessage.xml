@@ -31,8 +31,8 @@
 	<selectKey keyProperty="cmNo" resultType="Long" order="BEFORE">
 	      SELECT SEQ_CHATMESSAGE_NO.NEXTVAL FROM DUAL
 	</selectKey>
-	INSERT INTO CHATMESSAGE
-	VALUES(#{cmNo},#{cmSendMember},#{cmChatRoomNo},#{cmMessage},#{cmDate})
+	INSERT INTO CHATMESSAGE (CM_NO, CM_SENDUSER, CM_CHATROOMNO, CM_MSG, CM_DATE) 
+	VALUES (#{cmNo}, #{cmSendMember}, #{cmChatRoomNo}, #{cmMessage}, #{cmDate})
 </insert>
 
 <select id="getChattingMessage" parameterType="hashmap" resultMap="ChatMessageSelect">
@@ -80,4 +80,15 @@
 	WHERE M.M_NO = #{mpMemberNo}
 </select>
 
+<update id="updateReadDate" parameterType="hashmap">
+	UPDATE CHATMESSAGE m
+   SET m.cm_read_date = SYSDATE
+ WHERE m.cm_chatroomno = (
+           SELECT r.cr_no
+             FROM CHATROOM r
+            WHERE r.cr_no = #{chatRoomNo}
+       )
+   AND m.cm_senduser != #{memberNo}
+   AND m.cm_read_date IS NULL
+</update>
 </mapper>

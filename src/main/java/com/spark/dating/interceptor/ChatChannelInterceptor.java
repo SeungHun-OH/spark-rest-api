@@ -39,6 +39,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
 		switch (accessor.getCommand()) {
 		case CONNECT:
+
 			String jwtToken = jwtUtil.getToken(accessor.getFirstNativeHeader("Authorization"));
 			log.info(jwtToken);
 //			String token = jwtUtil.generateToken(2L);
@@ -49,7 +50,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 				Member member = new Member();
 				member.setMNo(jwtUtil.getMemberNo(jwtToken).intValue());
 				log.info(member.toString());
-				log.info(jwtUtil.parseClaims(jwtToken)+"");
+				log.info(jwtUtil.parseClaims(jwtToken) + "");
 				if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
 					throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
 				}
@@ -64,29 +65,31 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 			}
 			break;
 		case SEND:
-			
+
 			break;
 		case SUBSCRIBE:
-			Map<String, Object> sessionAttribute = accessor.getSessionAttributes();
-			if (sessionAttribute != null && sessionAttribute.containsKey("rooms")) {
-				Set<String> rooms = (Set<String>) accessor.getSessionAttributes().get("rooms");
-				String userDestinationRoomUUID = accessor.getDestination().substring(10);
-				log.info(rooms.toString());
-				log.info("des:  " + userDestinationRoomUUID);
-				if (rooms.contains(userDestinationRoomUUID)) {
-					log.info("presend 구독");
-					log.info("올바른 채팅");
-				} else {
-					Map<String, Object> memberNoAndUuid = new HashMap<>();
-					memberNoAndUuid.put("memberNo", accessor.getSessionAttributes().get("memberNo").toString());
-					memberNoAndUuid.put("roomUUID",
-							UuidBase62Utils.fromBase62(userDestinationRoomUUID).toString().replace("-", ""));
-					if (chatRoomService.existsChatroomByMemberNoAndUuid(memberNoAndUuid) == false) {
-						throw new RestApiException(ChatErrorCode.USER_NOT_IN_CHAT);
+			if (!accessor.getDestination().equals("/sub/room")) {
+				Map<String, Object> sessionAttribute = accessor.getSessionAttributes();
+				if (sessionAttribute != null && sessionAttribute.containsKey("rooms")) {
+					Set<String> rooms = (Set<String>) accessor.getSessionAttributes().get("rooms");
+					String userDestinationRoomUUID = accessor.getDestination().substring(10);
+					log.info(rooms.toString());
+					log.info("des:  " + userDestinationRoomUUID);
+					if (rooms.contains(userDestinationRoomUUID)) {
+						log.info("presend 구독");
+						log.info("올바른 채팅");
+					} else {
+						Map<String, Object> memberNoAndUuid = new HashMap<>();
+						memberNoAndUuid.put("memberNo", accessor.getSessionAttributes().get("memberNo").toString());
+						memberNoAndUuid.put("roomUUID",
+								UuidBase62Utils.fromBase62(userDestinationRoomUUID).toString().replace("-", ""));
+						if (chatRoomService.existsChatroomByMemberNoAndUuid(memberNoAndUuid) == false) {
+							throw new RestApiException(ChatErrorCode.USER_NOT_IN_CHAT);
+						}
+						rooms.add(userDestinationRoomUUID);
+						sessionAttribute.put("rooms", rooms);
+						log.info("해당 방 추가" + sessionAttribute.get("rooms"));
 					}
-					rooms.add(userDestinationRoomUUID);
-					sessionAttribute.put("rooms", rooms);
-					log.info("해당 방 추가" + sessionAttribute.get("rooms"));
 				}
 			}
 			break;

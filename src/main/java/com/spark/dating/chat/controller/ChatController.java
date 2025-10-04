@@ -20,7 +20,7 @@ import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.chat.ChatMessageSendRequest;
 import com.spark.dating.dto.chat.ChatMessageWithMemberResponse;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
-import com.spark.dating.dto.chat.ChatRoomSelectRequest;
+import com.spark.dating.dto.chat.ChatRoomSelectResponse;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class ChatController implements ChatControllerDocs {
 	}
 
 	@GetMapping("/list")
-	public List<ChatRoomSelectRequest> chatRoomList() {
+	public List<ChatRoomSelectResponse> chatRoomList() {
 		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
 		return chatRoomService.selectAllChatRoom(memberNo);
 	}
@@ -50,6 +50,7 @@ public class ChatController implements ChatControllerDocs {
 	@GetMapping("/chatting/{chatroom-uuid}")
 	public ChatMessageWithMemberResponse chatMessage(@PathVariable("chatroom-uuid") String chatBase62RoomUUID) {
 		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+		
 		return chatMessageService.getChattingMessage(chatBase62RoomUUID, memberNo);
 	}
 
@@ -67,6 +68,7 @@ public class ChatController implements ChatControllerDocs {
 
 		log.info(chatBase62RoomUUID);
 		Long sendMemberNo = (Long) sessionAttributes.get("memberNo");
+		
 		chatMessageService.insertChatMessage(sendMemberNo, chatBase62RoomUUID, request);
 
 	}

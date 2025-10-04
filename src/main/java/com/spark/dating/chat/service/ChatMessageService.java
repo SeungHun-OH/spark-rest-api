@@ -16,6 +16,7 @@ import com.spark.dating.dto.chat.ChatMessageSelect;
 import com.spark.dating.dto.chat.ChatMessageSendRequest;
 import com.spark.dating.dto.chat.ChatMessageSendResponse;
 import com.spark.dating.dto.chat.ChatMessageWithMemberResponse;
+import com.spark.dating.dto.chat.ChatRoomEvent;
 import com.spark.dating.utils.UuidBase62Utils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +45,15 @@ public class ChatMessageService {
 		String chatRoomUUID = UuidBase62Utils.fromBase62(chatBase62RoomUUID).toString().replace("-", "").toUpperCase();
 		
 		Long chatRoomNo = chatRoomService.findChatRoomIdByUuid(chatRoomUUID);
-		ChatMessage chatMessage = ChatMessage.builder().cmMessage(request.getCmMessage()).cmSendMember(sendMemberNo).cmChatRoomNo(chatRoomNo).build();
+		
+		String message = request.getCmMessage();
+		ChatMessage chatMessage = ChatMessage.builder().cmMessage(message).cmSendMember(sendMemberNo).cmChatRoomNo(chatRoomNo).build();
 		log.info("chatMessageSend {}"+chatMessage.toString());
 		chatMessageDao.insertChatMessage(chatMessage);
+		log.info("chatMessageSend==========================");
 		chatMessageDao.updateLastMessage(chatMessage);
+		log.info("chatMessageSend++++++++++++++++++++++++++");
+		simpMessagingTemplate.convertAndSend("/sub/room", ChatRoomEvent.builder().lastMessage(message).chatRoomBase62RoomUUID(chatBase62RoomUUID).lastMessageDate(chatMessage.getCmDate()).build());
 		simpMessagingTemplate.convertAndSend("/sub/room/"+chatBase62RoomUUID, ChatMessageSendResponse.from(chatMessage, request));
 	}
 	
@@ -58,6 +64,7 @@ public class ChatMessageService {
 		Map<String, Object> chatMessageMap = new HashMap<>();
 		chatMessageMap.put("chatRoomNo", chatRoomNo);
 		chatMessageMap.put("memberNo", memberNo);
+		chatMessageDao.updateReadDate(chatMessageMap);
 		List<ChatMessageSelect> messages = chatMessageDao.getChattingMessage(chatMessageMap);
 		Long opponentMno = chatMessageDao.getOpponentMnoByChatRoom(chatMessageMap);
 		ChatMemberProfile profile = chatMessageDao.getOpponentProfileByMno(opponentMno);

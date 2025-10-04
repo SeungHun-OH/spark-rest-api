@@ -4,17 +4,15 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@Builder
 @Getter
-public class ChatMessageSelect {
+public class ChatRoomEvent {
 
-	private Long cmNo;
-	private boolean cmSendUserFlag;
-	private String cmMessage;
+	private String lastMessage;
+	private String chatRoomBase62RoomUUID;
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-	private LocalDateTime cmDate;
-	
+	private LocalDateTime lastMessageDate;
 }

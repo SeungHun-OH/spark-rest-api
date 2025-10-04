@@ -6,7 +6,7 @@
 
 <mapper namespace="com.spark.dating.chat.dao.ChatRoomDao">
 
-<resultMap id="ChatRoomRequest" type="com.spark.dating.dto.chat.ChatRoomSelectRequest">
+<resultMap id="ChatRoomResponse" type="com.spark.dating.dto.chat.ChatRoomSelectResponse">
 	<id column="CR_NO" property="crNo" />
 	<result column="CR_NAME"  property="crName"/>
 	<result column="CR_AGE"  property="crAge"/>
@@ -54,31 +54,41 @@
 </select>
 
 <select id="selectAllChatRoom" parameterType="int" resultType="ChatRoom">
-	SELECT
-        CR.CR_UUID as cr_UUID,
-        M.M_NAME as cr_Name,
-        CM.CM_MSG as cr_Message,
-        M.M_AGE as cr_Age,
-        CM.CM_DATE as cr_Date
-    FROM CHATROOM CR
-    JOIN MATCHINGCHATROOMMAPPING MC
-         ON CR.CR_NO = MC.MC_CHATROOMNO
-    JOIN MATCHING MT
-         ON MC.MC_MATCHINGNO = MT.MT_NO
-    JOIN HEARTS H
-         ON MT.MT_HEARTSNO = H.H_NO
-    JOIN MEMBER M
-         ON M.M_NO = CASE
-                        WHEN H.H_SENDUSER = #{memberNo}
-                        THEN H.H_RECEIVEUSER
-                        ELSE H.H_SENDUSER
-                     END
-    LEFT JOIN CHATMESSAGE CM
-         ON CR.CR_LASTMESSAGENO = CM.CM_NO
-    WHERE #{memberNo} IN (H.H_SENDUSER, H.H_RECEIVEUSER)
-    ORDER BY CM.CM_DATE DESC NULLS LAST
+	SELECT 
+	    CR.CR_UUID          AS cr_UUID,
+	    M.M_NAME            AS cr_Name,
+	    CM.CM_MSG           AS cr_Message,
+	    M.M_AGE             AS cr_Age,
+	    CM.CM_DATE          AS cr_Date,
+	    NVL(UNREAD.UNREAD_COUNT, 0) AS cr_UnreadCount
+	FROM CHATROOM CR
+	JOIN MATCHINGCHATROOMMAPPING MC
+	    ON CR.CR_NO = MC.MC_CHATROOMNO
+	JOIN MATCHING MT
+	    ON MC.MC_MATCHINGNO = MT.MT_NO
+	JOIN HEARTS H
+	    ON MT.MT_HEARTSNO = H.H_NO
+	JOIN MEMBER M
+	    ON M.M_NO = CASE
+	                   WHEN H.H_SENDUSER = #{memberNo}
+	                   THEN H.H_RECEIVEUSER
+	                   ELSE H.H_SENDUSER
+	                END
+	LEFT JOIN CHATMESSAGE CM
+	    ON CR.CR_LASTMESSAGENO = CM.CM_NO
+	-- ✅ 안 읽은 메시지 수 집계 서브쿼리
+	LEFT JOIN (
+	    SELECT CM_CHATROOMNO, COUNT(*) AS UNREAD_COUNT
+	    FROM CHATMESSAGE
+	    WHERE CM_SENDUSER != #{memberNo}
+	      AND CM_READ_DATE IS NULL
+	    GROUP BY CM_CHATROOMNO
+	) UNREAD
+	    ON CR.CR_NO = UNREAD.CM_CHATROOMNO
+	WHERE #{memberNo} IN (H.H_SENDUSER, H.H_RECEIVEUSER)
+	ORDER BY CM.CM_DATE DESC NULLS LAST
 </select>
-
+	
 <select id="selectAllChatRoomUUID" parameterType="String" resultType="java.util.UUID">
 	SELECT
         CR.CR_UUID as cr_UUID
@@ -126,5 +136,6 @@
 	FROM CHATROOM
 	WHERE CR_UUID = #{chatRoomUUID}
 </select>
+
 
 </mapper>
