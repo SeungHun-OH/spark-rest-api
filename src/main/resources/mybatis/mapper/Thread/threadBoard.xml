@@ -11,27 +11,19 @@
     <result property="brMemberNo" column="BR_MEMBERNO" />
     <result property="brContent" column="BR_CONTENT" />
     <result property="createdAt" column="createdAt" />
-    <!-- <result property="memberName" column="BR_MEMBERNAME" />
-    <result property="memberPicture" column="BR_MEMBERPICTURE" /> -->
   </resultMap>
 
   <!-- 게시글 + 댓글 컬렉션 매핑 -->
- <resultMap id="ThreadBoardResponseMap" type="ThreadBoardResponse">
-  <id property="tbNo" column="TB_NO" />
-  <result property="tbTitle" column="TB_TITLE" />
-  <result property="tbContent" column="TB_CONTENT" />
-  <result property="tbLikeCount" column="TB_LIKECOUNT" />
-  <result property="tbMemberNo" column="TB_MEMBERNO" />
+  <resultMap id="ThreadBoardResponseMap" type="ThreadBoardResponse">
+    <id property="tbNo" column="TB_NO" />
+    <result property="tbTitle" column="TB_TITLE" />
+    <result property="tbContent" column="TB_CONTENT" />
+    <result property="tbLikeCount" column="TB_LIKECOUNT" />
+    <result property="tbMemberNo" column="TB_MEMBERNO" />
 
-  <!-- <result property="createdAt" column="createdAt" />
-  <result property="memberName" column="memberName" />
-  <result property="memberPicture" column="memberPicture" /> -->
-
-  <!-- ✅ select만 남기고 resultMap 제거 -->
-  <collection property="boardReplys"
-              column="TB_NO"
-              select="getRepliesByBoardNo" />
-</resultMap>
+    <!-- ✅ select만 남기고 resultMap 제거 -->
+    <collection property="boardReplys" column="TB_NO" select="getRepliesByBoardNo" />
+  </resultMap>
 
   <insert id = "insertThreadBoard" parameterType="ThreadBoard">
     <selectKey keyProperty="tbNo" resultType="int" order="BEFORE">
@@ -54,6 +46,12 @@
       SYSDATE, 
       SYSDATE)
   </insert>
+
+  <select id = "getThreadBoard" parameterType= "int" resultType="ThreadBoard">
+    SELECT *
+    FROM THREADBOARD TB
+    WHERE TB.TB_NO = #{tbNo}
+  </select>
 
   <select id = "getThreadBoardList" resultMap="ThreadBoardResponseMap">
     SELECT    
@@ -100,7 +98,41 @@
 
     WHERE BR.BR_THREADBOARDNO = #{tbNo}
     ORDER BY BR.BR_NO ASC
-    </select>
+  </select>
 
+  <delete id = "deleteThreadBoard" parameterType="int">
+    DELETE FROM THREADBOARD
+    WHERE TB_NO  = #{tbNo}
+  </delete>
+
+  <delete id = "deleteBoardRepliesByBoardNo" parameterType="int">
+    DELETE FROM BOARDREPLY
+    WHERE BR_THREADBOARDNO = #{tbNo}
+  </delete>
+
+  <update id = "updateThreadBoard" parameterType="ThreadBoard">
+    update THREADBOARD
+    SET 
+      TB_TITLE = #{tbTitle},
+      TB_CONTENT = #{tbContent},
+      TB_DATE = TO_DATE(#{tbDate}, 'YYYY-MM-DD HH24:MI:SS'),
+      TB_ACTIVE = #{tbActive},
+      TB_LIKECOUNT = #{tbLikeCount},
+      TB_MEMBERNO = #{tbMemberNo},
+      TB_VIEWCOUNT = #{tbViewCount},
+      TB_IMAGENO = #{tbImageNo},
+      UPDATEDAT = SYSDATE
+       
+      where TB_NO = #{tbNo}
+  </update>
 
 </mapper>
+
+
+
+<!-- <result property="createdAt" column="createdAt" />
+  <result property="memberName" column="memberName" />
+  <result property="memberPicture" column="memberPicture" /> -->
+
+<!-- <result property="memberName" column="BR_MEMBERNAME" />
+    <result property="memberPicture" column="BR_MEMBERPICTURE" /> -->

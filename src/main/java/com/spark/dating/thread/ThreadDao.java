@@ -14,4 +14,11 @@ public interface ThreadDao {
 
   List<ThreadBoardResponse> getThreadBoardList();
 
+  ThreadBoard getThreadBoard(int tbNo);
+
+  int deleteThreadBoard(int tbNo);
+
+  int deleteBoardReplysByBoardNo(int tbNo);
+
+  int updateThreadBoard(ThreadBoard threadBoard);
 }

@@ -3,9 +3,12 @@ package com.spark.dating.thread;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.dto.member.ApiResponse;
@@ -32,6 +35,26 @@ public class ThreadController {
     }
   }
 
+  @DeleteMapping("/thread/board")
+  public ApiResponse<Integer> deleteThreadBoard(@RequestParam("tbNo") int tbNo) {
+    try {
+      int result = threadService.deleteThreadBoard(tbNo);
+      return new ApiResponse<>("success", "threadBaord 삭제 성공", result);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "threadBaord 삭제 실패" + e, 0);
+    }
+  }
+
+  @PutMapping("/thread/board")
+  public ApiResponse<Integer> updateThreadBoard(@RequestBody ThreadBoard threadBoard) {
+    try {
+      int result = threadService.updateThreadBoard(threadBoard);
+      return new ApiResponse<>("success", "threadBaord 수정 성공", result);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "threadBaord 수정 실패" + e, 0);
+    }
+  }
+
   @GetMapping("/thread/boardList")
   public ApiResponse<List<ThreadBoardResponse>> getThreadBoardList() {
     try {
@@ -42,7 +65,6 @@ public class ThreadController {
     }
   }
 
-
   @PostMapping("/thread/boardreply")
   public ApiResponse<Integer> insertBoardReply(@RequestBody BoardReply boardReply) {
     try {
@@ -52,4 +74,5 @@ public class ThreadController {
       return new ApiResponse<>("fail", "threadBaord 등록 실패" + e, 0);
     } 
   }
+
 }

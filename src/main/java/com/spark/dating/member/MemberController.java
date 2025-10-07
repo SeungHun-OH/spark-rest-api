@@ -52,13 +52,13 @@ public class MemberController {
     return memberService.updateMember(member);
   }
 
-  // 회원 수정
+  // 회원 등록
   @PostMapping("/member")
   public ApiResponse<Integer> insertMember(@RequestBody Member member) {
     return memberService.insertMember(member);
   }
 
-  // 회원 등록
+  // 회원 사진등록
   @PostMapping("/member/picture")
   public ApiResponse<Integer> insertMemberPicture(@RequestParam("mNo") int mNo,
       @RequestParam("file") MultipartFile file) {

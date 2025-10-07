@@ -4,11 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spark.dating.dto.thread.BoardReply;
 import com.spark.dating.dto.thread.ThreadBoard;
 import com.spark.dating.dto.thread.response.ThreadBoardResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ThreadService {
 
@@ -17,6 +21,10 @@ public class ThreadService {
 
   @Autowired
   BoardReplyDao boardReplyDao;
+
+  // public ThreadBoard getThreadBoard(int tbNo) {
+  //   return threadDao.getThreadBoard(tbNo);
+  // }
 
   public int insertThreadBoard(ThreadBoard threadBoard) {
     threadDao.insertThreadBoard(threadBoard);
@@ -30,5 +38,20 @@ public class ThreadService {
   public int insertBoardReply(BoardReply boardReply) {
     boardReplyDao.insertBoardReply(boardReply);
     return boardReply.getBrNo();
+  }
+
+  @Transactional // 댓글 + 본문 삭제 트랜젝션 처리!!
+  public int deleteThreadBoard(int tbNo) {
+
+           threadDao.deleteBoardReplysByBoardNo(tbNo);
+    return threadDao.deleteThreadBoard(tbNo);
+  }
+
+  public int updateThreadBoard(ThreadBoard threadBoard) {
+
+    ThreadBoard GetBoard = threadDao.getThreadBoard(threadBoard.getTbNo());
+    log.info("수정 전 데이터" + GetBoard.toString());
+    
+    return threadDao.updateThreadBoard(threadBoard);
   }
 }
