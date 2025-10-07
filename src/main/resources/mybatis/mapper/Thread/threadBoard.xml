@@ -10,9 +10,9 @@
     <result property="brThreadBoardNo" column="BR_THREADBOARDNO" />
     <result property="brMemberNo" column="BR_MEMBERNO" />
     <result property="brContent" column="BR_CONTENT" />
-    <result property="createdAt" column="BR_CREATEDAT" />
-    <result property="memberName" column="BR_MEMBERNAME" />
-    <result property="memberPicture" column="BR_MEMBERPICTURE" />
+    <result property="createdAt" column="createdAt" />
+    <!-- <result property="memberName" column="BR_MEMBERNAME" />
+    <result property="memberPicture" column="BR_MEMBERPICTURE" /> -->
   </resultMap>
 
   <!-- 게시글 + 댓글 컬렉션 매핑 -->
@@ -20,12 +20,12 @@
   <id property="tbNo" column="TB_NO" />
   <result property="tbTitle" column="TB_TITLE" />
   <result property="tbContent" column="TB_CONTENT" />
-  <result property="createdAt" column="TB_CREATEDAT" />
   <result property="tbLikeCount" column="TB_LIKECOUNT" />
   <result property="tbMemberNo" column="TB_MEMBERNO" />
-  
-  <result property="memberName" column="M_NAME" />
-  <result property="memberPicture" column="MP_ATTACHDATA" />
+
+  <!-- <result property="createdAt" column="createdAt" />
+  <result property="memberName" column="memberName" />
+  <result property="memberPicture" column="memberPicture" /> -->
 
   <!-- ✅ select만 남기고 resultMap 제거 -->
   <collection property="boardReplys"
@@ -69,6 +69,7 @@
 
       TB.CREATEDAT as createdAt,
       TB.UPDATEDAT as updatedAt,
+      
       M.M_ID       as memberId,
       M.M_NAME     as memberName,
       MP.MP_ATTACHDATA as memberPicture
@@ -87,7 +88,9 @@
       BR.BR_THREADBOARDNO,
       BR.BR_MEMBERNO,
       BR.BR_CONTENT,
+
       TO_CHAR(BR.CREATEDAT, 'YYYY-MM-DD HH24:MI:SS') as createdAt,
+
       M.M_NAME as memberName,
       MP.MP_ATTACHDATA as memberPicture
 
