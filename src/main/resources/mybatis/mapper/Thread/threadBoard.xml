@@ -5,6 +5,34 @@
 
 <mapper namespace="com.spark.dating.thread.ThreadDao">
 
+  <resultMap id="BoardReplyResponseMap" type="BoardReplyResponse">
+    <id property="brNo" column="BR_NO" />
+    <result property="brThreadBoardNo" column="BR_THREADBOARDNO" />
+    <result property="brMemberNo" column="BR_MEMBERNO" />
+    <result property="brContent" column="BR_CONTENT" />
+    <result property="createdAt" column="BR_CREATEDAT" />
+    <result property="memberName" column="BR_MEMBERNAME" />
+    <result property="memberPicture" column="BR_MEMBERPICTURE" />
+  </resultMap>
+
+  <!-- 게시글 + 댓글 컬렉션 매핑 -->
+ <resultMap id="ThreadBoardResponseMap" type="ThreadBoardResponse">
+  <id property="tbNo" column="TB_NO" />
+  <result property="tbTitle" column="TB_TITLE" />
+  <result property="tbContent" column="TB_CONTENT" />
+  <result property="createdAt" column="TB_CREATEDAT" />
+  <result property="tbLikeCount" column="TB_LIKECOUNT" />
+  <result property="tbMemberNo" column="TB_MEMBERNO" />
+  
+  <result property="memberName" column="M_NAME" />
+  <result property="memberPicture" column="MP_ATTACHDATA" />
+
+  <!-- ✅ select만 남기고 resultMap 제거 -->
+  <collection property="boardReplys"
+              column="TB_NO"
+              select="getRepliesByBoardNo" />
+</resultMap>
+
   <insert id = "insertThreadBoard" parameterType="ThreadBoard">
     <selectKey keyProperty="tbNo" resultType="int" order="BEFORE">
       SELECT THREAD_BOARD_SEQ.NEXTVAL FROM dual
@@ -27,7 +55,7 @@
       SYSDATE)
   </insert>
 
-  <select id = "getThreadBoardList" resultType="ThreadBoardResponse">
+  <select id = "getThreadBoardList" resultMap="ThreadBoardResponseMap">
     SELECT    
       TB.TB_NO,
       TB.TB_TITLE,
@@ -53,26 +81,23 @@
       ORDER BY TB.TB_NO DESC
   </select>
 
+  <select id="getRepliesByBoardNo" parameterType="int" resultMap="BoardReplyResponseMap">
+    SELECT
+      BR.BR_NO,
+      BR.BR_THREADBOARDNO,
+      BR.BR_MEMBERNO,
+      BR.BR_CONTENT,
+      TO_CHAR(BR.CREATEDAT, 'YYYY-MM-DD HH24:MI:SS') as createdAt,
+      M.M_NAME as memberName,
+      MP.MP_ATTACHDATA as memberPicture
 
-  <!-- <select id = "getThreadBoardList" resultType="ThreadBoard">
-    SELECT    
-      TB_NO as tbNo,
-      TB_TITLE as tbTitle,
-      TB_CONTENT as tbContent,
-      TO_CHAR(TB_DATE, 'YYYY-MM-DD HH24:MI:SS') as tbDate,
-      TB_ACTIVE as tbActive,
-      TB_LIKECOUNT as tbLikeCount,
-      TB_MEMBERNO as tbMemberNo,
-      TB_VIEWCOUNT as tbViewCount,
-      TB_IMAGENO as tbImageNo,
-      CREATEDAT as createdAt,
-      UPDATEDAT as updatedAt
+    FROM BOARDREPLY BR
+    JOIN MEMBER M ON BR.BR_MEMBERNO = M.M_NO
+    JOIN MEMBERPICTURE MP ON BR.BR_MEMBERNO = MP.MP_MEMBERNO 
 
-      FROM THREADBOARD
-      WHERE TB_ACTIVE = 'Y'
-      ORDER BY TB_NO DESC
-  </select> -->
-
+    WHERE BR.BR_THREADBOARDNO = #{tbNo}
+    ORDER BY BR.BR_NO ASC
+    </select>
 
 
 </mapper>
