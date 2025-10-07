@@ -57,10 +57,15 @@
 	SELECT 
 	    CR.CR_UUID          AS cr_UUID,
 	    M.M_NAME            AS cr_Name,
+	    M.M_UUID        AS cr_OPPONENTUUID,
 	    CM.CM_MSG           AS cr_Message,
 	    M.M_AGE             AS cr_Age,
+	    MS.MS_STATUS        AS cr_Status,
 	    CM.CM_DATE          AS cr_Date,
-	    NVL(UNREAD.UNREAD_COUNT, 0) AS cr_UnreadCount
+	    NVL(UNREAD.UNREAD_COUNT, 0) AS cr_UnreadCount,
+	    MP.MP_ATTACHONAME   AS cr_AttachOname,
+	    MP.MP_ATTACHTYPE    AS cr_AttachType,
+	    MP.MP_ATTACHDATA    AS cr_AttachData
 	FROM CHATROOM CR
 	JOIN MATCHINGCHATROOMMAPPING MC
 	    ON CR.CR_NO = MC.MC_CHATROOMNO
@@ -74,6 +79,12 @@
 	                   THEN H.H_RECEIVEUSER
 	                   ELSE H.H_SENDUSER
 	                END
+	-- ✅ MEMBERPICTURE 조인
+	LEFT JOIN MEMBERPICTURE MP
+	    ON MP.MP_MEMBERNO = M.M_NO
+	-- ✅ MEMBERSTATUS 조인
+	LEFT JOIN MEMBERSTATUS MS
+	    ON MS.MS_NO = M.M_NO
 	LEFT JOIN CHATMESSAGE CM
 	    ON CR.CR_LASTMESSAGENO = CM.CM_NO
 	-- ✅ 안 읽은 메시지 수 집계 서브쿼리
@@ -88,6 +99,10 @@
 	WHERE #{memberNo} IN (H.H_SENDUSER, H.H_RECEIVEUSER)
 	ORDER BY CM.CM_DATE DESC NULLS LAST
 </select>
+	
+	
+	
+	
 	
 <select id="selectAllChatRoomUUID" parameterType="String" resultType="java.util.UUID">
 	SELECT

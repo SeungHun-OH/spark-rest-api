@@ -15,36 +15,43 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ChatMemberProfile {
-	
-	
-	private String mName;
-	
-	private int mAge;
-	
-	@JsonIgnore
-    private String mpAttachType;
-	
-	@JsonInclude(Include.NON_NULL)
-    private String mpBase64Data;
-    
-    public void setMpAttachData(byte[] mpAttachData) {
-        if (mpAttachData != null) {
-            String base64 = Base64.getEncoder().encodeToString(mpAttachData);
-            this.mpBase64Data = "data:" + this.mpAttachType + ";base64," + base64;
-        }
-    }
 
-    @JsonProperty("name")
-	public String getmName() {
-		return mName;
+	@JsonProperty("opponentUuid")
+	private String mpUUID;
+
+	private String mpName;
+
+	private int mpAge;
+
+	@JsonProperty("nickName")
+	private String mpNickName;
+		
+	@JsonIgnore
+	private String mpAttachType;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("attachData")
+	private String mpAttachData;
+
+	@JsonProperty("status")
+	private String mpStatus;
+
+
+	public void setMpAttachData(byte[] mpAttachData) {
+		if (mpAttachData != null) {
+			String base64 = Base64.getEncoder().encodeToString(mpAttachData);
+			this.mpAttachData = "data:" + this.mpAttachType + ";base64," + base64;
+		}
+	}
+
+	@JsonProperty("name")
+	public String getmpName() {
+		return mpName;
 	}
 
 	@JsonProperty("age")
-	public int getmAge() {
-		return mAge;
+	public int getmpAge() {
+		return mpAge;
 	}
-	
-	
-    
-    
+
 }

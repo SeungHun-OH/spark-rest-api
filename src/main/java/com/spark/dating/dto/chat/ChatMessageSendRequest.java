@@ -11,6 +11,7 @@ import lombok.ToString;
 public class ChatMessageSendRequest {
 
 	private String cmNo;
+	private String cmOpponentUuid;
 	
 	@NotBlank(message = "메세지를 입력해주세요.")
 	private String cmMessage;

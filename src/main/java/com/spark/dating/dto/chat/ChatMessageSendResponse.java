@@ -10,16 +10,17 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ChatMessageSendResponse {
-	private String cmNo;
+	private Long cmNo;
 	private String cmMessage;
 	private String cmDate;
-	@Builder.Default
-	private boolean cmSendUserFlag = false;
+	private boolean cmSendUserFlag;
 
-	public static ChatMessageSendResponse from(ChatMessage send, ChatMessageSendRequest request) {
+	public static ChatMessageSendResponse from(ChatMessage send, Long opponentMno) {
 		return ChatMessageSendResponse.builder()
-				.cmNo(request.getCmNo())
+				.cmNo(send.getCmNo())
 				.cmMessage(send.getCmMessage())
+				.cmSendUserFlag(opponentMno == send.getCmSendMember() ? true : false)
+				.cmSendUserFlag(false)
 				.cmDate(send.getCmDate().toString()).build();
 	}
 

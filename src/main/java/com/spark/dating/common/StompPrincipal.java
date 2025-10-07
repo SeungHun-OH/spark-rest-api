@@ -14,7 +14,7 @@ public class StompPrincipal implements Principal {
 	
 	@Override
 	public String getName() {
-		return memberNo+"";
+		return memberNo;
 	}
 
 }

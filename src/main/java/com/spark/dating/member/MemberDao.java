@@ -1,7 +1,10 @@
 package com.spark.dating.member;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
+import com.spark.dating.dto.chat.MemberStatusMessage;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberForFeed;
 
@@ -16,4 +19,14 @@ public interface MemberDao {
   int existsByNo(Long memberId);
 
   MemberForFeed selectMemberByMnickname(String m_nickname);
+  
+  void updateMemberStatusInfo(MemberStatusMessage memberStatus);
+  
+  String selectMnickNameByMno (Long memberNo);
+  
+  int checkUuidMatch(Map<String, Object> memberNoAndUuidMap);
+  
+  Long getMemberNoByUuid(String uuid);
+  
+  String getMemberUuidByMemberNo(Long memberNo);
 }

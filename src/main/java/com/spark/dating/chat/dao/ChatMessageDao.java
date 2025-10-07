@@ -21,4 +21,5 @@ public interface ChatMessageDao {
 	public Long getOpponentMnoByChatRoom(Map<String, Object> chatMessageMap);
 	public ChatMemberProfile getOpponentProfileByMno(Long opponentMno);
 	public void updateReadDate(Map<String, Object> chatMessageMap);
+	public void updateLastMessageByCMno(Long lastMessageNo);
 }

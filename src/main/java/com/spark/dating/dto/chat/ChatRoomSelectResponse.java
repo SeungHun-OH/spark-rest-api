@@ -17,9 +17,12 @@ public class ChatRoomSelectResponse {
 
 	private String encodedUUID;
 	private String chatRoomName;
+	private String opponentUuid;
 	private String lastMessage;
 	private Integer age;
+	private String status;
 	private Integer unreadCount;
+	private String imgData;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime date;

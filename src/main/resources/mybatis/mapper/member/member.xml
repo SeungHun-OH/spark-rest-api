@@ -81,4 +81,39 @@
     where m_nickname = #{mNickname}
   </select>
 
+
+  <update id="updateMemberStatusInfo" parameterType="com.spark.dating.dto.chat.MemberStatusMessage">
+	  UPDATE MEMBERSTATUS
+       SET MS_STATUS = #{memberStatus},
+           MS_LAST_ACTIVE = SYSDATE
+     WHERE MS_NO = #{memberNO}
+  </update>
+  
+  <select id="selectMnickNameByMno" parameterType="Long" resultType="String">
+  	SELECT M_NICKNAME
+    FROM MEMBER
+    WHERE M_NO = #{memberNo}
+   </select>
+   
+   <select id="checkUuidMatch" parameterType="hashmap" resultType="int">
+   SELECT CASE WHEN EXISTS (
+        SELECT 1
+        FROM MEMBER
+        WHERE M_NO = #{memberNo}
+          AND M_UUID = #{uuid}
+    ) THEN 1 ELSE 0 END
+	FROM DUAL
+   </select>
+   
+   <select id="getMemberNoByUuid" parameterType="String" resultType="Long">
+   SELECT M_NO
+    FROM MEMBER
+    WHERE M_UUID = #{uuid}
+   </select>
+   
+   <select id="getMemberUuidByMemberNo" parameterType="Long" resultType="String">
+    SELECT M_UUID
+    FROM MEMBER
+    WHERE M_NO = #{memberNo}
+   </select>
 </mapper>

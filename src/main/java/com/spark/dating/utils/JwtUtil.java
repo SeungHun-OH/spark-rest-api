@@ -29,7 +29,7 @@ public class JwtUtil {
 	private MemberService memberService;
 	
     private final byte[] secret = "com.spark.dating.web.backend.project.mycompany.secret.key.restapi".getBytes(StandardCharsets.UTF_8);
-    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 100;
+    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 300;
 
     private final SecretKey secretKey = Keys.hmacShaKeyFor(secret);
     

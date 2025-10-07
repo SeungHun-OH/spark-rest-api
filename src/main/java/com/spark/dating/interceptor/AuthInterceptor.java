@@ -33,6 +33,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 		String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
 //		String token = jwtUtil.generateToken(2L);
+//		System.err.println(token);
+
 		log.info("JWT 토큰 {}", jwtToken);
 		if (jwtUtil.isValidToken(jwtToken)) {
 			Long memberNo = jwtUtil.getMemberNo(jwtToken);
