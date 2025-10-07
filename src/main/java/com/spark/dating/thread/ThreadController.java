@@ -46,8 +46,8 @@ public class ThreadController {
   @PostMapping("/thread/boardreply")
   public ApiResponse<Integer> insertBoardReply(@RequestBody BoardReply boardReply) {
     try {
-      int memberNo = threadService.insertBoardReply(boardReply);
-      return new ApiResponse<>("success", "BoardReply 등록 성공", memberNo);
+      int brNo = threadService.insertBoardReply(boardReply);
+      return new ApiResponse<>("success", "BoardReply 등록 성공 bRNo?" + boardReply.getBrNo(), brNo);
     } catch (Exception e) {
       return new ApiResponse<>("fail", "threadBaord 등록 실패" + e, 0);
     } 

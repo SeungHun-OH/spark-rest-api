@@ -15,6 +15,9 @@ public class ThreadService {
   @Autowired
   ThreadDao threadDao;
 
+  @Autowired
+  BoardReplyDao boardReplyDao;
+
   public int insertThreadBoard(ThreadBoard threadBoard) {
     threadDao.insertThreadBoard(threadBoard);
     return threadBoard.getTbNo(); 
@@ -25,7 +28,7 @@ public class ThreadService {
   }
 
   public int insertBoardReply(BoardReply boardReply) {
-    BoardReply.insertBoardReply(boardReply);
+    boardReplyDao.insertBoardReply(boardReply);
     return boardReply.getBrNo();
   }
 }

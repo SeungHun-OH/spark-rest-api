@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.thread.BoardReplyDao">
+
+  <insert id = "insertBoardReply" parameterType="BoardReply">
+    <selectKey keyProperty="brNo" resultType="int" order="BEFORE">
+      SELECT BOARDREPLY_SEQ.NEXTVAL FROM dual
+    </selectKey>
+
+    iNSERT INTO BOARDREPLY
+    (BR_NO,
+     BR_THREADBOARDNO,
+     BR_MEMBERNO,
+     BR_CONTENT,
+     CREATEDAT)
+
+    VALUES
+    (#{brNo},
+     #{brThreadBoardNo},
+     #{brMemberNo},
+     #{brContent},
+     SYSDATE)
+  </insert>
+
+</mapper> 
