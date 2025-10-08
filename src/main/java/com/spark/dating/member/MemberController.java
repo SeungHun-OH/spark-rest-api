@@ -1,9 +1,13 @@
 package com.spark.dating.member;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.dto.member.MemberForFeed;
 import com.spark.dating.dto.member.MemberPicture;
 import com.spark.dating.dto.member.request.MemberLoginRequest;
 
@@ -38,18 +44,11 @@ public class MemberController {
     return memberService.createMember(member, file);
   }
 
-  // 회원 로그인
+  //회원 로그인
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody MemberLoginRequest memberlogin) {
-
-    log.info("프론트 넘어오는 memberLogin찍기" + memberlogin.toString());
-
     Map<String, Object> map = memberService.login(memberlogin);
-
-    log.info("백엔드 받아오는 memberLogin찍기" + map);
-
     return map;
-
   }
 
   // 회원 수정
@@ -96,11 +95,11 @@ public class MemberController {
   // }
 
   // jwt 토큰으로 회원정보 조회
-  @GetMapping("/member/jwt")
-  public ApiResponse<Member> selectMemberByJwt(@RequestHeader("Authorization") String authHeader) {
+  @GetMapping("/member/getjwt")
+  public ApiResponse<Map<String, String>> selectMemberByJwt(@RequestHeader("Authorization") String authHeader) {
     // "Bearer eyJ..." 에서 "Bearer " 제거
-    String token = authHeader.substring(7).trim();
-    return memberService.selectMemberByJwt(token);
+  
+    return memberService.selectMemberByJwt(authHeader);
   }
 
   @GetMapping("/member/test")
@@ -110,6 +109,33 @@ public class MemberController {
     member.setMEmail("www@www.www");
     return new ObjectMapper().writeValueAsString(member);
   }
+
+  //회원 사진 조회(단일)
+  @GetMapping("member/memberPicture/{m_nickname}")
+  public ResponseEntity<byte[]> getMemberPicture(@PathVariable("m_nickname") String m_nickname) {
+    MemberForFeed memberForFeed = memberService.selectMemberByMnickname(m_nickname);
+    int m_no = memberForFeed.getmNo();
+    MemberPicture memberPicture = memberService.selectMemberPictureByMno(m_no);
+    return ResponseEntity
+    .ok()
+    .contentType(MediaType.parseMediaType(memberPicture.getMpAttachType()))
+    .body(memberPicture.getMpAttachData());
+  }
+
+  //단일 멤버 조회
+  @GetMapping("/member/info")
+  public MemberForFeed selectMemberByMno() {
+    int m_no = AuthenticationContextHolder.getContextMemberNo();
+    return memberService.selectMemberByMno(m_no);
+  }
+
+  //나를 제외한 랜덤 멤버 리스트 조회
+  @GetMapping("/randomExceptMe")
+    public List<MemberForFeed> getRandomMembersExceptMe(
+      @RequestParam("mNo") int myNo,
+      @RequestParam("count") int count) { 
+        return memberService.getRandomMembersExceptMe(myNo, count);
+    }
 }
 
 // log.info("MemberController insertMember값은?" + member);
@@ -119,3 +145,18 @@ public class MemberController {
 // log.info("member가 비었습니다");
 // return new ApiResponse<>("fail", "member가 비었습니다", 1);
 // }
+ // -------------------------승훈님 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // -------------------------주희님   

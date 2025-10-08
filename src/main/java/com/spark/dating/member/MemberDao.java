@@ -2,6 +2,8 @@ package com.spark.dating.member;
 
 import java.util.Map;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.spark.dating.dto.chat.MemberStatusMessage;
@@ -29,4 +31,8 @@ public interface MemberDao {
   Long getMemberNoByUuid(String uuid);
   
   String getMemberUuidByMemberNo(Long memberNo);
+
+  MemberForFeed selectMemberByMno(int mNo);
+
+  List<MemberForFeed> selectRandomMembersExceptMe(int myNo, int count);
 }

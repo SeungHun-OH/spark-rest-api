@@ -13,5 +13,6 @@ public interface FeedPictureDao {
     public List<FeedPicture> selectFirstImg(int f_no);
     // public int update(FeedPicture feedPicture);
     public int delete(int m_no);
+    public int deleteFeedPicture(int fp_no);
     public int countAll(int m_no);
 }

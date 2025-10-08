@@ -32,7 +32,7 @@ public class FeedService {
         int rows = feedDao.create(dbFeed);
 
         if (files != null) {
-            for (int i=0; i<files.length; i++) {
+            for (int i = 0; i < files.length; i++) {
                 FeedPicture feedPicture = FeedPicture.insertFeedPictures(dbFeed.getfNo(), files[i]);
                 feedPictureDao.create(feedPicture);
             }
@@ -43,12 +43,14 @@ public class FeedService {
         Map<String, Object> map = new HashMap<>();
         int feedPicRows = 0;
 
-        if (files != null) {
-            for (int i=0; i<files.length; i++) {
+        // null 체크 + length 체크 둘 다 하기
+        if (files != null && files.length > 0) {
+            for (int i = 0; i < files.length; i++) {
                 FeedPicture feedPicture = FeedPicture.insertFeedPictures(feed.getfNo(), files[i]);
                 feedPicRows += feedPictureDao.create(feedPicture);
             }
         }
+
         int feedRows = feedDao.update(feed);
         map.put("추가된 feedPictureRows", feedPicRows);
         map.put("수정된 feedRows", feedRows);
@@ -87,4 +89,3 @@ public class FeedService {
         return totalRows;
     }
 }
-

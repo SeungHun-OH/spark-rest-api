@@ -58,6 +58,11 @@
 		WHERE f.f_memberno = #{value}
 	</select>
 
+  <delete id="deleteFeedPicture" parameterType="int">
+    DELETE FROM feedPicture
+    WHERE fp_no = #{value}
+  </delete>
+
   <delete id="delete"
           parameterType="int">
     DELETE FROM feedPicture

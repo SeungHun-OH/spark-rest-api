@@ -20,4 +20,5 @@ public interface MemberCategoryDao {
 
   int deleteCategoriesByMemberWho(@Param("memberNo") int memberNo,
                                   @Param("memberWho") String memberWho);
+  List<PreferenceCategory> selectHobbyCategoriesByMemberNo(@Param("memberNo") int memberNo);
 }
