@@ -21,4 +21,6 @@ public interface ThreadDao {
   int deleteBoardReplysByBoardNo(int tbNo);
 
   int updateThreadBoard(ThreadBoard threadBoard);
+
+ 
 }

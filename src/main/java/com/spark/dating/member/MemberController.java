@@ -112,7 +112,9 @@ public class MemberController {
 // log.info("member가 비었습니다");
 // return new ApiResponse<>("fail", "member가 비었습니다", 1);
 // }
- // -------------------------승훈님 
+
+
+// -------------------------승훈님 
 
 
 
@@ -126,4 +128,4 @@ public class MemberController {
 
 
 
- // -------------------------주희님   
+// -------------------------주희님   

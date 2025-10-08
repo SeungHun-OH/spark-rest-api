@@ -40,6 +40,14 @@ public class ThreadService {
     return boardReply.getBrNo();
   }
 
+  public int deleteBoardReply(int brNo) {
+    return boardReplyDao.deleteBoardReply(brNo);
+  }
+
+  public int updateBoardReply(BoardReply boardReply) {
+    return boardReplyDao.updateBoardReply(boardReply);
+  }
+
   @Transactional // 댓글 + 본문 삭제 트랜젝션 처리!!
   public int deleteThreadBoard(int tbNo) {
 
@@ -51,7 +59,10 @@ public class ThreadService {
 
     ThreadBoard GetBoard = threadDao.getThreadBoard(threadBoard.getTbNo());
     log.info("수정 전 데이터" + GetBoard.toString());
+    log.info("수정 요청 데이터" + threadBoard.toString());
     
     return threadDao.updateThreadBoard(threadBoard);
   }
+
+
 }

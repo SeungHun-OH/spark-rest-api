@@ -25,4 +25,17 @@
      SYSDATE)
   </insert>
 
+  <delete id = "deleteBoardReply" parameterType="int">
+    DELETE FROM BOARDREPLY
+    WHERE BR_NO = #{brNo}
+  </delete>
+
+  <update id="updateBoardReply" parameterType="BoardReply">
+  UPDATE BOARDREPLY
+  SET 
+    BR_CONTENT = #{brContent},
+    CREATEDAT = SYSDATE
+  WHERE BR_NO = #{brNo}
+  </update>
+
 </mapper> 

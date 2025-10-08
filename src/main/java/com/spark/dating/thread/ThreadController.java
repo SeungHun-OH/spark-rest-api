@@ -75,4 +75,24 @@ public class ThreadController {
     } 
   }
 
+  @DeleteMapping("/thread/boardreply")
+  public ApiResponse<Integer> deleteBoardReply(@RequestParam("brNo") int brNo) {
+    try {
+      int result = threadService.deleteBoardReply(brNo);
+      return new ApiResponse<>("success", "BoardReply 삭제 성공", result);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "BoardReply 삭제 실패" + e, 0);
+    }
+  }
+
+  @PutMapping("/thread/boardreply")
+  public ApiResponse<Integer> updateBoardReply(@RequestBody BoardReply boardReply) {
+    try {
+      int result = threadService.updateBoardReply(boardReply);
+      return new ApiResponse<>("success", "BoardReply 수정 성공", result);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "BoardReply 수정 실패" + e, 0);
+    }
+  }
+
 }

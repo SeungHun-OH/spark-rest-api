@@ -16,6 +16,9 @@ public class AuthConfiguration implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(authInterceptor)
+
+	  //
 		.excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico");
+		// .excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico", "/member/**");
 	}
 }
