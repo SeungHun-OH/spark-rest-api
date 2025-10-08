@@ -1,6 +1,7 @@
 package com.spark.dating.member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class MemberService {
         String jwt = jwtService.createJWT(member.getMId(), member.getMEmail(), member.getMNo());
 
         map.put("result", "success");
-        
+
         // map.put("mId", member.getMId());
         // map.put("mName", member.getMName());
 
@@ -155,16 +156,31 @@ public class MemberService {
     response.setMessage("mid |" + claims.get("mid") + "memail |" + claims.get("memail") + "mno |" + claims.get("mno"));
     return response;
   }
-  
+
   public boolean existsByNo(Long memberId) {
-	  return memberDao.existsByNo(memberId) == 1 ? true : false;
+    return memberDao.existsByNo(memberId) == 1 ? true : false;
   }
 
-  //m_nickname으로 조회
+  // m_nickname으로 조회
   public MemberForFeed selectMemberByMnickname(String m_nickname) {
     return memberDao.selectMemberByMnickname(m_nickname);
   }
-  
+
+  // 회원 사진 조회(단일)
+  public MemberPicture selectMemberPictureByMno(int mNo) {
+    MemberPicture memberPicture = memberPictureDao.selectMemberPictureByM_no(mNo);
+    return memberPicture;
+  }
+
+  // 회원 조회(단일)
+  public MemberForFeed selectMemberByMno(int mNo) {
+    return memberDao.selectMemberByMno(mNo);
+  }
+
+  public List<MemberForFeed> getRandomMembersExceptMe(int myNo, int count) {
+    return memberDao.selectRandomMembersExceptMe(myNo, count);
+  }
+
 }
 
 // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();

@@ -87,7 +87,7 @@ public class FeedController {
 
     @PutMapping("/")
     public Map<String, Object> updateFeed(@RequestPart("feed") Feed feed,
-            @RequestPart("files") MultipartFile[] files) throws IOException {
+            @RequestPart(value = "files", required = false) MultipartFile[] files) throws IOException {
         Map<String, Object> map = feedService.updateFeed(feed, files);
         return map;
     }

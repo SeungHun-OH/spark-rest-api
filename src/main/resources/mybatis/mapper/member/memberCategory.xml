@@ -88,6 +88,23 @@
       AND MC_MEMBERWHO = #{memberWho}
   </delete>
 
+  <select id="selectHobbyCategoriesByMemberNo" resultMap="PreferenceCategoryMap">
+    SELECT 
+      PC.PC_NO,
+      PC.PC_TYPE,
+      PC.PC_TYPENUM,
+      PC.PC_GROUP,
+      PC.PC_NAME,
+      PC.PC_DESC
+    FROM MEMBERCATEGORY MC
+    JOIN PREFERENCECATEGORY PC
+        ON MC.MC_PREFERNO = PC.PC_NO
+    WHERE MC.MC_MEMBERNO = #{memberNo}
+      AND MC.MC_MEMBERWHO = 'S'
+      AND PC.PC_TYPE = 'HOBBY'
+    ORDER BY PC.PC_TYPENUM
+  </select>
+
 </mapper>
 
 <!-- <insert id="insertMemberCategories" parameterType="map">

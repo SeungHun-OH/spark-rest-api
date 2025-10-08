@@ -15,28 +15,33 @@ public class MemberForFeed {
     private String mNickname;
     private String mBio;
     private String mMbti;
-
+    
     public int getmNo() {
         return mNo;
     }
+
     public String getmId() {
         return mId;
     }
+
     public String getmName() {
         return mName;
     }
+
     public int getmAge() {
         return mAge;
     }
+
     public String getmNickname() {
         return mNickname;
     }
+
     public String getmBio() {
         return mBio;
     }
+
     public String getmMbti() {
         return mMbti;
     }
-
 
 }

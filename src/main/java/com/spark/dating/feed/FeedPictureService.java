@@ -31,4 +31,9 @@ public class FeedPictureService {
     	return feedPictureDao.selectFirstImg(m_no);
     }
 
+    public int deleteFeedPicture(int fpNo) {
+        log.info("Deleting feed picture: fp_no={}", fpNo);
+        return feedPictureDao.deleteFeedPicture(fpNo);
+    }
+
 }

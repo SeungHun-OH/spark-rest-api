@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class FeedPictureController {
 
     @GetMapping("/list")
     public List<FeedPicture> getFeedPictureList(@RequestParam("f_no") int f_no) {
+        log.info("f_no : {}", f_no);
         return feedPictureService.getPictures(f_no);
     }
 
@@ -47,4 +49,15 @@ public class FeedPictureController {
         int m_no = AuthenticationContextHolder.getContextMemberNo();
     	return feedPictureService.getFirstImgOfFeed(m_no);
     }
+
+    @DeleteMapping("/{fp_no}")
+    public int deleteFeedPicture(@PathVariable("fp_no") int fpNo) {
+    int rows = feedPictureService.deleteFeedPicture(fpNo);
+    if (rows > 0) {
+        log.info("피드 사진 삭제 완료 fp_no={}", fpNo);
+    } else {
+        log.warn("피드 사진 삭제 실패 또는 존재하지 않음 fp_no={}", fpNo);
+    }
+    return rows;
+}
 }
