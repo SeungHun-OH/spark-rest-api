@@ -44,16 +44,10 @@ public class MemberController {
     return memberService.createMember(member, file);
   }
 
-  // 회원 로그인
+  //회원 로그인
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody MemberLoginRequest memberlogin) {
-
-    log.info("프론트 넘어오는 memberLogin찍기" + memberlogin.toString());
-
     Map<String, Object> map = memberService.login(memberlogin);
-
-    log.info("백엔드 받아오는 memberLogin찍기" + map);
-
     return map;
   }
 
@@ -101,11 +95,11 @@ public class MemberController {
   // }
 
   // jwt 토큰으로 회원정보 조회
-  @GetMapping("/member/jwt")
-  public ApiResponse<Member> selectMemberByJwt(@RequestHeader("Authorization") String authHeader) {
+  @GetMapping("/member/getjwt")
+  public ApiResponse<Map<String, String>> selectMemberByJwt(@RequestHeader("Authorization") String authHeader) {
     // "Bearer eyJ..." 에서 "Bearer " 제거
-    String token = authHeader.substring(7).trim();
-    return memberService.selectMemberByJwt(token);
+  
+    return memberService.selectMemberByJwt(authHeader);
   }
 
   @GetMapping("/member/test")
@@ -151,3 +145,18 @@ public class MemberController {
 // log.info("member가 비었습니다");
 // return new ApiResponse<>("fail", "member가 비었습니다", 1);
 // }
+ // -------------------------승훈님 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // -------------------------주희님   

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.thread.ThreadDao">
+
+  <insert id = "insertThreadBoard" parameterType="ThreadBoard">
+    <selectKey keyProperty="tbNo" resultType="int" order="BEFORE">
+      SELECT THREAD_BOARD_SEQ.NEXTVAL FROM dual
+    </selectKey>
+    INSERT INTO THREADBOARD
+     (TB_NO, 
+      TB_TITLE, 
+      TB_CONTENT, 
+      TB_MEMBERNO, 
+      TB_ACTIVE, 
+      TB_DATE, 
+      CREATEDAT)
+    VALUES
+     (#{tbNo}, 
+      #{tbTitle}, 
+      #{tbContent}, 
+      #{tbMemberNo}, 
+      'Y', 
+      SYSDATE, 
+      SYSDATE)
+  </insert>
+
+  <select id = "getThreadBoardList" resultType="ThreadBoardResponse">
+    SELECT    
+      TB.TB_NO,
+      TB.TB_TITLE,
+      TB.TB_CONTENT,
+      TO_CHAR(TB.TB_DATE, 'YYYY-MM-DD HH24:MI:SS') as tbDate,
+      TB.TB_ACTIVE as tbActive,
+      TB.TB_LIKECOUNT as tbLikeCount,
+      TB.TB_MEMBERNO,
+      TB.TB_VIEWCOUNT as tbViewCount,
+      TB.TB_IMAGENO as tbImageNo,
+
+      TB.CREATEDAT as createdAt,
+      TB.UPDATEDAT as updatedAt,
+      M.M_ID       as memberId,
+      M.M_NAME     as memberName,
+      MP.MP_ATTACHDATA as memberPicture
+
+      FROM THREADBOARD TB
+      JOIN MEMBER M ON TB.TB_MEMBERNO = M.M_NO
+      JOIN MEMBERPICTURE MP ON TB.TB_MEMBERNO = MP.MP_MEMBERNO 
+      
+      WHERE TB.TB_ACTIVE = 'Y'
+      ORDER BY TB.TB_NO DESC
+  </select>
+
+
+  <!-- <select id = "getThreadBoardList" resultType="ThreadBoard">
+    SELECT    
+      TB_NO as tbNo,
+      TB_TITLE as tbTitle,
+      TB_CONTENT as tbContent,
+      TO_CHAR(TB_DATE, 'YYYY-MM-DD HH24:MI:SS') as tbDate,
+      TB_ACTIVE as tbActive,
+      TB_LIKECOUNT as tbLikeCount,
+      TB_MEMBERNO as tbMemberNo,
+      TB_VIEWCOUNT as tbViewCount,
+      TB_IMAGENO as tbImageNo,
+      CREATEDAT as createdAt,
+      UPDATEDAT as updatedAt
+
+      FROM THREADBOARD
+      WHERE TB_ACTIVE = 'Y'
+      ORDER BY TB_NO DESC
+  </select> -->
+
+
+
+</mapper>
