@@ -16,6 +16,7 @@ import com.spark.dating.common.RestApiException;
 import com.spark.dating.common.exception.ChatErrorCode;
 import com.spark.dating.common.exception.JwtErrorCode;
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.member.MemberService;
 import com.spark.dating.utils.JwtUtil;
 import com.spark.dating.utils.UuidBase62Utils;
 
@@ -30,6 +31,10 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
 	@Autowired
 	private ChatRoomService chatRoomService;
+
+	//JwtUtil -> MemberService에서 JwtUtil을 주입받기 때문에 순환참조 문제가 발생할 수 있음
+	@Autowired
+	private MemberService memberService;
 
 	private StompHeaderAccessor accessor;
 
@@ -50,9 +55,16 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 				member.setMNo(jwtUtil.getMemberNo(jwtToken).intValue());
 				log.info(member.toString());
 				log.info(jwtUtil.parseClaims(jwtToken)+"");
-				if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
-					throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
-				}
+
+				// JwtUtil -> MemberService.existsByNo() 를
+				// MemberService.existsByNo() 대체 
+				// 순환참조 문제 해결
+
+				// if (!jwtUtil.existsByNo((jwtUtil.getMemberNo(jwtToken)))) {
+				// 	throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
+				// }
+				memberService.existsByNo(jwtUtil.getMemberNo(jwtToken));
+
 				accessor.getSessionAttributes().put("memberNo", jwtUtil.getMemberNo(jwtToken));
 //				accessor.setUser(new StompPrincipal(jwtUtil.getMemberNo(jwtToken).toString()));
 				Set<String> chatroomBase62UuidList = chatRoomService

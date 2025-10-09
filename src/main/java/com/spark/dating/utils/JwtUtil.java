@@ -25,8 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtUtil {
 
-	@Autowired
-	private MemberService memberService;
+    // !! MemberService에서 JwtUtil을 주입받기 때문에 순환참조 문제가 발생할 수 있음
+
+	// @Autowired
+	// private MemberService memberService;
 	
     private final byte[] secret = "com.spark.dating.web.backend.project.mycompany.secret.key.restapi".getBytes(StandardCharsets.UTF_8);
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 100;
@@ -96,9 +98,9 @@ public class JwtUtil {
         return token.substring(7);
     }
     
-    public boolean existsByNo(Long memberId) {
-    	return memberService.existsByNo(memberId);
-    }
+    // public boolean existsByNo(Long memberId) {
+    // 	return memberService.existsByNo(memberId);
+    // }
     
     public Long getMemberNo(String token) {
 		return parseClaims(token).get("memberNo", Long.class);

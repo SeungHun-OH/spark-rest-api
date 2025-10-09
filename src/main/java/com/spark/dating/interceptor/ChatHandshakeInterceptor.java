@@ -28,29 +28,18 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-			Map<String, Object> attributes) throws Exception {
+		Map<String, Object> attributes) throws Exception {
 		// 추후 jwt를 통해 로그인 검증 과정 추가
 		String jwt = "";
 		String memberId = "test";
 
-		
-		
-		
 		if (request instanceof ServletServerHttpRequest) {
 			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request; // 추후에 헤더에서 jwt 가져오는데 사용
-			
-//			attributes.put("memberId", memberId);
+			//attributes.put("memberId", memberId);
 		}
-		
-		
-		
-		
-		
-		// 추후 jwt유효 검증 및 아이디 검증 
-//		if (stompService.isMemberExist(memberId) == 0) {
-//			return false;
-//		}
-
+    // 추후 jwt유효 검증 및 아이디 검증 
+    // if (stompService.isMemberExist(memberId) == 0) {
+    // return false;}
 		log.info("핸드셰이크 ~~~~~~~~~~");
 		return true;
 	}
@@ -58,7 +47,6 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 	@Override
 	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Exception exception) {
-
 	}
 	
 	@EventListener
@@ -67,11 +55,8 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 	    String sessionId = accessor.getSessionId();
 	    Long memberId = (Long) accessor.getSessionAttributes().get("memberId");
 
+			
 	    // 세션 데이터 정리
-	    
-
 	    log.info("세션 종료: {} (사용자: {})", sessionId, memberId);
 	}
-
-
 }
