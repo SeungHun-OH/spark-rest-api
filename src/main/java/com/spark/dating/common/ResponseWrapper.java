@@ -20,7 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.spark.dating.common.exception.BaseErrorCode;
 
-@RestControllerAdvice(basePackages = { "com.spark.dating.chat", "com.spark.dating.feed", "com.spark.dating.common", "com.spark.dating.hearts", "com.spark.dating.login"})
+@RestControllerAdvice(basePackages = { "com.spark.dating.chat", "com.spark.dating.feed", "com.spark.dating.common", "com.spark.dating.hearts", "com.spark.dating.login", "com.spark.dating.matching"})
 public class ResponseWrapper implements ResponseBodyAdvice<Object> {
 
 	@Override

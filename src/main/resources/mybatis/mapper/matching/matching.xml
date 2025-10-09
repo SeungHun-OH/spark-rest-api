@@ -7,14 +7,23 @@
 <mapper namespace="com.spark.dating.matching.MatchingDao">
 
   <!--구현-->
-  <insert id="create"
+  <!--<insert id="create"
           parameterType="Matching">
     <selectKey keyProperty="mtNo" resultType="int" order="BEFORE">
       SELECT mt_no_seq.NEXTVAL FROM dual
     </selectKey>
     INSERT INTO matching (mtNo, mtHeartsno, mtDate)
     VALUES (#{mtNo}, #{mtHeartsno}, SYSDATE)
-  </insert>
+  </insert>-->
+
+	<insert id="insertHeart"
+          parameterType="com.spark.dating.dto.matching.MatchingLike">
+    <selectKey keyProperty="heartNo" resultType="Long" order="BEFORE">
+      SELECT SEQ_HEARTS_NO.NEXTVAL FROM dual
+    </selectKey>
+    INSERT INTO HEARTS (H_NO, H_SENDUSER, H_RECEIVEUSER, H_DATE, H_REQUESTCHANEL)
+    VALUES (#{heartNo}, #{sendMemberNo}, #{receiveMemberNo}, SYSDATE ,#{requestChannel})
+	</insert>
 
   <select id="selectByMtno" parameterType="int" resultType="Matching">
     SELECT h_no, h_senduser, h_receiveuser, h_date, h_requestchanel
@@ -27,5 +36,40 @@
     DELETE FROM matching
     WHERE mt_no = #{mtNo}
   </delete>
+  
+  
+  <select id="getRandomMatchList" parameterType="hashmap" resultType="Matching"> 
+	 SELECT *
+	FROM (
+	    SELECT
+	        M.M_NAME   AS name,
+	        M.M_AGE    AS age,
+	        M.M_REGION AS region,
+	        M.M_BIO    AS bio,
+	        M.M_UUID   AS uuid,
+	        P.MP_NO    AS mpNo
+	    FROM MEMBER M
+	    JOIN MEMBERPICTURE P
+	      ON P.MP_MEMBERNO = M.M_NO
+	    WHERE M.M_NO != #{memberNo}
+	      AND M.M_GENDER != #{memberGender}
+	      AND NOT EXISTS (
+	          SELECT 1
+	          FROM HEARTS H
+	          WHERE (H.H_SENDUSER = #{memberNo} AND H.H_RECEIVEUSER = M.M_NO)
+	             OR (H.H_RECEIVEUSER = #{memberNo} AND H.H_SENDUSER = M.M_NO)
+	      )
+	    ORDER BY DBMS_RANDOM.VALUE
+	)
+	<![CDATA[ 
+	WHERE ROWNUM <= 5
+	]]>
+  </select>
+  
+  <select id="getMemberPicture" parameterType="Long" resultType="com.spark.dating.dto.matching.MatchingPicture">
+  	SELECT MP_ATTACHTYPE as attachType, MP_ATTACHDATA as data
+	FROM MEMBERPICTURE
+	WHERE MP_NO = #{mpNo}
+  </select>
 
 </mapper>

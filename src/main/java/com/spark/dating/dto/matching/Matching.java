@@ -1,35 +1,25 @@
 package com.spark.dating.dto.matching;
 
-import java.util.Date;
+import java.util.Base64;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
 import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 @ToString
 public class Matching {
-	private int mtNo;
-	private int mtHeartsno;
-	private Date mtDate;
-
-	public int getMtNo() {
-		return mtNo;
+	private String name;
+	private int age;
+	private String region;
+	private String bio;
+	private String uuid;
+	private String url;
+	
+	
+	public void setMpNo(Long mpNo) {
+		this.url = (mpNo != null) ? "/matching/picture/"+mpNo : null;
 	}
-	public int getMtHeartsno() {
-		return mtHeartsno;
-	}
-	public Date getMtDate() {
-		return mtDate;
-	}
-	public void setMtNo(int mtNo) {
-		this.mtNo = mtNo;
-	}
-	public void setMtHeartsno(int mtHeartsno) {
-		this.mtHeartsno = mtHeartsno;
-	}
-	public void setMtDate(Date mtDate) {
-		this.mtDate = mtDate;
-	}
+	
 }

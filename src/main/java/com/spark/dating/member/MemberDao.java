@@ -35,4 +35,6 @@ public interface MemberDao {
   MemberForFeed selectMemberByMno(int mNo);
 
   List<MemberForFeed> selectRandomMembersExceptMe(int myNo, int count);
+  
+  String selectMemberGenderByMno(int memberNo);
 }

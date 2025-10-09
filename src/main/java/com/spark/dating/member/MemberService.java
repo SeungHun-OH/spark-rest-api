@@ -211,6 +211,10 @@ public class MemberService {
 	  return memberDao.getMemberUuidByMemberNo(memberNo);
   }
   
+  public String selectMemberGenderByMno(int memberNo) {
+	  return memberDao.selectMemberGenderByMno(memberNo);
+  }
+  
 }
 
 // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();

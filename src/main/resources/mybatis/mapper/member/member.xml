@@ -135,4 +135,10 @@
   ]]>
 </select>
 
+  <select id="selectMemberGenderByMno" parameterType="int" resultType="String">
+  	SELECT M_GENDER
+	FROM MEMBER
+	WHERE M_NO = #{memberNo}
+  </select>
+
 </mapper>
