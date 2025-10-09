@@ -70,27 +70,6 @@ public class ThreadController {
     }
   }
 
-  // @GetMapping("/thread/boardList")
-  // public ApiResponse<List<ThreadBoardResponse>> getThreadBoardList(
-  // @RequestHeader(value = "Authorization", required = false) String authHeader)
-  // {
-  // try {
-  
-  // log.info("전역 헤더추가 Token getThreadBoardList memberNo : " + AuthenticationContextHolder.getContextMemberNo());
-  // String jwtToken = authHeader.substring(7);
-  // Long memberNo = jwtutil.getMemberNo(jwtToken);
-
-  // log.info("Token 뽑아내기 authHeader : " + authHeader);
-  // log.info("Token 뽑아내기 authHeader MNO : " + memberNo);
-
-  // List<ThreadBoardResponse> threadBoardList =
-  // threadService.getThreadBoardList();
-  // return new ApiResponse<>("success", "threadBoard 목록 조회 성공", threadBoardList);
-  // } catch (Exception e) {
-  // return new ApiResponse<>("fail", "threadBoard 목록 조회 실패" + e, null);
-  // }
-  // }
-
   @GetMapping("/thread/boardsearch")
   public ApiResponse<List<ThreadBoardResponse>> searchThreadBoards(@RequestParam("keyword") String keyword) {
     try {
@@ -132,3 +111,25 @@ public class ThreadController {
   }
 
 }
+
+
+  // @GetMapping("/thread/boardList")
+  // public ApiResponse<List<ThreadBoardResponse>> getThreadBoardList(
+  // @RequestHeader(value = "Authorization", required = false) String authHeader)
+  // {
+  // try {
+  
+  // log.info("전역 헤더추가 Token getThreadBoardList memberNo : " + AuthenticationContextHolder.getContextMemberNo());
+  // String jwtToken = authHeader.substring(7);
+  // Long memberNo = jwtutil.getMemberNo(jwtToken);
+
+  // log.info("Token 뽑아내기 authHeader : " + authHeader);
+  // log.info("Token 뽑아내기 authHeader MNO : " + memberNo);
+
+  // List<ThreadBoardResponse> threadBoardList =
+  // threadService.getThreadBoardList();
+  // return new ApiResponse<>("success", "threadBoard 목록 조회 성공", threadBoardList);
+  // } catch (Exception e) {
+  // return new ApiResponse<>("fail", "threadBoard 목록 조회 실패" + e, null);
+  // }
+  // }

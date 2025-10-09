@@ -78,7 +78,7 @@
       
       WHERE TB.TB_ACTIVE = 'Y'
       AND (TB.TB_TITLE LIKE '%' || #{keyword} || '%' OR TB.TB_CONTENT LIKE '%' || #{keyword} || '%')
-      ORDER BY TB.TB_NO DESC
+      ORDER BY TB.TB_DATE DESC
     </select>
 
 
