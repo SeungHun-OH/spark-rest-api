@@ -10,6 +10,7 @@ import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.common.RestApiException;
 import com.spark.dating.common.exception.JwtErrorCode;
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.member.MemberService;
 import com.spark.dating.utils.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	private JwtUtil jwtUtil;
+
+	@Autowired
+	private MemberService	memberService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -55,9 +59,34 @@ public class AuthInterceptor implements HandlerInterceptor {
 		// 	return true;
 		// }
 		// return false;
-		//  7-------------------------------------------------
+		//  
 
-		return true;
+
+		// -------------------------------------------------
+	  // JwtUtil.existsByNo 구조 -> memberService.existsByNo 구조로 변경
+		String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
+
+    String token = jwtUtil.generateToken(2L);
+
+		log.info("JWT 토큰 {}", jwtToken);
+		if (jwtUtil.isValidToken(jwtToken)) {
+			Long memberNo = jwtUtil.getMemberNo(jwtToken);
+			if (memberNo == null) {
+				throw new RestApiException(JwtErrorCode.EMPTY_JWT);
+			}
+			Member member = new Member();
+			member.setMNo(memberNo.intValue());
+			log.info("JWT 토큰 파싱 {}", jwtUtil.parseClaims(jwtToken));
+			if (!memberService.existsByNo(memberNo)) {
+				throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
+			}
+			AuthenticationContextHolder.setContext(member);
+
+			return true;
+		}
+		return false;
+		 
+		// return true;
 	}
 
 	@Override

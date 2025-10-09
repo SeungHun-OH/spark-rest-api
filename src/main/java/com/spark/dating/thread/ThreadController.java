@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.thread.BoardReply;
 import com.spark.dating.dto.thread.ThreadBoard;
 import com.spark.dating.dto.thread.response.ThreadBoardResponse;
+import com.spark.dating.utils.JwtUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ThreadController {
   @Autowired
   ThreadService threadService;
+
+  @Autowired
+  JwtUtil jwtutil;
 
   @PostMapping("/thread/board")
   public ApiResponse<Integer> insertThreadBoard(@RequestBody ThreadBoard threadBoard) {
@@ -65,6 +70,37 @@ public class ThreadController {
     }
   }
 
+  // @GetMapping("/thread/boardList")
+  // public ApiResponse<List<ThreadBoardResponse>> getThreadBoardList(
+  // @RequestHeader(value = "Authorization", required = false) String authHeader)
+  // {
+  // try {
+  
+  // log.info("전역 헤더추가 Token getThreadBoardList memberNo : " + AuthenticationContextHolder.getContextMemberNo());
+  // String jwtToken = authHeader.substring(7);
+  // Long memberNo = jwtutil.getMemberNo(jwtToken);
+
+  // log.info("Token 뽑아내기 authHeader : " + authHeader);
+  // log.info("Token 뽑아내기 authHeader MNO : " + memberNo);
+
+  // List<ThreadBoardResponse> threadBoardList =
+  // threadService.getThreadBoardList();
+  // return new ApiResponse<>("success", "threadBoard 목록 조회 성공", threadBoardList);
+  // } catch (Exception e) {
+  // return new ApiResponse<>("fail", "threadBoard 목록 조회 실패" + e, null);
+  // }
+  // }
+
+  @GetMapping("/thread/boardsearch")
+  public ApiResponse<List<ThreadBoardResponse>> searchThreadBoards(@RequestParam("keyword") String keyword) {
+    try {
+      List<ThreadBoardResponse> searchResults = threadService.searchThreadBoards(keyword);
+      return new ApiResponse<>("success", "threadBoard 검색 성공", searchResults);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "threadBoard 검색 실패" + e, null);
+    }
+  }
+
   @PostMapping("/thread/boardreply")
   public ApiResponse<Integer> insertBoardReply(@RequestBody BoardReply boardReply) {
     try {
@@ -72,7 +108,7 @@ public class ThreadController {
       return new ApiResponse<>("success", "BoardReply 등록 성공 bRNo?" + boardReply.getBrNo(), brNo);
     } catch (Exception e) {
       return new ApiResponse<>("fail", "threadBaord 등록 실패" + e, 0);
-    } 
+    }
   }
 
   @DeleteMapping("/thread/boardreply")

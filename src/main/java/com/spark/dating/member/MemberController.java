@@ -20,17 +20,22 @@ import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberPicture;
 import com.spark.dating.dto.member.request.MemberLoginRequest;
+import com.spark.dating.utils.JwtUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 public class MemberController {
+
   @Autowired
   MemberService memberService;
 
   @Autowired
   JwtService jwtService;
+
+  @Autowired
+  JwtUtil jwtUtil;
 
   // 회원 생성
   @PostMapping("member/create")
@@ -38,7 +43,7 @@ public class MemberController {
     return memberService.createMember(member, file);
   }
 
-  //회원 로그인
+  // 회원 로그인
   @PostMapping("member/login")
   public Map<String, Object> login(@RequestBody MemberLoginRequest memberlogin) {
     Map<String, Object> map = memberService.login(memberlogin);
@@ -51,6 +56,21 @@ public class MemberController {
     log.info("멤버 업데이트" + member.toString());
     return memberService.updateMember(member);
   }
+
+  // @PutMapping("/member")
+  // public ApiResponse<Integer> updateMember(@RequestBody Member member,
+  // @RequestHeader(value = "Authorization", required = false) String authHeader)
+  // {
+
+  // String jwtToken = authHeader.substring(7);
+  // Long memberNo = jwtUtil.getMemberNo(jwtToken);
+
+  // log.info("Token 뽑아내기 authHeader : " + authHeader);
+  // log.info("Token 뽑아내기 authHeader MNO : " + memberNo);
+
+  // log.info("멤버 업데이트" + member.toString());
+  // return memberService.updateMember(member);
+  // }
 
   // 회원 등록
   @PostMapping("/member")
@@ -82,17 +102,9 @@ public class MemberController {
   }
 
   // jwt 토큰으로 회원정보 조회
-  // @GetMapping("member/jwt")
-  // public ApiResponse<Member> selectMemberByJwt(@RequestParam("jwt") String jwt)
-  // {
-  // return memberService.selectMemberByJwt(jwt);
-  // }
-
-  // jwt 토큰으로 회원정보 조회
   @GetMapping("/member/getjwt")
   public ApiResponse<Map<String, String>> selectMemberByJwt(@RequestHeader("Authorization") String authHeader) {
     // "Bearer eyJ..." 에서 "Bearer " 제거
-  
     return memberService.selectMemberByJwt(authHeader);
   }
 
@@ -105,6 +117,13 @@ public class MemberController {
   }
 }
 
+// jwt 토큰으로 회원정보 조회
+// @GetMapping("member/jwt")
+// public ApiResponse<Member> selectMemberByJwt(@RequestParam("jwt") String jwt)
+// {
+// return memberService.selectMemberByJwt(jwt);
+// }
+
 // log.info("MemberController insertMember값은?" + member);
 // return new ApiResponse<>("fail", member.toString(), 1);
 
@@ -113,19 +132,6 @@ public class MemberController {
 // return new ApiResponse<>("fail", "member가 비었습니다", 1);
 // }
 
+// -------------------------승훈님
 
-// -------------------------승훈님 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// -------------------------주희님   
+// -------------------------주희님

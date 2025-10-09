@@ -22,5 +22,7 @@ public interface ThreadDao {
 
   int updateThreadBoard(ThreadBoard threadBoard);
 
+  List<ThreadBoardResponse> searchThreadBoards(String keyword);
+
  
 }

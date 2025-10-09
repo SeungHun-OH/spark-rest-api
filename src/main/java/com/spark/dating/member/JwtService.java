@@ -53,6 +53,7 @@ public class JwtService {
       JwtParser jwtParser = jwtParserBuilder.build();
       
       Jws<Claims>jws = jwtParser.parseSignedClaims(jwt);
+      
       result = true;
       } catch(ExpiredJwtException e){
         log.info("기간이 만료된 토큰입니다");

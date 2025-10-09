@@ -56,13 +56,15 @@ public class ThreadService {
   }
 
   public int updateThreadBoard(ThreadBoard threadBoard) {
-
-    ThreadBoard GetBoard = threadDao.getThreadBoard(threadBoard.getTbNo());
-    log.info("수정 전 데이터" + GetBoard.toString());
-    log.info("수정 요청 데이터" + threadBoard.toString());
-    
     return threadDao.updateThreadBoard(threadBoard);
   }
 
-
+  public List<ThreadBoardResponse> searchThreadBoards(String keyword) {
+    return threadDao.searchThreadBoards(keyword);
+  }
 }
+
+
+ // ThreadBoard GetBoard = threadDao.getThreadBoard(threadBoard.getTbNo());
+    // log.info("수정 전 데이터" + GetBoard.toString());
+    // log.info("수정 요청 데이터" + threadBoard.toString());
