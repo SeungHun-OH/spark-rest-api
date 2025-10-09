@@ -13,14 +13,16 @@ public class ChatMessageSendResponse {
 	private Long cmNo;
 	private String cmMessage;
 	private String cmDate;
-	private boolean cmSendUserFlag;
+//	private boolean cmSendUserFlag;
+	private String cmSendMemberUuid;
 
-	public static ChatMessageSendResponse from(ChatMessage send, Long opponentMno) {
+	public static ChatMessageSendResponse from(ChatMessage send, String sendMemberUuid) {
 		return ChatMessageSendResponse.builder()
 				.cmNo(send.getCmNo())
 				.cmMessage(send.getCmMessage())
-				.cmSendUserFlag(opponentMno == send.getCmSendMember() ? true : false)
-				.cmSendUserFlag(false)
+//				.cmSendUserFlag(opponentMno == send.getCmSendMember() ? true : false)
+//				.cmSendUserFlag(false)
+				.cmSendMemberUuid(sendMemberUuid)
 				.cmDate(send.getCmDate().toString()).build();
 	}
 

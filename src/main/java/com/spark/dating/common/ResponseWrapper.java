@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.spark.dating.common.exception.BaseErrorCode;
 
-@RestControllerAdvice(basePackages = { "com.spark.dating.chat", "com.spark.dating.feed", "com.spark.dating.common", "com.spark.dating.hearts" })
+@RestControllerAdvice(basePackages = { "com.spark.dating.chat", "com.spark.dating.feed", "com.spark.dating.common", "com.spark.dating.hearts", "com.spark.dating.login"})
 public class ResponseWrapper implements ResponseBodyAdvice<Object> {
 
 	@Override
@@ -64,7 +65,6 @@ public class ResponseWrapper implements ResponseBodyAdvice<Object> {
 			String errorMessage = fieldError.getDefaultMessage();
 			errors.put(fieldName, errorMessage);
 		}
-		System.out.println("여기");
 		return ResponseEntity.badRequest().body(errors);
 	}
 

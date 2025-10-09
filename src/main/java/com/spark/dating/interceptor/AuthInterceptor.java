@@ -27,13 +27,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		log.info(handler.getClass() + "");
+
 		if (!(handler instanceof HandlerMethod)) {
 			return true; // 컨트롤러 메서드가 아닌 경우는 그냥 통과
 		}
-
+		System.err.println(request.getHeader("Authorization"));
+		System.err.println(request.getRequestURL());
 		String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
-//		String token = jwtUtil.generateToken(2L);
-//		System.err.println(token);
 
 		log.info("JWT 토큰 {}", jwtToken);
 		if (jwtUtil.isValidToken(jwtToken)) {
@@ -49,7 +49,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 			}
 
 			AuthenticationContextHolder.setContext(member);
-			
+
 			return true;
 		}
 

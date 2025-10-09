@@ -41,7 +41,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 		accessor = StompHeaderAccessor.wrap(message);
 		StompCommand command = accessor.getCommand();
 		String destination = accessor.getDestination();
-		log.info("Headers: {}", message.getHeaders());
+//		log.info("Headers: {}", message.getHeaders());
 		if (command != null) {
 			switch (command) {
 			case CONNECT:

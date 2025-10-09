@@ -68,7 +68,7 @@ public class ChatMessageService {
 		simpMessagingTemplate.convertAndSend("/sub/room", ChatRoomEvent.builder().lastMessage(message)
 				.chatRoomBase62RoomUUID(chatBase62RoomUUID).lastMessageDate(chatMessage.getCmDate()).build());
 		simpMessagingTemplate.convertAndSend("/sub/room/" + chatBase62RoomUUID,
-				ChatMessageSendResponse.from(chatMessage, opponentMno));
+				ChatMessageSendResponse.from(chatMessage, request.getCmSendMemberUuid()));
 	}
 
 	@Transactional
@@ -92,7 +92,6 @@ public class ChatMessageService {
 //			sessionRegistry.addMapping(opponentMno, UUID.randomUUID().toString());
 //		}
 		
-		System.err.println("멤버 프로필 "+profile.toString());
 		
 //		profile.setmOpponentUuid(sessionRegistry.getUuid(opponentMno));
 		ChatMessageWithMemberResponse response = ChatMessageWithMemberResponse.builder().chatMemberProfile(profile)

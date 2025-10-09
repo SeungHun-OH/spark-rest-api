@@ -22,39 +22,22 @@ public class StompEventListener {
 
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
-	
+
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private SessionRegistry sessionRegistry;
-	
+
 	@EventListener
 	public void handleSessionConnected(SessionConnectEvent event) {
 		StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
 		Long memberNo = (Long) accessor.getSessionAttributes().get("memberNo");
-		if(memberNo == null) {
-			System.err.println("connect principle LONG 값 "+memberNo);
-			System.err.println("connect principle LONG 값 "+accessor.toString());
-			return ;
-		}
-//		String nickName = memberService.selectMnickNameByMno(memberNo);
 		String memberUuid = memberService.getMemberUuidByMemberNo(memberNo);
 		MemberStatusMessage statusMessage = MemberStatusMessage.builder().memberNO(memberNo).memberUuid(memberUuid)
 				.memberStatus(MemberStatus.ONLINE).build();
-//		if (memberNo != null && !sessionRegistry.isSessionActive(memberNo)) {
-		System.err.println("이벤트 리스터 memberNo null을 위한 에러 확인용    "+memberNo);
-//		if (!sessionRegistry.isSessionActive(memberNo)) {
-//			String uuid = UUID.randomUUID().toString();
-//			sessionRegistry.addMapping(memberNo, uuid);
-//			statusMessage.setMemberUuid(uuid);
-//		}
 
-		log.info("connect status msg 11 {}", statusMessage.toString());
 		memberService.updateMemberStatusInfo(statusMessage);
-//		statusMessage.setMemberUuid(sessionRegistry.getUuid(memberNo));
-		log.info("connect status msg 22 {}", statusMessage.toString());
-		System.out.println("statujs  "+ statusMessage.toString());
 		messagingTemplate.convertAndSend("/sub/status", statusMessage);
 	}
 
@@ -65,25 +48,21 @@ public class StompEventListener {
 		String sessionId = accessor.getSessionId();
 
 		Long memberNo = (Long) accessor.getSessionAttributes().get("memberNo");
-		
-		if(memberNo == null) {
-			System.err.println("disconnect principle LONG 값 "+memberNo);
-			return ;
+
+		if (memberNo == null) {
+			System.err.println("disconnect principle LONG 값 " + memberNo);
+			return;
 		}
-		
-		
+
 		String memberUuid = memberService.getMemberUuidByMemberNo(memberNo);
-		
-		MemberStatusMessage statusMessage = MemberStatusMessage.builder().memberUuid(sessionRegistry.getUuid(memberNo)).memberNO(memberNo)
-				.memberUuid(memberUuid).memberStatus(MemberStatus.OFFLINE).build();
-		System.err.println("mem status   "+statusMessage.toString());
+
+		MemberStatusMessage statusMessage = MemberStatusMessage.builder().memberUuid(memberUuid)
+				.memberNO(memberNo).memberUuid(memberUuid).memberStatus(MemberStatus.OFFLINE).build();
+		System.err.println("mem status   " + statusMessage.toString());
 		memberService.updateMemberStatusInfo(statusMessage);
 
 		messagingTemplate.convertAndSend("/sub/status", statusMessage);
 		Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
-//		if (sessionRegistry.isSessionActive(memberNo)) {
-//			sessionRegistry.removeByMno(memberNo);
-//		}
 
 		if (sessionAttributes != null) {
 			sessionAttributes.clear();

@@ -41,8 +41,6 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 //		if (stompService.isMemberExist(memberId) == 0) {
 //			return false;
 //		}
-
-		log.info("핸드셰이크 ~~~~~~~~~~");
 		return true;
 	}
 

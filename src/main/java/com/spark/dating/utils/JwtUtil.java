@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.spark.dating.common.RestApiException;
 import com.spark.dating.common.exception.JwtErrorCode;
+import com.spark.dating.dto.login.AuthMember;
 import com.spark.dating.member.MemberService;
 
 import io.jsonwebtoken.Claims;
@@ -33,10 +34,11 @@ public class JwtUtil {
 
     private final SecretKey secretKey = Keys.hmacShaKeyFor(secret);
     
-    public String generateToken(Long memberNo) {
+    public String generateToken(AuthMember authMember) {
     	long now = System.currentTimeMillis();
         Claims claims = Jwts.claims()
-        		.add("memberNo", memberNo)
+        		.add("memberNo", authMember.getMNo())
+//        		.add("memberUuid", authMember.getMUuid())
         		.build();
     	return Jwts.builder()
         		.claims(claims)
