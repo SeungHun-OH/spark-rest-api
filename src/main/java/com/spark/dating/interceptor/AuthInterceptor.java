@@ -40,7 +40,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 		String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
 
 		log.info("JWT 토큰 {}", jwtToken);
-		if (jwtUtil.isValidToken(jwtToken)) {
+//		if (jwtUtil.isValidToken(jwtToken)) {
 			Long memberNo = jwtUtil.getMemberNo(jwtToken);
 			if (memberNo == null) {
 				throw new RestApiException(JwtErrorCode.EMPTY_JWT);
@@ -53,9 +53,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 			}
 		 	AuthenticationContextHolder.setContext(member);
 
-		 	return true;
-		 }
-		 return false;
+//		 	return true;
+//		 }
+		 return true;
 	}
 
 	@Override
