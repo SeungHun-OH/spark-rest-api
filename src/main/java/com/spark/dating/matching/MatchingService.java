@@ -40,11 +40,12 @@ public class MatchingService {
     	myInfo.put("memberNo", memberNo);
     	myInfo.put("memberGender", memberGender);
     	
+    	// 쿼리문은 로그인한 사용자, 같은 성별인 사람을 제외하고 랜덤하게 섞어 상위 5개를 조회한 데이터를 반환함
     	return matchingDao.getRandomMatchList(myInfo);
         
     }
     public void matchingPostLike(int sendMemberNo,String partnerUuid) {
-    	System.out.println(partnerUuid);
+    	// 회원을 식별하는 uuid를 가지고 mno를 조회 후 로그인한 회원(요청한 보낸 회원), 상대방(요청을 받는 회원), 채널(매칭 or 피드)를 가진 객체의 값을 insert
     	Long reciveMemberNo = memberService.getMemberNoByUuid(partnerUuid);
     	matchingDao.insertHeart(MatchingLike.builder().sendMemberNo(sendMemberNo).receiveMemberNo(reciveMemberNo).requestChannel('M').build());
     }

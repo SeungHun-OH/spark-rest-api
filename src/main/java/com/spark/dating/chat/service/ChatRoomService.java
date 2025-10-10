@@ -32,9 +32,15 @@ public class ChatRoomService {
 
 	@Transactional
 	public void createChatRoom(Long heartsNo, int memberNo) {
+		// heart요청을 승낙한 값을 저장할 객체
 		HeartsRequest heartsRequest = new HeartsRequest();
 		heartsRequest.setHeartsNo(heartsNo);
+		
+		// 해당 쿼리를 수행하면 matchingNo 바인딩 됨
 		heartsService.acceptHeartRequest(heartsRequest);
+		
+		// 최종적으로 채팅방을 위한 값들을 저장할 객체, 해당 부분에 매칭번호가 필요하기 때문에 위에서 pk를 바인딩 시키고 처리해야함
+		// 매칭 번호가 없으면 채팅방이 만들어지면 안되기 때문에 트랜잭션 처리
 		ChatRoomCreateRequest chatRoomCreateRequest = ChatRoomCreateRequest.builder().memberNo(heartsNo).chatRoomUUID(UUID.randomUUID().toString().replace("-", "")).matchingNo(heartsRequest.getMatchingNo()).build(); 
 		
 		if (chatRoomDao.existsMatchingNo(chatRoomCreateRequest.getMatchingNo()) != 1) {
