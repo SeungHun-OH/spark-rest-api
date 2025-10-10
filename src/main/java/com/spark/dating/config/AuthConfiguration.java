@@ -19,7 +19,7 @@ public class AuthConfiguration implements WebMvcConfigurer{
 
 	  //
 		.excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico", "/member/create", "/member/login", 
-		"/member/picture" ,"/thread/boardList", "/thread/board"
+		"/member/picture" ,"/thread/boardList", "/thread/board", "/member/membercategories/", "/member/categories/"
 		);
 
 		// .excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico", "/member/**");

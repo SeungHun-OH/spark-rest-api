@@ -82,11 +82,11 @@
       AND MC.MC_MEMBERWHO = 'P'
   </select>
 
-  <!-- <delete id = "deleteCategoriesByMemberWho" parameterType="map">
+  <delete id = "deleteCategoriesByMemberWho" parameterType="map">
     DELETE FROM MemberCategory
     WHERE MC_MEMBERNO  = #{memberNo}
       AND MC_MEMBERWHO = #{memberWho}
-  </delete> -->
+  </delete>
 
   <select id="selectHobbyCategoriesByMemberNo" resultMap="PreferenceCategoryMap">
     SELECT 
