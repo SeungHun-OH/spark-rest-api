@@ -10,6 +10,7 @@ import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.common.RestApiException;
 import com.spark.dating.common.exception.JwtErrorCode;
 import com.spark.dating.dto.member.Member;
+import com.spark.dating.member.MemberService;
 import com.spark.dating.utils.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	private JwtUtil jwtUtil;
+
+	@Autowired
+	private MemberService memberService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -44,16 +48,14 @@ public class AuthInterceptor implements HandlerInterceptor {
 			Member member = new Member();
 			member.setMNo(memberNo.intValue());
 			log.info("JWT 토큰 파싱 {}", jwtUtil.parseClaims(jwtToken));
-			if (!jwtUtil.existsByNo(memberNo)) {
+			if (!memberService.existsByNo(memberNo)) {
 				throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
 			}
+		 	AuthenticationContextHolder.setContext(member);
 
-			AuthenticationContextHolder.setContext(member);
-
-			return true;
-		}
-
-		return false;
+		 	return true;
+		 }
+		 return false;
 	}
 
 	@Override

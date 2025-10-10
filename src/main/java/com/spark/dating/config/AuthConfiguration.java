@@ -16,6 +16,10 @@ public class AuthConfiguration implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(authInterceptor)
-		.excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico", "/member/login", "/login", "/error", "/matching/picture/**");
+		.excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico", "/member/create", "/member/login", 
+		"/member/picture" ,"/thread/boardList", "/thread/board", "/member/membercategories/", "/member/categories/", "/error", "/matching/picture/**"
+		);
+
+		// .excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico", "/member/**");
 	}
 }

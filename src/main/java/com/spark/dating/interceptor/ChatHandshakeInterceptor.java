@@ -26,7 +26,7 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-			Map<String, Object> attributes) throws Exception {
+		Map<String, Object> attributes) throws Exception {
 		// 추후 jwt를 통해 로그인 검증 과정 추가
 		String jwt = "";
 		String memberId = "test";
@@ -36,7 +36,6 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 
 //			attributes.put("memberId", memberId);
 		}
-
 		// 추후 jwt유효 검증 및 아이디 검증
 //		if (stompService.isMemberExist(memberId) == 0) {
 //			return false;
@@ -47,7 +46,5 @@ public class ChatHandshakeInterceptor implements HandshakeInterceptor {
 	@Override
 	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Exception exception) {
-
 	}
-
 }

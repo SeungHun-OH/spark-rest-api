@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.spark.dating.dto.thread.BoardReply;
 import com.spark.dating.dto.thread.ThreadBoard;
 import com.spark.dating.dto.thread.response.ThreadBoardResponse;
 
@@ -15,4 +14,15 @@ public interface ThreadDao {
 
   List<ThreadBoardResponse> getThreadBoardList();
 
+  ThreadBoard getThreadBoard(int tbNo);
+
+  int deleteThreadBoard(int tbNo);
+
+  int deleteBoardReplysByBoardNo(int tbNo);
+
+  int updateThreadBoard(ThreadBoard threadBoard);
+
+  List<ThreadBoardResponse> searchThreadBoards(String keyword);
+
+ 
 }

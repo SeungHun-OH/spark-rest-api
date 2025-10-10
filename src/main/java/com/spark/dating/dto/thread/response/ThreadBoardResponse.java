@@ -1,9 +1,9 @@
 package com.spark.dating.dto.thread.response;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -38,4 +38,7 @@ public class ThreadBoardResponse {
 
   //MemberPicture
   private byte[] memberPicture;
+
+  //BoardReply
+  private List<BoardReplyResponse> boardReplys;
 }

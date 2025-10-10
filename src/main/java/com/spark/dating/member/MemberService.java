@@ -17,13 +17,16 @@ import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberForFeed;
 import com.spark.dating.dto.member.MemberPicture;
 import com.spark.dating.dto.member.request.MemberLoginRequest;
+import com.spark.dating.utils.JwtUtil;
 
-import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class MemberService {
+
+  @Autowired
+  JwtUtil jwtUtil;
 
   @Autowired
   JwtService jwtService;
@@ -88,10 +91,9 @@ public class MemberService {
     } else {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       boolean result = passwordEncoder.matches(memberlogin.getMPassword(), member.getMPassword());
+      
       if (result) {
-
         String jwt = jwtService.createJWT(member.getMId(), member.getMEmail(), member.getMNo());
-
         map.put("result", "success");
         
 
@@ -101,12 +103,16 @@ public class MemberService {
         map.put("jwt", jwt);
         map.put("message", member.getMName() + "님 환영합니다");
         map.put("mNo", member.getMNo());
+        map.put("data", member);
+
+        //인터셉터Jwt Token 발급
+        map.put("token", jwtUtil.generateToken((long)member.getMNo()));
 
       } else {
         map.put("result", "fail");
         map.put("message", "비밀번호가 틀립니다");
       }
-      map.put("data", member);
+      // map.put("data", member);
     }
     return map;
   }

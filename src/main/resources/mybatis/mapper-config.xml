@@ -31,8 +31,10 @@
     <typeAlias type="com.spark.dating.dto.member.response.PreferenceResponse" alias="PreferenceResponse"/>
 
     <typeAlias type="com.spark.dating.dto.thread.ThreadBoard" alias="ThreadBoard"/>
-
     <typeAlias type="com.spark.dating.dto.thread.response.ThreadBoardResponse" alias="ThreadBoardResponse"/>
+
+    <typeAlias type="com.spark.dating.dto.thread.BoardReply" alias="BoardReply"/>
+    <typeAlias type="com.spark.dating.dto.thread.response.BoardReplyResponse" alias="BoardReplyResponse"/>
 
   </typeAliases>
 
