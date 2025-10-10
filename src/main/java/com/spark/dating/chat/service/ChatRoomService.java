@@ -77,5 +77,15 @@ public class ChatRoomService {
 		
 		return chatRoomDao.findChatRoomIdByUuid(chatRoomUUID);
 	}
+	
+	@Transactional
+	public void leaveChatRoom(String chatBase62RoomUUID) {
+		String chatRoomUUID = UuidBase62Utils.fromBase62(chatBase62RoomUUID).toString().replace("-", "").toUpperCase();
+		Long chatRoomNo = findChatRoomIdByUuid(chatRoomUUID);
+		
+		chatRoomDao.deleteMatchingChatRoomMapping(chatRoomNo);
+		chatRoomDao.deleteChatMessages(chatRoomNo);
+		chatRoomDao.deleteChatRoom(chatRoomNo);
+	}
 
 }

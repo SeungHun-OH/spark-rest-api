@@ -21,4 +21,8 @@ public interface ChatRoomDao {
 	public List<UUID> selectAllChatRoomUUID(String memberNo);
 	public int existsChatroomByMemberNoAndUuid(Map<String,Object> memberNoAndUuid);
 	public Long findChatRoomIdByUuid(String chatRoomUUID);
+	public void deleteMatchingChatRoomMapping(Long chatRoomNo);
+	public void deleteChatMessages(Long chatRoomNo);
+	public void deleteChatRoom(Long chatRoomNo);
+	
 }
