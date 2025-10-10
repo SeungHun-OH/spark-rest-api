@@ -17,6 +17,8 @@ import com.spark.dating.dto.chat.ChatRoom;
 import com.spark.dating.dto.chat.ChatRoomCreateRequest;
 import com.spark.dating.dto.chat.ChatRoomSelectResponse;
 import com.spark.dating.dto.chat.MatchingRoomMapping;
+import com.spark.dating.dto.hearts.HeartsRequest;
+import com.spark.dating.hearts.HeartsService;
 import com.spark.dating.utils.UuidBase62Utils;
 
 @Service
@@ -24,19 +26,24 @@ public class ChatRoomService {
 
 	@Autowired
 	private ChatRoomDao chatRoomDao;
+	
+	@Autowired
+	private HeartsService heartsService;
 
 	@Transactional
-	public void createChatRoom(ChatRoomCreateRequest chatRoomCreateRequest, int memberNo) {
-
-		chatRoomCreateRequest.setMemberNo(Long.valueOf(memberNo));
-
+	public void createChatRoom(Long heartsNo, int memberNo) {
+		HeartsRequest heartsRequest = new HeartsRequest();
+		heartsRequest.setHeartsNo(heartsNo);
+		heartsService.acceptHeartRequest(heartsRequest);
+		ChatRoomCreateRequest chatRoomCreateRequest = ChatRoomCreateRequest.builder().memberNo(heartsNo).chatRoomUUID(UUID.randomUUID().toString().replace("-", "")).matchingNo(heartsRequest.getMatchingNo()).build(); 
+		
 		if (chatRoomDao.existsMatchingNo(chatRoomCreateRequest.getMatchingNo()) != 1) {
 			throw new RestApiException(ChatErrorCode.MATCHING_NOT_FOUND);
 		}
-//		if (chatRoomDao.isValidMatchingUser(chatRoomCreateRequest.getMatchingNo()) != 1) {
-//			throw new RestApiException(ChatErrorCode.USER_NOT_IN_MATCHING);
-//		}
-		chatRoomCreateRequest.setChatRoomUUID(UUID.randomUUID().toString().replace("-", ""));
+		if (chatRoomDao.isValidMatchingUser(chatRoomCreateRequest.getMatchingNo()) != 1) {
+			throw new RestApiException(ChatErrorCode.USER_NOT_IN_MATCHING);
+		}
+		
 		System.out.println(chatRoomCreateRequest.toString());
 		chatRoomDao.createChatRoom(chatRoomCreateRequest);
 		chatRoomDao.insertMatchingRoomMapping(
@@ -46,8 +53,6 @@ public class ChatRoomService {
 
 	public List<ChatRoomSelectResponse> selectAllChatRoom(int memberNo) {
 		List<ChatRoomSelectResponse> chatRoomList = ChatRoom.toDtoList(chatRoomDao.selectAllChatRoom(memberNo));
-		
-		
 		return chatRoomList;
 	}
 

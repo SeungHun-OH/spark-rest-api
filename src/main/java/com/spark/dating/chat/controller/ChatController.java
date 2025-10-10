@@ -37,11 +37,11 @@ public class ChatController implements ChatControllerDocs {
 	@Autowired
 	private ChatMessageService chatMessageService;
 
-	@PostMapping("/rooms")
-	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest ChatRoomCreateRequest) {
-		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
-		chatRoomService.createChatRoom(ChatRoomCreateRequest, memberNo);
-	}
+//	@PostMapping("/rooms")
+//	public void createChatRoom(@Valid @RequestBody ChatRoomCreateRequest ChatRoomCreateRequest) {
+//		final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+//		chatRoomService.createChatRoom(ChatRoomCreateRequest, memberNo);
+//	}
 
 	@GetMapping("/list")
 	public List<ChatRoomSelectResponse> chatRoomList() {
