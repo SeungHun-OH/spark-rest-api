@@ -88,6 +88,7 @@ public class MemberController {
   @PostMapping("/member/picture")
   public ApiResponse<Integer> insertMemberPicture(@RequestParam("mNo") int mNo,
       @RequestParam("file") MultipartFile file) {
+
     return memberService.insertMemberPicture(mNo, file);
   }
 
