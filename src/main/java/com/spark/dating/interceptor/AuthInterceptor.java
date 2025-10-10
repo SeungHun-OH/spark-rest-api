@@ -25,68 +25,37 @@ public class AuthInterceptor implements HandlerInterceptor {
 	private JwtUtil jwtUtil;
 
 	@Autowired
-	private MemberService	memberService;
+	private MemberService memberService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		log.info(handler.getClass() + "");
+
 		if (!(handler instanceof HandlerMethod)) {
 			return true; // 컨트롤러 메서드가 아닌 경우는 그냥 통과
 		}
+		System.err.println(request.getHeader("Authorization"));
+		System.err.println(request.getRequestURL());
+		String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
 
-		// -------------------------------------------------
-	  // 로그인시 JWT 검증은 예외가 필요해서 추후에 적용할것
-		// String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
+		log.info("JWT 토큰 {}", jwtToken);
+//		if (jwtUtil.isValidToken(jwtToken)) {
+			Long memberNo = jwtUtil.getMemberNo(jwtToken);
+			if (memberNo == null) {
+				throw new RestApiException(JwtErrorCode.EMPTY_JWT);
+			}
+			Member member = new Member();
+			member.setMNo(memberNo.intValue());
+			log.info("JWT 토큰 파싱 {}", jwtUtil.parseClaims(jwtToken));
+			if (!memberService.existsByNo(memberNo)) {
+				throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
+			}
+		 	AuthenticationContextHolder.setContext(member);
 
-    // String token = jwtUtil.generateToken(2L);
-
-		// log.info("JWT 토큰 {}", jwtToken);
-		// if (jwtUtil.isValidToken(jwtToken)) {
-		// 	Long memberNo = jwtUtil.getMemberNo(jwtToken);
-		// 	if (memberNo == null) {
-		// 		throw new RestApiException(JwtErrorCode.EMPTY_JWT);
-		// 	}
-		// 	Member member = new Member();
-		// 	member.setMNo(memberNo.intValue());
-		// 	log.info("JWT 토큰 파싱 {}", jwtUtil.parseClaims(jwtToken));
-		// 	if (!jwtUtil.existsByNo(memberNo)) {
-		// 		throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
-		// 	}
-
-		// 	AuthenticationContextHolder.setContext(member);
-
-		// 	return true;
-		// }
-		// return false;
-		//  
-
-
-		// -------------------------------------------------
-	  // JwtUtil.existsByNo 구조 -> memberService.existsByNo 구조로 변경
-		// String jwtToken = jwtUtil.getToken(request.getHeader("Authorization"));
-
-    // String token = jwtUtil.generateToken(2L);
-
-		// log.info("JWT 토큰 {}", jwtToken);
-		// if (jwtUtil.isValidToken(jwtToken)) {
-		// 	Long memberNo = jwtUtil.getMemberNo(jwtToken);
-		// 	if (memberNo == null) {
-		// 		throw new RestApiException(JwtErrorCode.EMPTY_JWT);
-		// 	}
-		// 	Member member = new Member();
-		// 	member.setMNo(memberNo.intValue());
-		// 	log.info("JWT 토큰 파싱 {}", jwtUtil.parseClaims(jwtToken));
-		// 	if (!memberService.existsByNo(memberNo)) {
-		// 		throw new RestApiException(JwtErrorCode.USER_NOT_FOUND);
-		// 	}
-		// 	AuthenticationContextHolder.setContext(member);
-
-		// 	return true;
-		// }
-		// return false;
-		 
-		return true;
+//		 	return true;
+//		 }
+		 return true;
 	}
 
 	@Override

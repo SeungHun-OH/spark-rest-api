@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spark.dating.dto.chat.MemberStatusMessage;
 import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.member.Member;
 import com.spark.dating.dto.member.MemberForFeed;
@@ -197,6 +198,31 @@ public class MemberService {
     return memberDao.selectRandomMembersExceptMe(myNo, count);
   }
 
+  public void updateMemberStatusInfo(MemberStatusMessage memberStatus) {
+	  memberDao.updateMemberStatusInfo(memberStatus);
+  }
+  
+  public String selectMnickNameByMno (Long memberNo) {
+	  return memberDao.selectMnickNameByMno(memberNo);
+  }
+  
+  public int checkUuidMatch(Map<String, Object> memberNoAndUuidMap) {
+	  System.err.println("체크 매치 uuid "+ memberNoAndUuidMap.toString());
+	  return 0;
+  }
+  
+  public Long getMemberNoByUuid(String uuid) {
+	  return memberDao.getMemberNoByUuid(uuid);
+  }
+  
+  public String getMemberUuidByMemberNo(Long memberNo) {
+	  return memberDao.getMemberUuidByMemberNo(memberNo);
+  }
+  
+  public String selectMemberGenderByMno(int memberNo) {
+	  return memberDao.selectMemberGenderByMno(memberNo);
+  }
+  
 }
 
 // PasswordEncoder passwordEncode = new BCryptPasswordEncoder();

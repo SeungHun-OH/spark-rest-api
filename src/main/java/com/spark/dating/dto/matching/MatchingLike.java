@@ -1,4 +1,4 @@
-package com.spark.dating.dto.chat;
+package com.spark.dating.dto.matching;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
-public class ChatRoomCreateRequest {
+public class MatchingLike {
 
-	private Long matchingNo;
-	private Long memberNo;
-	private String chatRoomUUID;
-	private long chatRoomNo;
-
+	private Long heartNo;
+	private int sendMemberNo;
+	private Long receiveMemberNo;
+	char requestChannel;
 }

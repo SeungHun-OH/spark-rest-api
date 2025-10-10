@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spark.dating.login.dao.LoginDao">
+
+	<select id="selectMemberById" parameterType="String" resultType="com.spark.dating.dto.login.AuthMember">
+	SELECT M_NO, M_ID, M_PASSWORD, M_UUID, M_NAME
+    FROM MEMBER
+    WHERE M_ID = #{memberId}
+	</select>
+	
+	<select id="selectMemberByMno" parameterType="int" resultType="com.spark.dating.dto.login.MyInfo">
+	SELECT M_ID as id, M_UUID as uuid, M_NAME as name
+    FROM MEMBER
+    WHERE M_NO = #{memberNo}
+	</select>
+
+</mapper>

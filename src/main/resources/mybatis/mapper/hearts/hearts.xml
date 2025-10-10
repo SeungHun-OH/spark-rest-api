@@ -7,13 +7,12 @@
 <mapper namespace="com.spark.dating.hearts.HeartsDao">
 
   <!--구현-->
-  <insert id="create"
-          parameterType="Hearts">
-    <selectKey keyProperty="hNo" resultType="int" order="BEFORE">
-      SELECT h_no_seq.NEXTVAL FROM dual
+  <insert id="createMatching" parameterType="com.spark.dating.dto.hearts.HeartsRequest">
+    <selectKey keyProperty="matchingNo" order="BEFORE" resultType="Long">
+      SELECT SEQ_MATCHING_NO.NEXTVAL FROM dual
     </selectKey>
-    INSERT INTO hearts (h_no, h_senduser, h_receiveuser, h_date, h_requestchanel)
-    VALUES (#{hNo}, #{hSendUser}, #{hReceiveUser}, SYSDATE, #{hRequestChanel})
+    INSERT INTO MATCHING (MT_NO, MT_HEARTSNO, MT_DATE)
+    VALUES (#{matchingNo}, #{heartsNo}, SYSDATE )
   </insert>
 
   <select id="selectByHno" parameterType="int" resultType="Hearts">
@@ -29,10 +28,29 @@
       AND h_requestchanel = #{h_requestchanel}
   </select>
 
-  <delete id="delete"
-          parameterType="int">
+  <delete id="injectHeartRequest"
+          parameterType="Long">
     DELETE FROM hearts
-    WHERE h_no = #{hNo}
+    WHERE h_no = #{heartsNo}
   </delete>
+  
+  <select id="selectReceivedHeartRequests" parameterType="int" resultType="Hearts">
+	SELECT 
+	    H.H_NO             AS no,
+	    H.H_DATE           AS requestDate,
+	    H.H_REQUESTCHANEL  AS reqeustChannel,
+	    M.M_NAME           AS name,
+	    M.M_AGE            AS age,
+	    M.M_REGION         AS region,
+	    M.M_UUID           AS uuid,
+	    P.MP_NO            AS mpNo
+	FROM HEARTS H
+	JOIN MEMBER M
+	  ON H.H_SENDUSER = M.M_NO
+	LEFT JOIN MEMBERPICTURE P
+	  ON P.MP_MEMBERNO = M.M_NO
+	WHERE H.H_RECEIVEUSER = #{memberNO}
+	ORDER BY requestDate DESC
+  </select>
 
 </mapper>

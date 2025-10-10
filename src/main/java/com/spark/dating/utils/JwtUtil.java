@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.spark.dating.common.RestApiException;
 import com.spark.dating.common.exception.JwtErrorCode;
+import com.spark.dating.dto.login.AuthMember;
 import com.spark.dating.member.MemberService;
 
 import io.jsonwebtoken.Claims;
@@ -31,7 +32,7 @@ public class JwtUtil {
 	// private MemberService memberService;
 	
     private final byte[] secret = "com.spark.dating.web.backend.project.mycompany.secret.key.restapi".getBytes(StandardCharsets.UTF_8);
-    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 100;
+    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 300;
 
     private final SecretKey secretKey = Keys.hmacShaKeyFor(secret);
     
@@ -39,6 +40,7 @@ public class JwtUtil {
     	long now = System.currentTimeMillis();
         Claims claims = Jwts.claims()
         		.add("memberNo", memberNo)
+//        		.add("memberUuid", authMember.getMUuid())
         		.build();
     	return Jwts.builder()
         		.claims(claims)

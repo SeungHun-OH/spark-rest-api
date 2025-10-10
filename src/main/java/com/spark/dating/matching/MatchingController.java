@@ -1,14 +1,24 @@
 package com.spark.dating.matching;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spark.dating.common.AuthenticationContextHolder;
+import com.spark.dating.dto.feed.FeedPicture;
 import com.spark.dating.dto.matching.Matching;
+import com.spark.dating.dto.matching.MatchingPicture;
+import com.spark.dating.dto.member.MemberPicture;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,20 +38,37 @@ public class MatchingController {
     */
     
     //뭐가 필요하지? 우선 회원번호 필요, 받은 회원번호 필요, 경로도 필요
-    @PostMapping("/")
-    public void createMatching(@RequestParam("h_no") int h_no) {
-        matchingService.createMatching(h_no);
-    }
+//    @PostMapping("/")
+//    public void createMatching(@RequestParam("h_no") int h_no) {
+//        matchingService.createMatching(h_no);
+//    }
     
     @GetMapping("/")
     //매칭 테이블을 모두 가지고 올 이유가 있을까? 해당 하는 매칭 테이블만 가지고 오면 될 거 같은데
-    public Matching getMatching(@RequestParam("mt_no") int mt_no) {
-        return matchingService.getMatching(mt_no);
+    public List<Matching> createMatching() {
+        final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+    	return matchingService.getMatching(memberNo);
     }
+    
+    @PostMapping("/like")
+    public void matchingPostLike(@RequestBody String partnerUuid) {
+    	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+    	matchingService.matchingPostLike(memberNo ,partnerUuid);
+    }
+    
 
     @DeleteMapping("/")
     public int deleteMatching(@RequestParam("mt_no") int mt_no) {
         return matchingService.deleteMatching(mt_no);
+    }
+    
+    @GetMapping("/picture/{memberPictureNo}")
+    public ResponseEntity<byte[]> getFeedPicture(@PathVariable("memberPictureNo") Long mpNo) {
+    	MatchingPicture matchingPicture = matchingService.getMemberPicture(mpNo);
+        return ResponseEntity
+        .ok()
+        .contentType(MediaType.parseMediaType(matchingPicture.getAttachType()))
+        .body(matchingPicture.getData());
     }
     
 }

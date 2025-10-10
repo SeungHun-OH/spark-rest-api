@@ -5,13 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spark.dating.chat.service.ChatRoomService;
+import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.hearts.Hearts;
+import com.spark.dating.dto.hearts.HeartsRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,22 +31,38 @@ public class HeartsController {
         - 내가 좋아요한 프로필 리스트 (추후에 구현)
         - 나를 좋아요한 프로필 리스트
     */
+	
     @Autowired
     private HeartsService heartsService;
+    
+    @Autowired
+    private ChatRoomService chatRoomService;
 
-    @PostMapping("/")
-    public Hearts createHearts(@RequestBody Hearts hearts) {
-        return heartsService.createHearts(hearts);
+//    @PostMapping("/")
+//    public Hearts createHearts(@RequestBody Hearts hearts) {
+//        return heartsService.createHearts(hearts);
+//    }
+    @PostMapping("/{heartsNo}/accept")
+    public void acceptHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
+    	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+//    	System.out.println();
+		chatRoomService.createChatRoom(heartsNo, memberNo);
+    	
+    	//내일 이거만 이어서 하면 될듯
+    	// 채팅방 연동확인
+//    	return heartsService.createHearts(hearts);
     }
 
     //나를 좋아요한 리스트 //requestChanel에 따라 변경 가능
     @GetMapping("/")
-    public List<Hearts> getHearts(@RequestParam("h_requestchanel") char h_requestchanel) {
-        return heartsService.getHearts(h_requestchanel);
+    public List<Hearts> getHearts() 
+    {
+    	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+        return heartsService.getHearts(memberNo);
     }
 
-    @DeleteMapping("/")
-    public int deleteHearts(@RequestParam("h_no") int h_no) {
-        return heartsService.deleteHearts(h_no);
+    @DeleteMapping("/{heartsNo}/reject")
+    public void injectHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
+        heartsService.injectHeartRequest(heartsNo);
     }
 }
