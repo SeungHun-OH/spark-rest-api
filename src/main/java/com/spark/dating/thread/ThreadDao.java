@@ -24,5 +24,5 @@ public interface ThreadDao {
 
   List<ThreadBoardResponse> searchThreadBoards(String keyword);
 
- 
+  List<ThreadBoard> searchThreadBoardPrompt(List<String> keywords);
 }

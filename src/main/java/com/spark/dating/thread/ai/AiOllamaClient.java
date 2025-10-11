@@ -8,10 +8,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+@Slf4j
 @Component
 public class AiOllamaClient {
 
@@ -41,7 +44,7 @@ public class AiOllamaClient {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error: " + e.getMessage();
+            return "AiOllamaClient Error: " + e.getMessage();
         }
     }
 }
