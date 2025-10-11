@@ -1,6 +1,7 @@
 package com.spark.dating.thread.ai;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,10 +46,10 @@ public class AiController {
   }
 
   @GetMapping("/Ai/generaeAnswerBoardQuestion")
-  public String generateAnswerBoardQuestion(@RequestParam("question") String question) {
+  public  Map<String, Object> generateAnswerBoardQuestion(@RequestParam("question") String question) {
 
-    String result = aiService.generateAnswerBoardQuestion(question);
-    log.info("AiService generaeAnswerBoardQuestion 컨트롤러 실행 머라왔냐" +  result);
-    return result;
+    Map<String, Object>map = aiService.generateAnswerBoardQuestion(question);
+    log.info("AiService generaeAnswerBoardQuestion 컨트롤러 실행 머라왔냐" +  map);
+    return map;
   }
 }

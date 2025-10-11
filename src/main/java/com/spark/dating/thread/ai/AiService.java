@@ -1,6 +1,7 @@
 package com.spark.dating.thread.ai;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -68,40 +69,103 @@ public class AiService {
   }
 
   // 프롬프트로 단어를 AI로 뽑아 게시판 RAG 기반으로 질문 -> AI -> RAG -> 답변
-  public String generateAnswerBoardQuestion(String question) {
+  public Map<String, Object> generateAnswerBoardQuestion(String question) {
+    Map<String, Object> map = new HashMap<>();
+    List<String> keywords = FilterPromtKeword(question);
 
-    List<String> kewords = FilterPromtKeword(question);
+    List<ThreadBoard> threadBoards = threadDao.searchThreadBoardPrompt(keywords);
 
-    String context = threadDao.searchThreadBoardPrompt(kewords).stream()
+    List<Map<String, String>> newboards = threadBoards.stream().map(p -> {
+      Map<String, String> m = new HashMap<>();
+      m.put("tbTitle", p.getTbTitle());
+      m.put("tbContent", p.getTbContent());
+      return m;
+    }).toList();
+
+    String context = threadBoards.stream()
         .map(p -> p.getTbTitle() + " " + p.getTbContent())
         .collect(Collectors.joining("\n\n"));
+
+    // 프롬프트용 제목 리스트들
+    List<String> titles = newboards.stream()
+        .map(b -> b.get("tbTitle"))
+        .filter(Objects::nonNull)
+        .filter(t -> !t.isBlank())
+        .toList();
+
+    String titleList = titles.stream()
+        .map(t -> "• " + t)
+        .collect(Collectors.joining("\n"));
+
     String prompt = """
-        질문: %s
-        너는 지금 연애 상담 게시판의 조언자야.
-        아래 사용자의 고민을 읽고, 게시글들을 참고해서 **따뜻하고 진심 어린 한국어로** 조언해줘.
-        반드시 공감과 현실적인 조언이 함께 담기도록 해.
-        너 자신이 고민하는 것처럼 말하지 말고, **상담해주는 입장으로** 말해야 해.
-        영어는 절대 사용하지 마.
+                질문: %s
+
+        너는 지금 연애 고민 게시판의 따뜻한 조언자야.
+
+        아래는 참고용 게시글 데이터야.
+        각 게시글에는 "tbTitle"(제목) 과 "tbContent"(본문)이 포함되어 있어.
+        이 데이터들을 참고해서 질문자의 고민에 대한 진심 어린 조언을 작성해줘.
+
+        [참고 게시글 요약 목록]
         %s
-        위 내용을 참고해서 공감 있고 따뜻하게, 사람처럼 대화하듯이 대답해줘.
-        """.formatted(question, context);
-    // return ("AI뽑아낸 kewords = " + kewords + "\n" + "게시판 리스트AI 쿼리 = \n" + prompt + "\n AI답변 \n----------\n " + aiOllamaClient.generateText(prompt));
-    return (aiOllamaClient.generateText(prompt)); 
+        [참고 게시글 전체 내용]
+        %s
+        ---
+
+        작성 원칙:
+        1. 반드시 질문자의 고민에 집중해서 답변해. (참고글 복붙 금지)
+        2. 하나의 완성된 상담글처럼 자연스럽게 작성해.
+        3. 상담자의 말투로, 따뜻하고 진심 어린 어조를 유지해.
+        4. 출력은 오직 한글 문장만 포함해야 한다.
+           - 영어, 숫자, 이모지, 특수문자, 마크다운 기호(`*`, `#`, `>`, ```, 등) 절대 사용 금지.
+           - 한글 외 문자가 생성되면 반드시 제거하고 한글만 남겨야 한다.
+        5. 문장은 5~10문장 내외로 구성해.
+        6. 문체는 자연스럽고 대화하듯이 써.
+        7. ‘첫째’, ‘둘째’ 같은 나열형 문체는 절대 쓰지 마.
+
+        ---
+
+        추가 지시:
+        - 답변 마지막에는 짧게 공감 한마디를 덧붙여줘.
+          예: "비슷한 고민을 가진 분들도 많아요, 혼자라 생각하지 마요."
+        - 그리고 마지막 1~2문장 안에는 아래 [참고 게시글 요약 목록]의 **tbTitle** 값 중에서
+          2~3개를 선택해 자연스럽게 언급해.
+          - 반드시 실제 존재하는 제목(tbTitle)만 사용해야 해.
+          - 새로운 제목을 창작하거나 바꾸지 마.
+          - 제목은 따옴표(“ ”)로 감싸서 써야 해.
+          - 제목은 너무 많지 않게, 2~3개 정도만 자연스럽게 포함해.
+
+        ---
+
+        출력 형식:
+        한글 문장만. (한글 외 문자 전부 금지)
+
+        지금부터 %s 에 대한 따뜻하고 현실적인 상담 답변을 작성해줘.
+                        """.formatted(question, titleList, context, question);
+    map.put("keywords", keywords);
+    map.put("answer", aiOllamaClient.generateText(prompt));
+    map.put("boards", newboards);
+
+    // return ("AI뽑아낸 kewords = " + kewords + "\n" + "게시판 리스트AI 쿼리 = \n" + prompt +
+    // "\n AI답변 \n----------\n " + aiOllamaClient.generateText(prompt));
+
+    // - 예:
+    //   “연락이 줄어드는 게 불안해요”, “그 사람의 마음이 멀어진 걸까” 같은 글에서도 비슷한 고민이 있었어요.
+    //   당신도 그 글들처럼 천천히 마음을 다듬어가면 좋겠어요.
+
+    return map;
   }
 
   public List<String> FilterPromtKeword(String question) {
     String prompt = """
-        다음 문장에서 검색에 사용할 핵심 키워드만 3~5개 뽑아줘.
-        - 반드시 **JSON 문자열 배열(String Array)** 형식으로만 출력해.
-        - 예를 들어 ["연락", "고민", "어려움"] 처럼, 각 단어는 반드시 따옴표("")로 감싸고 쉼표로 구분해.
-        - **객체나 키(`word:` 등)**, 설명 문장, 다른 텍스트는 절대 포함하지 마.
-        - JSON 배열 외의 문장, 해설, 설명, 마크다운 문법(예: ```json) 도 포함하지 마.
-        - 불필요한 조사, 접속사, 형용사는 제외하고 **명사 중심**으로만 선택해.
-        - 영어 단어는 절대 포함하지 말고, 반드시 **한글 단어만** 사용해.
-        예시:
-        ["연락", "고민", "어려움"]
-                문장: "%s"
-                """.formatted(question);
+              다음 문장에서 핵심 키워드 3~5개를 추출해.
+        명사 중심으로만 선택하고, 조사는 빼.
+        출력은 반드시 아래 형식으로만 해:
+        ["키워드1", "키워드2", "키워드3"]
+        그 외 어떤 설명, 문장, JSON 코드 블록, 마크다운 기호도 절대 포함하지 마.
+        영어 단어, 숫자, 특수문자는 사용하지 마.
+        문장: "%s"
+                        """.formatted(question);
     try {
       String response = aiOllamaClient.generateText(prompt);
       String jsonPart = response.substring(response.indexOf("["), response.indexOf("]") + 1);
