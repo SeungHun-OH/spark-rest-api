@@ -18,11 +18,13 @@ public interface ThreadDao {
 
   int deleteThreadBoard(int tbNo);
 
-  int deleteBoardReplysByBoardNo(int tbNo);
+  int deleteBoardRepliesByBoardNo(int tbNo);
 
   int updateThreadBoard(ThreadBoard threadBoard);
 
   List<ThreadBoardResponse> searchThreadBoards(String keyword);
 
   List<ThreadBoard> searchThreadBoardPrompt(List<String> keywords);
+
+  List<Integer> getThreadBoardListTbNo();
 }

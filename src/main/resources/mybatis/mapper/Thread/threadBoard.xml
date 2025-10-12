@@ -109,6 +109,13 @@
       ORDER BY TB.TB_NO DESC
   </select>
 
+   <select id = "getThreadBoardListTbNo" resultType="int">
+    SELECT    
+      TB.TB_NO
+      FROM THREADBOARD TB
+      ORDER BY DBMS_RANDOM.VALUE
+  </select>
+
   <select id="getRepliesByBoardNo" parameterType="int" resultMap="BoardReplyResponseMap">
     SELECT
       BR.BR_NO,

@@ -39,10 +39,10 @@ public class AiController {
     }
   }
 
-  @PostMapping("/AI/BoardReplyGenerate")
-  public ApiResponse<String> aiBoardReplyGenerate(){
-    aiService.aiBoardReplyGenerate();
-    return new ApiResponse<String>("success", "성공", "true");
+  @PostMapping("/Ai/BoardReplyGenerate")
+  public ApiResponse<String> aiBoardReplyGenerate(@RequestParam("count") int count){
+    String brNosString = aiService.aiBoardReplyGenerate(count);
+    return new ApiResponse<String>("success", "성공", brNosString);
   }
 
   @GetMapping("/Ai/FilterPromtKeword")

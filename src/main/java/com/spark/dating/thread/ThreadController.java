@@ -70,6 +70,16 @@ public class ThreadController {
     }
   }
 
+   @GetMapping("/thread/boardList/ByReplyCount")
+  public ApiResponse<List<ThreadBoardResponse>> getThreadBoardListByReplyCount() {
+    try {
+      List<ThreadBoardResponse> threadBoardList = threadService.getThreadBoardListByReplyCount();
+      return new ApiResponse<>("success", "threadBoard 목록 조회 성공", threadBoardList);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "threadBoard 목록 조회 실패" + e, null);
+    }
+  }
+
   @GetMapping("/thread/boardsearch")
   public ApiResponse<List<ThreadBoardResponse>> searchThreadBoards(@RequestParam("keyword") String keyword) {
     try {
@@ -100,6 +110,16 @@ public class ThreadController {
     }
   }
 
+  @DeleteMapping("/thread/deleteBoardReplyAll")
+  public ApiResponse<Integer> deleteBoardReplyAll() {
+    try {
+      threadService.deleteBoardReplyAll();
+      return new ApiResponse<>("success", "BoardReply전체 삭제 성공", 1);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", "BoardReply전체 삭제 실패" + e, 0);
+    }
+  }
+
   @PutMapping("/thread/boardreply")
   public ApiResponse<Integer> updateBoardReply(@RequestBody BoardReply boardReply) {
     try {
@@ -109,6 +129,8 @@ public class ThreadController {
       return new ApiResponse<>("fail", "BoardReply 수정 실패" + e, 0);
     }
   }
+
+  
 
 }
 

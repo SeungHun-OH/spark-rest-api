@@ -6,17 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spark.dating.dto.member.Member;
+import com.spark.dating.dto.thread.BoardReply;
 import com.spark.dating.dto.thread.ThreadBoard;
 import com.spark.dating.member.MemberDao;
+import com.spark.dating.thread.BoardReplyDao;
 import com.spark.dating.thread.ThreadDao;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +33,9 @@ public class AiService {
 
   @Autowired
   private ThreadDao threadDao;
+
+  @Autowired
+  private BoardReplyDao boardReplyDao;
 
   private static final String[] PROMPTS = {
       "20~30대 남녀가 친구에게 털어놓듯이, 감정이 섬세하게 느껴지는 짧은 연애 고민글을 작성해줘. "
@@ -97,7 +100,7 @@ public class AiService {
     for (int i = 0; i < Math.min(threadBoards.size(), 3); i++) {
       content += threadBoards.get(indices.get(i)).getTbContent() + "\n";
     }
-    log.info("AiService title 뽑아내기 "+ title);
+    log.info("AiService title 뽑아내기 " + title);
     String prompt = """
         너는 연애 고민 게시판의 따뜻한 상담자야.
         [질문]
@@ -152,8 +155,40 @@ public class AiService {
     return threadDao.searchThreadBoardPrompt(FilterPromtKeword(question));
   }
 
-  public void aiBoardReplyGenerate() {
-    throw new UnsupportedOperationException("Unimplemented method 'aiBoardReplyGenerate'");
+  public String aiBoardReplyGenerate(int count) {
+    String brNosSt = "";
+    List<Integer> brNos = threadDao.getThreadBoardListTbNo();
+
+    for (int i = 0; i < count; i++) {
+      int randomBrNum = brNos.get(new Random().nextInt(brNos.size()));
+      Member member = memberDao.getRandomMember();
+      
+      String tbTitle = threadDao.getThreadBoard(randomBrNum).getTbTitle();
+      String tbContent = threadDao.getThreadBoard(randomBrNum).getTbContent();
+
+      String prompt = """
+          너는 한국 커뮤니티의 댓글 작성자야.
+          항상 한국어로만 대답해야 해. 절대로 영어를 사용하지 마.
+          %s 글을 읽고, 글 분위기에 어울리는 자연스러운 짧은 댓글을 한 줄 써줘.
+          
+          조건:
+          - 반드시 한글로만 작성.
+          - 길이 60자 이하.
+          - 너무 딱딱하지 않고 자연스럽게 반응해줘.
+          """.formatted(tbContent);
+      String response = aiOllamaClient.generateText(prompt);
+
+      BoardReply boardReply = new BoardReply();
+      boardReply.setBrMemberNo(member.getMNo());
+      boardReply.setBrThreadBoardNo(randomBrNum);
+      boardReply.setBrContent(response);
+
+      brNosSt += "- 참고게시글 -" + tbTitle + " -생성댓글 - " + boardReply.getBrContent()+ "\n\n";
+
+      boardReplyDao.insertBoardReply(boardReply);
+    }
+
+    return brNosSt;
   }
 }
 
