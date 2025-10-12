@@ -65,6 +65,8 @@ public class ChatMessageService {
 		chatMessageDao.insertChatMessage(chatMessage);
 		chatMessageDao.updateLastMessage(chatMessage);
 		
+		
+		
 		simpMessagingTemplate.convertAndSend("/sub/room", ChatRoomEvent.builder().lastMessage(message)
 				.chatRoomBase62RoomUUID(chatBase62RoomUUID).lastMessageDate(chatMessage.getCmDate()).build());
 		simpMessagingTemplate.convertAndSend("/sub/room/" + chatBase62RoomUUID,

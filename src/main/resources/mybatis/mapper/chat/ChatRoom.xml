@@ -152,5 +152,19 @@
 	WHERE CR_UUID = #{chatRoomUUID}
 </select>
 
+<delete id="deleteMatchingChatRoomMapping" parameterType="Long">
+DELETE FROM MATCHINGCHATROOMMAPPING
+    WHERE MC_CHATROOMNO = #{chatroomNo}
+</delete>
+
+<delete id="deleteChatRoom" parameterType="Long">
+DELETE FROM CHATROOM
+    WHERE CR_NO = #{chatroomNo}
+</delete>
+
+<delete id="deleteChatMessages" parameterType="Long">
+DELETE FROM CHATMESSAGE
+    WHERE CM_CHATROOMNO = #{chatroomNo}
+</delete>
 
 </mapper>

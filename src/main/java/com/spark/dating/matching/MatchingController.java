@@ -43,32 +43,26 @@ public class MatchingController {
 //        matchingService.createMatching(h_no);
 //    }
     
-    @GetMapping("/")
     //매칭 테이블을 모두 가지고 올 이유가 있을까? 해당 하는 매칭 테이블만 가지고 오면 될 거 같은데
+    // 매칭 만드는 요청을 받는 메서드
+    @GetMapping("/")
     public List<Matching> createMatching() {
         final int memberNo = AuthenticationContextHolder.getContextMemberNo();
     	return matchingService.getMatching(memberNo);
     }
     
+    // 매칭에서 하트를 누르게 되었을 때 요청을 받는 메서드
+    // 해당 createMatching메서드의 응답 값으로 회원을 식별할 수 있는 UUID를 넘겨 받아 해당 hearts테이블에 요청 데이터가 저장됨
     @PostMapping("/like")
     public void matchingPostLike(@RequestBody String partnerUuid) {
     	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
     	matchingService.matchingPostLike(memberNo ,partnerUuid);
     }
     
-
-    @DeleteMapping("/")
-    public int deleteMatching(@RequestParam("mt_no") int mt_no) {
-        return matchingService.deleteMatching(mt_no);
-    }
-    
-    @GetMapping("/picture/{memberPictureNo}")
-    public ResponseEntity<byte[]> getFeedPicture(@PathVariable("memberPictureNo") Long mpNo) {
-    	MatchingPicture matchingPicture = matchingService.getMemberPicture(mpNo);
-        return ResponseEntity
-        .ok()
-        .contentType(MediaType.parseMediaType(matchingPicture.getAttachType()))
-        .body(matchingPicture.getData());
-    }
+      // 매칭에서 떴다고 하더라도 프론트에서만 거절 처리되기 때문에 사용하지 않았음 
+//    @DeleteMapping("/")
+//    public int deleteMatching(@RequestParam("mt_no") int mt_no) {
+//        return matchingService.deleteMatching(mt_no);
+//    }
     
 }

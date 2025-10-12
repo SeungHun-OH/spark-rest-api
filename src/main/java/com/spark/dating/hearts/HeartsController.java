@@ -42,6 +42,9 @@ public class HeartsController {
 //    public Hearts createHearts(@RequestBody Hearts hearts) {
 //        return heartsService.createHearts(hearts);
 //    }
+    
+    // 매칭이나 피드(해당 부분은 아직 구현안됨)를 통해 온 요청을 받는 메서드
+    // 해당 요청은 채팅방이 열려야 하기 때문에 채팅방 서비스에서 트랜잭션 처리함
     @PostMapping("/{heartsNo}/accept")
     public void acceptHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
     	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
@@ -61,6 +64,7 @@ public class HeartsController {
         return heartsService.getHearts(memberNo);
     }
 
+    // 매칭을 거절한 요청을 받는 메서드
     @DeleteMapping("/{heartsNo}/reject")
     public void injectHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
         heartsService.injectHeartRequest(heartsNo);
