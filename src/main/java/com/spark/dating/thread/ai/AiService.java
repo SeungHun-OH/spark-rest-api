@@ -1,6 +1,7 @@
 package com.spark.dating.thread.ai;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,76 +83,39 @@ public class AiService {
       return m;
     }).toList();
 
-    String context = threadBoards.stream()
-        .map(p -> p.getTbTitle() + " " + p.getTbContent())
-        .collect(Collectors.joining("\n\n"));
+    List<Integer> indices = new ArrayList<>();
+    for (int i = 0; i < threadBoards.size(); i++) {
+      indices.add(i);
+    }
+    Collections.shuffle(indices);
 
-    // 프롬프트용 제목 리스트들
-    List<String> titles = newboards.stream()
-        .map(b -> b.get("tbTitle"))
-        .filter(Objects::nonNull)
-        .filter(t -> !t.isBlank())
-        .toList();
-
-    String titleList = titles.stream()
-        .map(t -> "• " + t)
-        .collect(Collectors.joining("\n"));
-
+    String title = "";
+    for (int i = 0; i < Math.min(threadBoards.size(), 3); i++) {
+      title += threadBoards.get(indices.get(i)).getTbTitle() + "\n";
+    }
+    String content = "";
+    for (int i = 0; i < Math.min(threadBoards.size(), 3); i++) {
+      content += threadBoards.get(indices.get(i)).getTbContent() + "\n";
+    }
+    log.info("AiService title 뽑아내기 "+ title);
     String prompt = """
-                질문: %s
-
-        너는 지금 연애 고민 게시판의 따뜻한 조언자야.
-
-        아래는 참고용 게시글 데이터야.
-        각 게시글에는 "tbTitle"(제목) 과 "tbContent"(본문)이 포함되어 있어.
-        이 데이터들을 참고해서 질문자의 고민에 대한 진심 어린 조언을 작성해줘.
-
-        [참고 게시글 요약 목록]
+        너는 연애 고민 게시판의 따뜻한 상담자야.
+        [질문]
         %s
-        [참고 게시글 전체 내용]
+        [참고글 제목]
         %s
-        ---
+        답변은 두 문단으로 써줘.
+        1. 첫 문단은 질문자에게 직접 공감하고 따뜻하게 조언하기.
+        2. 두 번째 문단은 위 제목들 중 2~3개를 자연스럽게 언급하며,
+           비슷한 사례와 조언으로 마무리하기.
 
-        작성 원칙:
-        1. 반드시 질문자의 고민에 집중해서 답변해. (참고글 복붙 금지)
-        2. 하나의 완성된 상담글처럼 자연스럽게 작성해.
-        3. 상담자의 말투로, 따뜻하고 진심 어린 어조를 유지해.
-        4. 출력은 오직 한글 문장만 포함해야 한다.
-           - 영어, 숫자, 이모지, 특수문자, 마크다운 기호(`*`, `#`, `>`, ```, 등) 절대 사용 금지.
-           - 한글 외 문자가 생성되면 반드시 제거하고 한글만 남겨야 한다.
-        5. 문장은 5~10문장 내외로 구성해.
-        6. 문체는 자연스럽고 대화하듯이 써.
-        7. ‘첫째’, ‘둘째’ 같은 나열형 문체는 절대 쓰지 마.
-
-        ---
-
-        추가 지시:
-        - 답변 마지막에는 짧게 공감 한마디를 덧붙여줘.
-          예: "비슷한 고민을 가진 분들도 많아요, 혼자라 생각하지 마요."
-        - 그리고 마지막 1~2문장 안에는 아래 [참고 게시글 요약 목록]의 **tbTitle** 값 중에서
-          2~3개를 선택해 자연스럽게 언급해.
-          - 반드시 실제 존재하는 제목(tbTitle)만 사용해야 해.
-          - 새로운 제목을 창작하거나 바꾸지 마.
-          - 제목은 따옴표(“ ”)로 감싸서 써야 해.
-          - 제목은 너무 많지 않게, 2~3개 정도만 자연스럽게 포함해.
-
-        ---
-
-        출력 형식:
-        한글 문장만. (한글 외 문자 전부 금지)
-
-        지금부터 %s 에 대한 따뜻하고 현실적인 상담 답변을 작성해줘.
-                        """.formatted(question, titleList, context, question);
+        모든 문장은 자연스러운 한글 대화체로 작성하고,
+        영어, 숫자, 기호, 이모지는 절대 쓰지 마.
+        마지막 한 문장은 짧게 공감으로 마무리해.
+        """.formatted(question, title);
     map.put("keywords", keywords);
     map.put("answer", aiOllamaClient.generateText(prompt));
     map.put("boards", newboards);
-
-    // return ("AI뽑아낸 kewords = " + kewords + "\n" + "게시판 리스트AI 쿼리 = \n" + prompt +
-    // "\n AI답변 \n----------\n " + aiOllamaClient.generateText(prompt));
-
-    // - 예:
-    //   “연락이 줄어드는 게 불안해요”, “그 사람의 마음이 멀어진 걸까” 같은 글에서도 비슷한 고민이 있었어요.
-    //   당신도 그 글들처럼 천천히 마음을 다듬어가면 좋겠어요.
 
     return map;
   }
@@ -186,6 +150,10 @@ public class AiService {
 
   public List<ThreadBoard> searchThreadBoardPrompt(String question) {
     return threadDao.searchThreadBoardPrompt(FilterPromtKeword(question));
+  }
+
+  public void aiBoardReplyGenerate() {
+    throw new UnsupportedOperationException("Unimplemented method 'aiBoardReplyGenerate'");
   }
 }
 
@@ -227,3 +195,18 @@ public class AiService {
 // return List.of(question);
 // }
 // }
+
+// 프롬프트용 제목 리스트들
+// List<String> titles = newboards.stream()
+// .map(b -> b.get("tbTitle"))
+// .filter(Objects::nonNull)
+// .filter(t -> !t.isBlank())
+// .toList();
+
+// String titleList = titles.stream()
+// .map(t -> "• " + t)
+// .collect(Collectors.joining("\n"));
+
+// String context = threadBoards.stream()
+// .map(p -> p.getTbTitle() + " " + p.getTbContent())
+// .collect(Collectors.joining("\n\n"));

@@ -6,9 +6,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spark.dating.dto.member.ApiResponse;
 import com.spark.dating.dto.thread.ThreadBoard;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +24,25 @@ public class AiController {
   private AiService aiService;
 
   @GetMapping("/Ai/BoardGenerate/")
-  public ThreadBoard AiGenerateBoard() {
+  public ThreadBoard aiGenerateBoard() {
     return aiService.generatedRandomPost();
   }
 
   @GetMapping("/Ai/BoardGenerate/List")
-  public void AiGenerateBoard(@RequestParam("count") int count) {
-    for(int i = 0; i < count; i++){
-      aiService.generatedRandomPost();
+  public ApiResponse<String> aiGenerateBoards(@RequestParam("count") int count) {
+    try{
+      for(int i = 0; i < count; i++){
+      aiService.generatedRandomPost();}
+      return new ApiResponse<String>("success", "true", "true");
+    } catch(Exception e){
+      return new ApiResponse<String>("fail", e.toString(), "false");
     }
+  }
+
+  @PostMapping("/AI/BoardReplyGenerate")
+  public ApiResponse<String> aiBoardReplyGenerate(){
+    aiService.aiBoardReplyGenerate();
+    return new ApiResponse<String>("success", "성공", "true");
   }
 
   @GetMapping("/Ai/FilterPromtKeword")
@@ -46,10 +58,10 @@ public class AiController {
   }
 
   @GetMapping("/Ai/generaeAnswerBoardQuestion")
-  public  Map<String, Object> generateAnswerBoardQuestion(@RequestParam("question") String question) {
+  public Map<String, Object> generateAnswerBoardQuestion(@RequestParam("question") String question) {
 
-    Map<String, Object>map = aiService.generateAnswerBoardQuestion(question);
-    log.info("AiService generaeAnswerBoardQuestion 컨트롤러 실행 머라왔냐" +  map);
+    Map<String, Object> map = aiService.generateAnswerBoardQuestion(question);
+    log.info("AiService generaeAnswerBoardQuestion 컨트롤러 실행 머라왔냐" + map);
     return map;
   }
 }
