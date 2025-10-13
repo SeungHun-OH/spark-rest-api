@@ -28,7 +28,7 @@
       AND h_requestchanel = #{h_requestchanel}
   </select>
 
-  <delete id="injectHeartRequest"
+  <delete id="rejectHeartRequest"
           parameterType="Long">
     DELETE FROM hearts
     WHERE h_no = #{heartsNo}
@@ -38,7 +38,7 @@
 	SELECT 
 	    H.H_NO             AS no,
 	    H.H_DATE           AS requestDate,
-	    H.H_REQUESTCHANEL  AS reqeustChannel,
+	    H.H_REQUESTCHANEL  AS requestChannel,
 	    M.M_NAME           AS name,
 	    M.M_AGE            AS age,
 	    M.M_REGION         AS region,

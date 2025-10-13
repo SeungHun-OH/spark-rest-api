@@ -47,8 +47,8 @@ public class HeartsService {
         return heartsDao.selectReceivedHeartRequests(memberNo);
     }
 
-    public void injectHeartRequest(Long heartsNo) {
+    public void rejectHeartRequest(Long heartsNo) {
     	System.err.println(heartsNo);
-        heartsDao.injectHeartRequest(heartsNo);
+        heartsDao.rejectHeartRequest(heartsNo);
     }
 }

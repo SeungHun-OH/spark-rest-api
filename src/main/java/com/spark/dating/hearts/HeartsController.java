@@ -66,7 +66,7 @@ public class HeartsController {
 
     // 매칭을 거절한 요청을 받는 메서드
     @DeleteMapping("/{heartsNo}/reject")
-    public void injectHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
-        heartsService.injectHeartRequest(heartsNo);
+    public void rejectHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
+        heartsService.rejectHeartRequest(heartsNo);
     }
 }
