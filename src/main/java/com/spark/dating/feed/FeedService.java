@@ -74,7 +74,6 @@ public class FeedService {
     // ---------------------- READ (단일) ----------------------
     public Map<String, Object> getFeed(int f_no) {
         Feed feed = feedDao.selectByFno(f_no);
-        log.info("feed : {}", feed);
         List<FeedPicture> list = feedPictureDao.selectByFno(f_no);
 
         Map<String, Object> map = new HashMap<>();

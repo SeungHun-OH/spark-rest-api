@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.spark.dating.dto.hearts.Hearts;
 import com.spark.dating.dto.hearts.HeartsRequest;
 import com.spark.dating.member.MemberService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -51,7 +52,7 @@ public class HeartsService {
     	heartsDao.createMatching(heartsNo);
     }
     
-    public void sendHeart(int senderNo, int partnerNo, char requestChannel) {
+    public Long sendHeart(int senderNo, int partnerNo, char requestChannel) {
         // Long receiverNo = memberService.getMemberNoByUuid(partnerUuid);
         Map<String, Object> params = new HashMap<>();
         params.put("senderNo", senderNo);
@@ -59,6 +60,9 @@ public class HeartsService {
         params.put("requestChannel", requestChannel);
 
         heartsDao.insertHeart(params);
+
+        Long hNo = (Long) params.get("hNo");
+        return hNo;
     }
 
     public List<Hearts> getHearts(int memberNo) {

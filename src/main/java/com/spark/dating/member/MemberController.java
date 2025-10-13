@@ -129,7 +129,6 @@ public class MemberController {
     MemberForFeed memberForFeed = memberService.selectMemberByMnickname(m_nickname);
     int m_no = memberForFeed.getmNo();
     MemberPicture memberPicture = memberService.selectMemberPictureByMno(m_no);
-    log.info("memberPicture : {}", memberPicture);
     return ResponseEntity
     .ok()
     .contentType(MediaType.parseMediaType(memberPicture.getMpAttachType()))

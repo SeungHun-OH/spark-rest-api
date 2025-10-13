@@ -28,7 +28,7 @@ public class FeedPicture {
 			feedPicture.setFpAttachdata(file.getBytes());
 			feedPicture.setFpAttachtype(file.getContentType());
 		} catch (IOException e) {
-			log.info("error");
+			log.info("error : ", e);
 		}
 		return feedPicture;
 	}
