@@ -21,7 +21,6 @@ public class AuthConfiguration implements WebMvcConfigurer{
 		"/error", "/matching/picture/**", "/member/picture/**", "/member/picture/", "/thread/**", "/Ai/**", "/AI/BoardReplyGenerate"
 
 		);
-
 		// .excludePathPatterns("/images/**", "/feedPicture/picture/*", "/favicon/ico", "/member/**");
 	}
 }

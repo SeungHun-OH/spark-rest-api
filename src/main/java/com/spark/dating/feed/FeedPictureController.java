@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.Pager;
 import com.spark.dating.dto.feed.FeedPicture;
 
@@ -30,7 +29,6 @@ public class FeedPictureController {
 
     @GetMapping("/list")
     public List<FeedPicture> getFeedPictureList(@RequestParam("f_no") int f_no) {
-        log.info("f_no : {}", f_no);
         return feedPictureService.getPictures(f_no);
     }
 

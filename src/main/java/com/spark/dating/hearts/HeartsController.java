@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spark.dating.chat.service.ChatRoomService;
 import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.hearts.Hearts;
-import com.spark.dating.dto.hearts.HeartsRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,11 +57,12 @@ public class HeartsController {
     }
 
     @PostMapping("/send")
-    public void sendHeart(
+    public Long sendHeart(
         @RequestParam("partnerNo") int partnerNo, 
         @RequestParam("requestChannel") char requestChannel) {
     	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
-        heartsService.sendHeart(memberNo, partnerNo, requestChannel);    
+        Long hNo = heartsService.sendHeart(memberNo, partnerNo, requestChannel);    
+        return hNo;
     }
 
     //나를 좋아요한 리스트 //requestChanel에 따라 변경 가능

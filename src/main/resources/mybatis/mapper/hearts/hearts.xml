@@ -11,17 +11,16 @@
     <selectKey keyProperty="matchingNo" order="BEFORE" resultType="Long">
       SELECT SEQ_MATCHING_NO.NEXTVAL FROM dual
     </selectKey>
-    INSERT INTO MATCHING (MT_NO, MT_HEARTSNO, MT_DATE)
+    INSERT INTO MATCHING (MT_NO, MT_HEARTSNO, MT_DATE,)
     VALUES (#{matchingNo}, #{heartsNo}, SYSDATE )
   </insert>
 
-  <insert id="insertHeart" parameterType="map">
-    <selectKey keyProperty="No" order="BEFORE" resultType="Long">
-      SELECT h_no_seq.NEXTVAL FROM dual
+  <insert id="insertHeart" parameterType="map" >
+    <selectKey keyProperty="hNo" order="BEFORE" resultType="Long">
+      SELECT seq_hearts_no.NEXTVAL FROM dual
     </selectKey>
-    INSERT INTO HEARTS (h_senduser, h_receiveuser, h_date, h_requestchanel)
-    VALUES (#{senderNo}, #{partnerNo}, SYSDATE, #{requestChannel})
-
+    INSERT INTO HEARTS (h_no, h_senduser, h_receiveuser, h_date, h_requestchanel, h_status)
+    VALUES (#{hNo}, #{senderNo}, #{partnerNo}, SYSDATE, #{requestChannel}, 'PENDING')
   </insert>
 
   <select id="selectByHno" parameterType="int" resultType="Hearts">
