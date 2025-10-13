@@ -1,5 +1,7 @@
 package com.spark.dating.dto.matching;
 
+import com.spark.dating.hearts.HeartsStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,5 +18,6 @@ public class MatchingLike {
 	private Long heartNo;
 	private int sendMemberNo;
 	private Long receiveMemberNo;
-	char requestChannel;
+	private char requestChannel;
+	private HeartsStatus status;
 }

@@ -65,4 +65,12 @@ public class MatchingController {
 //        return matchingService.deleteMatching(mt_no);
 //    }
     
+    @GetMapping("/picture/{memberPictureNo}")
+    public ResponseEntity<byte[]> getFeedPicture(@PathVariable("memberPictureNo") Long mpNo) {
+    	MatchingPicture matchingPicture = matchingService.getMemberPicture(mpNo);
+        return ResponseEntity
+        .ok()
+        .contentType(MediaType.parseMediaType(matchingPicture.getAttachType()))
+        .body(matchingPicture.getData());
+    }
 }

@@ -21,22 +21,12 @@ public class ChatRoom {
 	private String crStatus;
 	private LocalDateTime crDate;
 	private int crUnreadCount;
-	@JsonIgnore
-	private String crAttachType;
-	private String crAttachData;
+	private String crAttachNo;
 
 	
 	public ChatRoomSelectResponse toDto() {
 		return ChatRoomSelectResponse.builder().encodedUUID(UuidBase62Utils.toBase62(crUUID)).chatRoomName(crName).opponentUuid(crOpponentUuid).lastMessage(crMessage).age(crAge).status(crStatus).unreadCount(crUnreadCount)
-				.date(crDate).imgData(crAttachData).build();
-	}
-	
-	
-	public void setCrAttachData(byte[] AttachData) {
-		if (crAttachData != null) {
-			String base64 = Base64.getEncoder().encodeToString(AttachData);
-			this.crAttachData = "data:" + this.crAttachType + ";base64," + base64;
-		}
+				.date(crDate).attachNo(crAttachNo).build();
 	}
 	
 	public static List<ChatRoomSelectResponse> toDtoList(List<ChatRoom> voList) {

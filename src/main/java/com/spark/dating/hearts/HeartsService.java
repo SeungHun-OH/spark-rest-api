@@ -48,8 +48,10 @@ public class HeartsService {
 //    }
     
     
-    public void acceptHeartRequest(HeartsRequest heartsNo) {
-    	heartsDao.createMatching(heartsNo);
+    public void acceptHeartRequest(HeartsRequest request) {
+    	request.setStatus(HeartsStatus.ACCEPT);
+    	heartsDao.updateHeartStatus(request);
+    	heartsDao.createMatching(request);
     }
     
     public Long sendHeart(int senderNo, int partnerNo, char requestChannel) {
@@ -69,8 +71,11 @@ public class HeartsService {
         return heartsDao.selectReceivedHeartRequests(memberNo);
     }
 
-    public void injectHeartRequest(Long heartsNo) {
-    	System.err.println(heartsNo);
-        heartsDao.injectHeartRequest(heartsNo);
+    public void rejectHeartRequest(Long heartsNo) {
+    	HeartsRequest request = new HeartsRequest();
+    	request.setHeartsNo(heartsNo);
+    	request.setStatus(HeartsStatus.REJECT);
+    	heartsDao.updateHeartStatus(request);
+        heartsDao.rejectHeartRequest(heartsNo);
     }
 }

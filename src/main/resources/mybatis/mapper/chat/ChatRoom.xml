@@ -63,9 +63,7 @@
 	    MS.MS_STATUS        AS cr_Status,
 	    CM.CM_DATE          AS cr_Date,
 	    NVL(UNREAD.UNREAD_COUNT, 0) AS cr_UnreadCount,
-	    MP.MP_ATTACHONAME   AS cr_AttachOname,
-	    MP.MP_ATTACHTYPE    AS cr_AttachType,
-	    MP.MP_ATTACHDATA    AS cr_AttachData
+	    MP.MP_NO as cr_AttachNo
 	FROM CHATROOM CR
 	JOIN MATCHINGCHATROOMMAPPING MC
 	    ON CR.CR_NO = MC.MC_CHATROOMNO

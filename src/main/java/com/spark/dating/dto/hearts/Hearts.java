@@ -18,7 +18,7 @@ public class Hearts {
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime requestDate;
 	
-	private char reqeustChannel; //request
+	private char requestChannel;
 	private String name;
 	private int age;
 	private String region;

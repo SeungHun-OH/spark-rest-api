@@ -30,19 +30,19 @@ public class ChatMemberProfile {
 	private String mpAttachType;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("attachData")
-	private String mpAttachData;
+	@JsonProperty("attachNo")
+	private String mpAttachNo;
 
 	@JsonProperty("status")
 	private String mpStatus;
 
 
-	public void setMpAttachData(byte[] mpAttachData) {
-		if (mpAttachData != null) {
-			String base64 = Base64.getEncoder().encodeToString(mpAttachData);
-			this.mpAttachData = "data:" + this.mpAttachType + ";base64," + base64;
-		}
-	}
+//	public void setMpAttachData(byte[] mpAttachData) {
+//		if (mpAttachData != null) {
+//			String base64 = Base64.getEncoder().encodeToString(mpAttachData);
+//			this.mpAttachData = "data:" + this.mpAttachType + ";base64," + base64;
+//		}
+//	}
 
 	@JsonProperty("name")
 	public String getmpName() {
