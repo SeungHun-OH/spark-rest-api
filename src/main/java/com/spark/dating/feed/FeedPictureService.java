@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spark.dating.dto.Pager;
 import com.spark.dating.dto.feed.FeedPicture;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,8 @@ public class FeedPictureService {
         return feedPictureDao.selectImgByFpno(fp_no);
     }
     
-    public List<FeedPicture> getFirstImgOfFeed(int m_no) {
-    	return feedPictureDao.selectFirstImg(m_no);
+    public List<FeedPicture> getFirstImgOfFeed(int m_no, Pager pager) {
+    	return feedPictureDao.selectFirstImg(m_no, pager);
     }
 
     public int deleteFeedPicture(int fpNo) {

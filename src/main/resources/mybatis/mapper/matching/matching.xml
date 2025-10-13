@@ -21,8 +21,8 @@
     <selectKey keyProperty="heartNo" resultType="Long" order="BEFORE">
       SELECT SEQ_HEARTS_NO.NEXTVAL FROM dual
     </selectKey>
-    INSERT INTO HEARTS (H_NO, H_SENDUSER, H_RECEIVEUSER, H_DATE, H_REQUESTCHANEL)
-    VALUES (#{heartNo}, #{sendMemberNo}, #{receiveMemberNo}, SYSDATE ,#{requestChannel})
+    INSERT INTO HEARTS (H_NO, H_SENDUSER, H_RECEIVEUSER, H_DATE, H_REQUESTCHANEL, H_STATUS)
+    VALUES (#{heartNo}, #{sendMemberNo}, #{receiveMemberNo}, SYSDATE ,#{requestChannel}, #{status})
 	</insert>
 
   <select id="selectByMtno" parameterType="int" resultType="Matching">

@@ -22,7 +22,7 @@ public class ChatRoomSelectResponse {
 	private Integer age;
 	private String status;
 	private Integer unreadCount;
-	private String imgData;
+	private String attachNo;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime date;

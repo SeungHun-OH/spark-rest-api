@@ -11,6 +11,7 @@ import com.spark.dating.dto.matching.Matching;
 import com.spark.dating.dto.matching.MatchingLike;
 import com.spark.dating.dto.matching.MatchingPicture;
 import com.spark.dating.dto.member.MemberPicture;
+import com.spark.dating.hearts.HeartsStatus;
 import com.spark.dating.member.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class MatchingService {
     public void matchingPostLike(int sendMemberNo,String partnerUuid) {
     	// 회원을 식별하는 uuid를 가지고 mno를 조회 후 로그인한 회원(요청한 보낸 회원), 상대방(요청을 받는 회원), 채널(매칭 or 피드)를 가진 객체의 값을 insert
     	Long reciveMemberNo = memberService.getMemberNoByUuid(partnerUuid);
-    	matchingDao.insertHeart(MatchingLike.builder().sendMemberNo(sendMemberNo).receiveMemberNo(reciveMemberNo).requestChannel('M').build());
+    	matchingDao.insertHeart(MatchingLike.builder().sendMemberNo(sendMemberNo).receiveMemberNo(reciveMemberNo).requestChannel('M').status(HeartsStatus.PENDING).build());
     }
     
     public MatchingPicture getMemberPicture(Long mpNo) {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.chat.service.ChatRoomService;
@@ -54,6 +55,14 @@ public class HeartsController {
     	//내일 이거만 이어서 하면 될듯
     	// 채팅방 연동확인
 //    	return heartsService.createHearts(hearts);
+    }
+
+    @PostMapping("/send")
+    public void sendHeart(
+        @RequestParam("partnerNo") int partnerNo, 
+        @RequestParam("requestChannel") char requestChannel) {
+    	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+        heartsService.sendHeart(memberNo, partnerNo, requestChannel);    
     }
 
     //나를 좋아요한 리스트 //requestChanel에 따라 변경 가능

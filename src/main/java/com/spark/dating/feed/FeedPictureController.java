@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.common.AuthenticationContextHolder;
+import com.spark.dating.dto.Pager;
 import com.spark.dating.dto.feed.FeedPicture;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 public class FeedPictureController {
     @Autowired
     FeedPictureService feedPictureService;
+    @Autowired
+    FeedService feedService;
+
 
     @GetMapping("/list")
     public List<FeedPicture> getFeedPictureList(@RequestParam("f_no") int f_no) {
@@ -45,9 +49,12 @@ public class FeedPictureController {
         -> 이미지 자체(byte[]
     */
     @GetMapping("/firstImg")
-    public List<FeedPicture> getFirstImageofFeed() {
-        int m_no = AuthenticationContextHolder.getContextMemberNo();
-    	return feedPictureService.getFirstImgOfFeed(m_no);
+    public List<FeedPicture> getFirstImageofFeed(
+        @RequestParam("m_no") int m_no, 
+        @RequestParam(value = "page_no", defaultValue = "1") int page_no) {
+        int totalRows = feedService.totalRows(m_no);
+        Pager pager = new Pager(9, 3, totalRows, page_no);
+    	return feedPictureService.getFirstImgOfFeed(m_no, pager);
     }
 
     @DeleteMapping("/{fp_no}")

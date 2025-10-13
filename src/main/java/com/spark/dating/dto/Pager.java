@@ -2,7 +2,10 @@ package com.spark.dating.dto;
 
 import java.util.stream.IntStream;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 public class Pager {
@@ -47,4 +50,6 @@ public class Pager {
 		endRowNo = pageNo * rowsPerPage;
 		endRowIndex = endRowNo - 1; 
 	}
-} 
+
+
+}

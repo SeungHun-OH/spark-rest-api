@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,17 +13,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spark.dating.common.AuthenticationContextHolder;
 import com.spark.dating.dto.member.ApiResponse;
+import com.spark.dating.dto.member.MemberForFeed;
 import com.spark.dating.dto.member.response.PreferenceCategory;
 import com.spark.dating.dto.member.response.PreferenceRequest;
 import com.spark.dating.dto.member.response.PreferenceResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 // 명관님 ------------------------------------------------------------------------------------------
 
 @RestController
+@Slf4j
 public class MemberCategoryController {
+
+  private final MemberService memberService;
 
   @Autowired
   MemberCategoryService memberCategoryService;
+
+  MemberCategoryController(MemberService memberService) {
+    this.memberService = memberService;
+  }
 
   // 멤버 카테고리 등록
   @PostMapping("/member/categories")
@@ -67,11 +78,24 @@ public class MemberCategoryController {
 
   // 취미 카테고리 조회
   @GetMapping("/member/membercategories/hobby")
-  public ApiResponse<List<PreferenceCategory>> getHobbyCategoriesByMemberNo() {
+  public ApiResponse<List<PreferenceCategory>> getHobbyCategoriesByMemberNo(@RequestParam("m_no") int m_no) {
     try {
-      int memberNo = AuthenticationContextHolder.getContextMemberNo();
-      List<PreferenceCategory> hobbies = memberCategoryService.getHobbyCategoriesByMemberNo(memberNo);
+      List<PreferenceCategory> hobbies = memberCategoryService.getHobbyCategoriesByMemberNo(m_no);
       return new ApiResponse<>("success", "취미 카테고리 조회 성공", hobbies);
+    } catch (Exception e) {
+      return new ApiResponse<>("fail", e.getMessage(), null);
+    }
+  }
+
+  // 선택한 멤버 카테고리 조회 (for feed)
+  @GetMapping("/member/membercategories/{m_nickname}")
+  public ApiResponse<PreferenceResponse> getCategoryByMnickname(@PathVariable("m_nickname") String m_nickname) {
+    int memberNo;
+    try {
+      MemberForFeed memberForFeed = memberService.selectMemberByMnickname(m_nickname);
+      memberNo = memberForFeed.getmNo();
+      PreferenceResponse response = memberCategoryService.getPreferenceByMember_No(memberNo);
+      return new ApiResponse<>("success", "조회 성공", response);
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
     }

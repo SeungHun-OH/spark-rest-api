@@ -28,4 +28,9 @@
   WHERE MP_MEMBERNO = #{mNo}
   </select>
 
+  <delete id = "deleteMemberPicture" parameterType="int">
+    DELETE FROM MemberPicture
+    WHERE MP_MEMBERNO = #{mNo} 
+  </delete>
+
 </mapper>

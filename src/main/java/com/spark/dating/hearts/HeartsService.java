@@ -1,21 +1,29 @@
 package com.spark.dating.hearts;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spark.dating.dto.hearts.Hearts;
 import com.spark.dating.dto.hearts.HeartsRequest;
-
+import com.spark.dating.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class HeartsService {
 
+    private final MemberService memberService;
+
     @Autowired
     private HeartsDao heartsDao;
+
+    HeartsService(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
 //    public Hearts createHearts(Hearts hearts) {
 //
@@ -39,16 +47,31 @@ public class HeartsService {
 //    }
     
     
-    public void acceptHeartRequest(HeartsRequest heartsNo) {
-    	heartsDao.createMatching(heartsNo);
+    public void acceptHeartRequest(HeartsRequest request) {
+    	request.setStatus(HeartsStatus.ACCEPT);
+    	heartsDao.updateHeartStatus(request);
+    	heartsDao.createMatching(request);
     }
     
+    public void sendHeart(int senderNo, int partnerNo, char requestChannel) {
+        // Long receiverNo = memberService.getMemberNoByUuid(partnerUuid);
+        Map<String, Object> params = new HashMap<>();
+        params.put("senderNo", senderNo);
+        params.put("partnerNo", partnerNo);
+        params.put("requestChannel", requestChannel);
+
+        heartsDao.insertHeart(params);
+    }
+
     public List<Hearts> getHearts(int memberNo) {
         return heartsDao.selectReceivedHeartRequests(memberNo);
     }
 
     public void rejectHeartRequest(Long heartsNo) {
-    	System.err.println(heartsNo);
+    	HeartsRequest request = new HeartsRequest();
+    	request.setHeartsNo(heartsNo);
+    	request.setStatus(HeartsStatus.REJECT);
+    	heartsDao.updateHeartStatus(request);
         heartsDao.rejectHeartRequest(heartsNo);
     }
 }

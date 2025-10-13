@@ -88,6 +88,7 @@ public class MemberController {
   @PostMapping("/member/picture")
   public ApiResponse<Integer> insertMemberPicture(@RequestParam("mNo") int mNo,
       @RequestParam("file") MultipartFile file) {
+
     return memberService.insertMemberPicture(mNo, file);
   }
 
@@ -128,6 +129,7 @@ public class MemberController {
     MemberForFeed memberForFeed = memberService.selectMemberByMnickname(m_nickname);
     int m_no = memberForFeed.getmNo();
     MemberPicture memberPicture = memberService.selectMemberPictureByMno(m_no);
+    log.info("memberPicture : {}", memberPicture);
     return ResponseEntity
     .ok()
     .contentType(MediaType.parseMediaType(memberPicture.getMpAttachType()))
@@ -136,9 +138,15 @@ public class MemberController {
 
   //단일 멤버 조회
   @GetMapping("/member/info")
-  public MemberForFeed selectMemberByMno() {
-    int m_no = AuthenticationContextHolder.getContextMemberNo();
-    return memberService.selectMemberByMno(m_no);
+  public MemberForFeed selectMemberByMno(@RequestParam(value = "m_no", required = false) Integer m_no) {
+    int memberNo;
+
+    if (m_no != null) {
+      memberNo = m_no;
+    } else {
+      memberNo = AuthenticationContextHolder.getContextMemberNo();
+    }
+    return memberService.selectMemberByMno(memberNo);
   }
 
   //나를 제외한 랜덤 멤버 리스트 조회

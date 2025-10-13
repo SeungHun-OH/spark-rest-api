@@ -15,6 +15,15 @@
     VALUES (#{matchingNo}, #{heartsNo}, SYSDATE )
   </insert>
 
+  <insert id="insertHeart" parameterType="map">
+    <selectKey keyProperty="No" order="BEFORE" resultType="Long">
+      SELECT h_no_seq.NEXTVAL FROM dual
+    </selectKey>
+    INSERT INTO HEARTS (h_senduser, h_receiveuser, h_date, h_requestchanel)
+    VALUES (#{senderNo}, #{partnerNo}, SYSDATE, #{requestChannel})
+
+  </insert>
+
   <select id="selectByHno" parameterType="int" resultType="Hearts">
     SELECT h_no, h_senduser, h_receiveuser, h_date, h_requestchanel
     FROM hearts
@@ -34,6 +43,13 @@
     WHERE h_no = #{heartsNo}
   </delete>
   
+  <update id="updateHeartStatus">
+  	UPDATE HEARTS
+    SET H_STATUS = #{status}
+    WHERE H_NO = #{heartsNo}
+  </update>
+  
+  <!--나를 좋아요한 행을 가져오고, 보낸 사람의 프로필 정보와 섬네일을 조인해 리턴-->
   <select id="selectReceivedHeartRequests" parameterType="int" resultType="Hearts">
 	SELECT 
 	    H.H_NO             AS no,
@@ -49,7 +65,7 @@
 	  ON H.H_SENDUSER = M.M_NO
 	LEFT JOIN MEMBERPICTURE P
 	  ON P.MP_MEMBERNO = M.M_NO
-	WHERE H.H_RECEIVEUSER = #{memberNO}
+	WHERE H.H_RECEIVEUSER = #{memberNo} AND H.H_STATUS = 'PENDING'
 	ORDER BY requestDate DESC
   </select>
 
