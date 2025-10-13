@@ -17,5 +17,5 @@ public interface HeartsDao {
     void rejectHeartRequest(Long heartsNo); //h_no
     List<Hearts> selectReceivedHeartRequests(int memberNo);
     void updateHeartStatus(HeartsRequest request);
-    boolean isExist(Map<String, Object> params);
+    Long isExist(Map<String, Object> params);
 }

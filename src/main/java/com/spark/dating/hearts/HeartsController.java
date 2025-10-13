@@ -1,6 +1,7 @@
 package com.spark.dating.hearts;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -80,12 +81,10 @@ public class HeartsController {
     }
 
     @GetMapping("/isExist")
-    public boolean isExistdHearts(
+    public Long isExistdHearts(
         @RequestParam("partnerNo") int partnerNo, 
         @RequestParam("requestChannel") char requestChannel) {
     	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
         return heartsService.isExistdHearts(memberNo, partnerNo, requestChannel);
     }
-    
-    
 }

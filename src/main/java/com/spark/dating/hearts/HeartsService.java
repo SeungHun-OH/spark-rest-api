@@ -79,7 +79,7 @@ public class HeartsService {
         heartsDao.rejectHeartRequest(heartsNo);
     }
 
-    public boolean isExistdHearts(int senderNo, int partnerNo, char requestChannel) {
+    public Long isExistdHearts(int senderNo, int partnerNo, char requestChannel) {
         Map<String, Object> params = new HashMap<>();
         params.put("senderNo", senderNo);
         params.put("partnerNo", partnerNo);

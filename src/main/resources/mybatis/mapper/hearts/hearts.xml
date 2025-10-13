@@ -68,18 +68,12 @@
 	ORDER BY requestDate DESC
   </select>
 
-  <select id="isExist" parameterType="map" resultType="boolean">
-  <![CDATA[
-    SELECT 
-      CASE 
-        WHEN COUNT(*) > 0 THEN 1 
-        ELSE 0 
-      END
-    FROM HEARTS
-    WHERE h_senduser = #{senderNo}
-      AND h_receiveuser = #{partnerNo}
-      AND h_requestchanel = #{requestChannel}
-  ]]>
-  </select>
+<select id="isExist" parameterType="map" resultType="long">
+  SELECT h_no
+  FROM HEARTS
+  WHERE h_senduser = #{senderNo}
+    AND h_receiveuser = #{partnerNo}
+    AND h_requestchanel = #{requestChannel}
+</select>
 
 </mapper>
