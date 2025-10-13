@@ -146,6 +146,7 @@ public class MemberController {
     } else {
       memberNo = AuthenticationContextHolder.getContextMemberNo();
     }
+    log.info("memberNo : {}", memberNo);
     return memberService.selectMemberByMno(memberNo);
   }
 
