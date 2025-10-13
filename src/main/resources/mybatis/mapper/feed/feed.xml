@@ -49,6 +49,16 @@
   ]]>
   </select>
 
+  <!-- 나를 제외한 다른 사람들의 랜덤 피드 가져오기 -->
+  <select id="selectRandomFeedExceptMe" resultType="Feed" parameterType="map">
+  <![CDATA[
+    SELECT f_no, f_memberno, f_content, f_date
+    FROM feed
+    WHERE f_memberno <> #{m_no}
+    ORDER BY DBMS_RANDOM.VALUE
+  ]]>
+  </select>
+
   <select id="selectAllByMno" parameterType="int" resultType="Feed">
     SELECT f_no, f_memberno, f_content, f_date
     FROM feed

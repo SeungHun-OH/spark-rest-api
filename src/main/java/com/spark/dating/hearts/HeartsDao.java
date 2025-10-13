@@ -11,9 +11,9 @@ import com.spark.dating.dto.hearts.HeartsRequest;
 @Mapper
 public interface HeartsDao {
     public void createMatching(HeartsRequest heartsNo); //h_receiveuser, h_requestchanel
+    public void insertHeart(Map<String, Object> params);
     public Hearts selectByHno(int h_no);
     public List<Hearts> selectByChanel(Map<String, Object> params); //m_no, h_requestchanel
     public void injectHeartRequest(Long heartsNo); //h_no
-    
     public List<Hearts> selectReceivedHeartRequests(int memberNo);
 }

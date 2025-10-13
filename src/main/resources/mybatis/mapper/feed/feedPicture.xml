@@ -39,24 +39,43 @@
      
   </select>
 
-	<select id="selectFirstImg"
-		parameterType="int"
-		resultType="FeedPicture">
-		WITH ranked_pictures AS (
-			SELECT fp.*,
-				ROW_NUMBER() OVER (PARTITION BY fp.fp_feedno ORDER BY fp.fp_no ASC) AS rn
-			FROM FEEDPICTURE fp
-		)
-		SELECT f.f_no AS fpFeedNo, 
-				p.fp_no, 
-				p.fp_attachtype, 
-				p.fp_attachoname 
-		FROM feed f
-		LEFT JOIN ranked_pictures p
-		ON f.f_no = p.fp_feedno
-		AND p.rn = 1
-		WHERE f.f_memberno = #{value}
-	</select>
+	<select id="selectFirstImg" parameterType="map" resultType="FeedPicture">
+  <![CDATA[
+    SELECT rnum,
+           fpFeedNo,
+           fp_no,
+           fp_attachtype,
+           fp_attachoname
+    FROM (
+        SELECT rownum AS rnum,
+               f.f_no AS fpFeedNo,
+               p.fp_no,
+               p.fp_attachtype,
+               p.fp_attachoname
+        FROM (
+            SELECT f_no
+            FROM feed
+            WHERE f_memberno = #{m_no}
+            ORDER BY f_no DESC
+        ) f
+        LEFT JOIN (
+            SELECT fp_no,
+                   fp_feedno,
+                   fp_attachtype,
+                   fp_attachoname
+            FROM (
+                SELECT fp.*,
+                       ROW_NUMBER() OVER (PARTITION BY fp_feedno ORDER BY fp_no ASC) AS rn
+                FROM feedpicture fp
+            )
+            WHERE rn = 1
+        ) p
+        ON f.f_no = p.fp_feedno
+        WHERE rownum <= #{pager.endRowNo}
+    )
+    WHERE rnum >= #{pager.startRowNo}
+  ]]>
+  </select>
 
   <delete id="deleteFeedPicture" parameterType="int">
     DELETE FROM feedPicture

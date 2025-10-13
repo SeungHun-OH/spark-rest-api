@@ -57,19 +57,39 @@ public class FeedController {
         return map;
     }
 
-    @GetMapping("/myfeed")
-    public List<Feed> getMyFeedList(@RequestParam(value = "page_no", defaultValue = "1") int page_no) {
-
-        int m_no = AuthenticationContextHolder.getContextMemberNo();
-        int totalRows = feedService.totalRows(m_no);
+    @GetMapping("/list")
+    public List<Feed> getFeedList(@RequestParam(value = "m_no", required = false) Integer m_no, @RequestParam(value = "page_no", defaultValue = "1") int page_no) {
+        int memberNo;
+        //타인
+        if (m_no != null) {
+            memberNo = m_no;
+        //본인
+        } else {
+            memberNo = AuthenticationContextHolder.getContextMemberNo();
+        }
+        int totalRows = feedService.totalRows(memberNo);
         Pager pager = new Pager(10, 10, totalRows, page_no);
-        List<Feed> feedList = feedService.getListByPage(m_no, pager);
+        List<Feed> feedList = feedService.getListByPage(memberNo, pager);
 
         return feedList;
     }
 
+
+    @GetMapping("/main")
+    public List<Feed> getFeedListExceptMe(
+        @RequestParam("m_no") int m_no, 
+        @RequestParam(value = "page_no", defaultValue = "1") int page_no,
+        @RequestParam(value = "reset", required = false, defaultValue = "false") boolean reset) {
+
+        int totalRows = feedService.totalRows(m_no);
+        //page_no가 1이면 3개, 그 이후엔 1개씩
+        Pager pager = new Pager(3, 10, totalRows, page_no);
+        return feedService.getFeedListExceptMe(m_no, pager, reset);
+    }
+
     // 타인 피드
     // (pathvariable / requestParam : mid) + 하나 생성
+    /*
     @GetMapping("/list")
     public List<Feed> getFeedList(@RequestParam("m_nickname") String m_nickname,
             @RequestParam(value = "page_no", defaultValue = "1") int page_no) {
@@ -84,6 +104,7 @@ public class FeedController {
 
         return feedList;
     }
+    */
 
     @PutMapping("/")
     public Map<String, Object> updateFeed(@RequestPart("feed") Feed feed,
