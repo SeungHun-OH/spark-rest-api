@@ -40,4 +40,6 @@ public interface MemberDao {
 
   @Select("SELECT * FROM MEMBER ORDER BY DBMS_RANDOM.VALUE FETCH FIRST 1 ROWS ONLY")
   Member getRandomMember();
+  
+  void inertMemberStatus(int memberNo);
 }

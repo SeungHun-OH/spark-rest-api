@@ -55,6 +55,7 @@ public class MemberService {
     member.setMPassword(encodedPassword);
     try {
       memberDao.insertMember(member);
+      memberDao.inertMemberStatus(member.getMNo());
       return new ApiResponse<>("success", "회원 가입을 환영합니다" + member.getMNo() + "님", member.getMNo());
     } catch (Exception e) {
       return new ApiResponse<>("fail", e.getMessage(), null);
