@@ -31,12 +31,12 @@
     insert into member (
       M_NO, M_ID, M_PASSWORD, M_NAME, M_SSN, M_AGE,
       M_EMAIL, M_GENDER, M_PHONE, M_NICKNAME, M_REGION,
-      M_BIO, M_MBTI, M_ACTIVE
+      M_BIO, M_MBTI, M_ACTIVE, M_UUID
     ) 
     VALUES (
       #{mNo}, #{mId}, #{mPassword}, #{mName}, #{mSsn}, #{mAge},
       #{mEmail}, #{mGender}, #{mPhone}, #{mNickname}, #{mRegion},
-      #{mBio}, #{mMbti}, #{mActive}
+      #{mBio}, #{mMbti}, #{mActive}, #{mUuid}
     )
   </insert>
 
@@ -140,5 +140,13 @@
 	FROM MEMBER
 	WHERE M_NO = #{memberNo}
   </select>
+
+	<insert id="inertMemberStatus" parameterType="int">
+		INSERT INTO MEMBERSTATUS(
+			MS_NO, MS_LAST_ACTIVE
+		)VALUES (
+			#{memberNo} ,SYSDATE
+    	)
+	</insert>
 
 </mapper>

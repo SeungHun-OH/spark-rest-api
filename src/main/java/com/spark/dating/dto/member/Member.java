@@ -1,6 +1,9 @@
 package com.spark.dating.dto.member;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -41,4 +44,6 @@ public class Member {
     private String mMbti;
     @JsonProperty("mActive")
     private String mActive = "T";
+    @JsonIgnore
+    private String mUuid = UUID.randomUUID().toString();
 }
