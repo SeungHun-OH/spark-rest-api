@@ -69,4 +69,6 @@ public class HeartsController {
     public void rejectHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
         heartsService.rejectHeartRequest(heartsNo);
     }
+    
+    
 }
