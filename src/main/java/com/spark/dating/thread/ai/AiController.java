@@ -1,5 +1,6 @@
 package com.spark.dating.thread.ai;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +63,13 @@ public class AiController {
 
     Map<String, Object> map = aiService.generateAnswerBoardQuestion(question);
     log.info("AiService generaeAnswerBoardQuestion 컨트롤러 실행 머라왔냐" + map);
+    return map;
+  }
+
+  @GetMapping("/Ai/analyzeLovePersonality")
+  public Map<String, Object> analyzeLovePersonality(@RequestParam("question") String question) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("data", aiService.analyzeLovePersonality(question));
     return map;
   }
 }

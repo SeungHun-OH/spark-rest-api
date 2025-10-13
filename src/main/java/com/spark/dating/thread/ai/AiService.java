@@ -51,7 +51,6 @@ public class AiService {
   public ThreadBoard generatedRandomPost() {
 
     String prompt = PROMPTS[new Random().nextInt(PROMPTS.length)];
-
     String aiResponse = aiOllamaClient.generateText(prompt);
 
     String[] split = aiResponse.split("\n", 2);
@@ -162,7 +161,7 @@ public class AiService {
     for (int i = 0; i < count; i++) {
       int randomBrNum = brNos.get(new Random().nextInt(brNos.size()));
       Member member = memberDao.getRandomMember();
-      
+
       String tbTitle = threadDao.getThreadBoard(randomBrNum).getTbTitle();
       String tbContent = threadDao.getThreadBoard(randomBrNum).getTbContent();
 
@@ -170,7 +169,7 @@ public class AiService {
           너는 한국 커뮤니티의 댓글 작성자야.
           항상 한국어로만 대답해야 해. 절대로 영어를 사용하지 마.
           %s 글을 읽고, 글 분위기에 어울리는 자연스러운 짧은 댓글을 한 줄 써줘.
-          
+
           조건:
           - 반드시 한글로만 작성.
           - 길이 60자 이하.
@@ -183,12 +182,35 @@ public class AiService {
       boardReply.setBrThreadBoardNo(randomBrNum);
       boardReply.setBrContent(response);
 
-      brNosSt += "- 참고게시글 -" + tbTitle + " -생성댓글 - " + boardReply.getBrContent()+ "\n\n";
+      brNosSt += "- 참고게시글 -" + tbTitle + " -생성댓글 - " + boardReply.getBrContent() + "\n\n";
 
       boardReplyDao.insertBoardReply(boardReply);
     }
 
     return brNosSt;
+  }
+
+  //Ai 연애 성향 분석기
+  public String  analyzeLovePersonality(String question) {
+    String prompt = """
+        너는 연애 심리 분석 전문가야.
+        %s 이것은 사용자의 지난 답변이야.
+        이 답변의 감정, 태도, 가치관을 고려해서
+        다음으로 물어볼 "심층적인 질문" 한 문장 한글로 만들어줘.
+
+        조건:
+        - 반드시 한글로 한 문장.
+        - 영어나 다른 외국어로 답변 금지.
+        - 연애와 성향에 관련된 주제일 것.
+        - 너무 일반적인 질문은 금지.
+
+        출력 형식:
+        {"question": "다음 질문 문장"},
+        """.formatted(question);
+        String answer = aiOllamaClient.generateText(prompt);
+        log.info("AiService 분석 답변" + answer);
+        
+    return answer;
   }
 }
 
