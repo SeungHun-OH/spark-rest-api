@@ -78,6 +78,14 @@ public class HeartsController {
     public void rejectHeartRequest(@PathVariable("heartsNo") Long heartsNo) {
         heartsService.rejectHeartRequest(heartsNo);
     }
+
+    @GetMapping("/isExist")
+    public boolean isExistdHearts(
+        @RequestParam("partnerNo") int partnerNo, 
+        @RequestParam("requestChannel") char requestChannel) {
+    	final int memberNo = AuthenticationContextHolder.getContextMemberNo();
+        return heartsService.isExistdHearts(memberNo, partnerNo, requestChannel);
+    }
     
     
 }

@@ -11,7 +11,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class HeartsForFeed {
-	
 	private int hNo;
 	private String hSendUser;
 	private String hReceiveUser;
