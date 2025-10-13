@@ -1,10 +1,10 @@
 package com.spark.dating.member;
 
+import java.util.List;
 import java.util.Map;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import com.spark.dating.dto.chat.MemberStatusMessage;
 import com.spark.dating.dto.member.Member;
@@ -37,4 +37,7 @@ public interface MemberDao {
   List<MemberForFeed> selectRandomMembersExceptMe(int myNo, int count);
   
   String selectMemberGenderByMno(int memberNo);
+
+  @Select("SELECT * FROM MEMBER ORDER BY DBMS_RANDOM.VALUE FETCH FIRST 1 ROWS ONLY")
+  Member getRandomMember();
 }

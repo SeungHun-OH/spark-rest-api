@@ -61,6 +61,7 @@ public class MemberService {
     }
   }
 
+  // @Transactional
   public ApiResponse<Integer> insertMemberPicture(int mNo, MultipartFile file) {
     try {
       MemberPicture memberPicture = new MemberPicture();
@@ -71,6 +72,7 @@ public class MemberService {
       memberPicture.setMpAttachData(file.getBytes());
       memberPicture.setMpAttachType(file.getContentType());
 
+      memberPictureDao.deleteMemberPicture(mNo);
       memberPictureDao.insertMemberPicture(memberPicture);
       return new ApiResponse<>("success", "사진등록성공", mNo);
     } catch (Exception e) {
@@ -96,7 +98,6 @@ public class MemberService {
         String jwt = jwtService.createJWT(member.getMId(), member.getMEmail(), member.getMNo());
         map.put("result", "success");
         
-
         // map.put("mId", member.getMId());
         // map.put("mName", member.getMName());
 
