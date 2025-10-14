@@ -123,19 +123,19 @@ public class MemberController {
     return new ObjectMapper().writeValueAsString(member);
   }
 
-  //회원 사진 조회(단일)
+  // 회원 사진 조회(단일)
   @GetMapping("member/memberPicture/{m_nickname}")
   public ResponseEntity<byte[]> getMemberPicture(@PathVariable("m_nickname") String m_nickname) {
     MemberForFeed memberForFeed = memberService.selectMemberByMnickname(m_nickname);
     int m_no = memberForFeed.getmNo();
     MemberPicture memberPicture = memberService.selectMemberPictureByMno(m_no);
     return ResponseEntity
-    .ok()
-    .contentType(MediaType.parseMediaType(memberPicture.getMpAttachType()))
-    .body(memberPicture.getMpAttachData());
+        .ok()
+        .contentType(MediaType.parseMediaType(memberPicture.getMpAttachType()))
+        .body(memberPicture.getMpAttachData());
   }
 
-  //단일 멤버 조회
+  // 단일 멤버 조회
   @GetMapping("/member/info")
   public MemberForFeed selectMemberByMno(@RequestParam(value = "m_no", required = false) Integer m_no) {
     int memberNo;
@@ -149,13 +149,18 @@ public class MemberController {
     return memberService.selectMemberByMno(memberNo);
   }
 
-  //나를 제외한 랜덤 멤버 리스트 조회
+  @GetMapping("/member/info/nickname")
+  public MemberForFeed selectMemberByMnickname(@RequestParam("m_nickname") String m_nickname) {
+    return memberService.selectMemberByMnickname(m_nickname);
+  }
+
+  // 나를 제외한 랜덤 멤버 리스트 조회
   @GetMapping("/randomExceptMe")
-    public List<MemberForFeed> getRandomMembersExceptMe(
+  public List<MemberForFeed> getRandomMembersExceptMe(
       @RequestParam("mNo") int myNo,
-      @RequestParam("count") int count) { 
-        return memberService.getRandomMembersExceptMe(myNo, count);
-    }
+      @RequestParam("count") int count) {
+    return memberService.getRandomMembersExceptMe(myNo, count);
+  }
 }
 
 // jwt 토큰으로 회원정보 조회
